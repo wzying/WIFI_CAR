@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52   1        if(pwm!=0)
   53   1          pwm += MOTOR_PWM_DIF;
   54   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 2   
 
   55   1        if(direction)//·´×ª
   56   1        {
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          /* Ç°×¦ */
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 3   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 3   
 
  117          void SetClaw( CLAW_DIR dir )
  118          {
@@ -190,7 +190,7 @@ line level    source
  176          void Control_Motor(u8 speed,u8 dir)
  177          {
  178   1        s16 carSpeed_L=0,carSpeed_R=0;
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 4   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 4   
 
  179   1        //u8 speed_dif;
  180   1        u8 flag=0;
@@ -254,7 +254,7 @@ line level    source
  238   1      }
  239          
 
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 5   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 5   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

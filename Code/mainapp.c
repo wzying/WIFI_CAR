@@ -24,6 +24,7 @@
 #include "Function_define.h"
 #include "string.h"
 #include "UART.h"
+#include "LED.h"
 
 /***********************Local function Define***********************/
 static void AppInit(void);
@@ -65,7 +66,8 @@ void main (void)
 	
 	while(1)
 	{
-		if(GetSysClock())
+		
+		if(GetSysClock())//500uS
 		{
 			ResetSysClock();
 			//接收超时，刹车
@@ -73,6 +75,8 @@ void main (void)
 			{
 				SetMotor_Brake();//刹车
 			}
+			
+			Indicator_Light();//指示灯显示
 		}
 //			if(GetTick_1ms())
 //			{//1ms event
@@ -181,6 +185,8 @@ static void AppTask(void)
 */
 void Rx_Package_Handle(uint8_t *uartBuf)
 {
+	SetWifiStatus();//设置WIFI为连接状态
+	
 	if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
 	{
 		Control_Motor(uartBuf[2],uartBuf[1]);

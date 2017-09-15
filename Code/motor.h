@@ -11,7 +11,7 @@
 #ifndef _MOTOR_H_
 #define	_MOTOR_H_
 
-#define MOTOR_PWM_DIF  100 
+#define MOTOR_PWM_DIF  80 
 
 /* 	×óµç»ú 	IO£ºPWM1 + PC7	*/
 #define	MOTOR_L	PC_ODR_bit.ODR7

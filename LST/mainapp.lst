@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 17:05:40 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -43,275 +43,283 @@ line level    source
   24          #include "Function_define.h"
   25          #include "string.h"
   26          #include "UART.h"
-  27          
-  28          /***********************Local function Define***********************/
-  29          static void AppInit(void);
-  30          static void AppTask(void);
-  31          static void ClearSensorStatus(void);
-  32          static void WakeupAction(void);
-  33          /***********************Local Variables Define***********************/
-  34          
-  35          EUINT8 midletick;//1s per tick
-  36           
-  37          u8  uartData = 0; //????
-  38          //u8  uartBuf[DATA_LEN];
-  39          u8  num = 0;
-  40          
-  41          u8 dataPacket0;
-  42          u8 dataPacket1;
-  43          u8 speed = 0x00;
-  44          u16 timeOutSonix = 0;//?????????
-  45          
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 17:05:40 PAGE 2   
+  27          #include "LED.h"
+  28          
+  29          /***********************Local function Define***********************/
+  30          static void AppInit(void);
+  31          static void AppTask(void);
+  32          static void ClearSensorStatus(void);
+  33          static void WakeupAction(void);
+  34          /***********************Local Variables Define***********************/
+  35          
+  36          EUINT8 midletick;//1s per tick
+  37           
+  38          u8  uartData = 0; //????
+  39          //u8  uartBuf[DATA_LEN];
+  40          u8  num = 0;
+  41          
+  42          u8 dataPacket0;
+  43          u8 dataPacket1;
+  44          u8 speed = 0x00;
+  45          u16 timeOutSonix = 0;//?????????
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 2   
 
-  46          /* ???? */
-  47          void delay(void)   //?? 0us
-  48          {
-  49   1          unsigned char a,b;
-  50   1          for(b=20;b>0;b--)
-  51   1              for(a=1;a>0;a--);
-  52   1      } 
-  53          
-  54          /*******************************************************************/
-  55          //UINT16 mtcnt,mprevtcnt;
-  56          void main (void) 
-  57          {
-  58   1      //  UINT16 minus;
-  59   1        u8 motorOutFlag = 0;
-  60   1        
-  61   1        AppInit();
-  62   1        BoardInit();
-  63   1        
-  64   1        MyPrintf("Hello WiFI Car \r\n");
-  65   1        
-  66   1        while(1)
-  67   1        {
-  68   2          if(GetSysClock())
-  69   2          {
-  70   3            ResetSysClock();
-  71   3            //接收超时，刹车
-  72   3            if(CheckTimeOut_Motor())
-  73   3            {
-  74   4              SetMotor_Brake();//刹车
-  75   4            }
-  76   3          }
-  77   2      //      if(GetTick_1ms())
-  78   2      //      {//1ms event
-  79   2      
-  80   2      //      }
-  81   2      //     HW_Board_Poll();
-  82   2      //      AppTask();
-  83   2          
-  84   2      //    delay();
-  85   2      //    
-  86   2      //    /* ???? */
-  87   2      //    if (timeOutSonix > 3000)
-  88   2      //    {
-  89   2      //      SetMotor_Brake();//刹车
-  90   2      //      //SetMotor_STOP();//不刹车
-  91   2      //      //SetArm( ARM_STOP );
-  92   2      //      //SetClaw( CLAW_STOP );
-  93   2      //      speed = 0;
-  94   2      //    }
-  95   2      //    else
-  96   2      //      timeOutSonix++;
-  97   2      //                
-  98   2          switch( dataPacket1 )
-  99   2          {
- 100   3            /* ????? */
- 101   3            case 0x70:
- 102   3              SetArm( ARM_DOWN );
- 103   3              break;
+  46          
+  47          /* ???? */
+  48          void delay(void)   //?? 0us
+  49          {
+  50   1          unsigned char a,b;
+  51   1          for(b=20;b>0;b--)
+  52   1              for(a=1;a>0;a--);
+  53   1      } 
+  54          
+  55          /*******************************************************************/
+  56          //UINT16 mtcnt,mprevtcnt;
+  57          void main (void) 
+  58          {
+  59   1      //  UINT16 minus;
+  60   1        u8 motorOutFlag = 0;
+  61   1        
+  62   1        AppInit();
+  63   1        BoardInit();
+  64   1        
+  65   1        MyPrintf("Hello WiFI Car \r\n");
+  66   1        
+  67   1        while(1)
+  68   1        {
+  69   2          
+  70   2          if(GetSysClock())//500uS
+  71   2          {
+  72   3            ResetSysClock();
+  73   3            //接收超时，刹车
+  74   3            if(CheckTimeOut_Motor())
+  75   3            {
+  76   4              SetMotor_Brake();//刹车
+  77   4            }
+  78   3            
+  79   3            Indicator_Light();//指示灯显示
+  80   3          }
+  81   2      //      if(GetTick_1ms())
+  82   2      //      {//1ms event
+  83   2      
+  84   2      //      }
+  85   2      //     HW_Board_Poll();
+  86   2      //      AppTask();
+  87   2          
+  88   2      //    delay();
+  89   2      //    
+  90   2      //    /* ???? */
+  91   2      //    if (timeOutSonix > 3000)
+  92   2      //    {
+  93   2      //      SetMotor_Brake();//刹车
+  94   2      //      //SetMotor_STOP();//不刹车
+  95   2      //      //SetArm( ARM_STOP );
+  96   2      //      //SetClaw( CLAW_STOP );
+  97   2      //      speed = 0;
+  98   2      //    }
+  99   2      //    else
+ 100   2      //      timeOutSonix++;
+ 101   2      //                
+ 102   2          switch( dataPacket1 )
+ 103   2          {
  104   3            /* ????? */
- 105   3            case 0x71:
- 106   3              SetArm( ARM_UP );
+ 105   3            case 0x70:
+ 106   3              SetArm( ARM_DOWN );
  107   3              break;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 17:05:40 PAGE 3   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 3   
 
- 108   3            /* ???? */
- 109   3            case 0x05:
- 110   3              SetClaw( CLAW_RELEASE );
+ 108   3            /* ????? */
+ 109   3            case 0x71:
+ 110   3              SetArm( ARM_UP );
  111   3              break;
  112   3            /* ???? */
- 113   3            case 0x09:
- 114   3              SetClaw( CLAW_HOLD );
- 115   3              break;    
- 116   3            default :
- 117   3              SetArm( ARM_STOP );
- 118   3              SetClaw( CLAW_STOP );       
- 119   3              break;
- 120   3          } 
- 121   2      
- 122   2      //    /* ???? */
- 123   2      //    motorOutFlag = 0;
- 124   2      //    switch( dataPacket0 )
- 125   2      //    {
- 126   2      //      /* ?? */
- 127   2      //      case 0x72:
- 128   2      //        SetMotor_L( 0 , 1 );
- 129   2      //        SetMotor_R( 180 , 0 );
- 130   2      //        break;
- 131   2      //      /* ?? */
- 132   2      //      case 0x73:
- 133   2      //        SetMotor_L( 180 , 0 );
- 134   2      //        SetMotor_R( 0 , 1 );
- 135   2      //        break;
- 136   2      //      /* ?? */
- 137   2      //      case 0x74:
- 138   2      //        SetMotor_L( speed , 0 );
- 139   2      //        SetMotor_R( speed , 0 );
- 140   2      //        break;
- 141   2      //      /* ?? */
- 142   2      //      case 0x75:
- 143   2      //        SetMotor_L( speed , 1 );
- 144   2      //        SetMotor_R( speed , 1 );
- 145   2      //        break;
- 146   2      //      /* ?? */
- 147   2      //      default:
- 148   2      //        motorOutFlag = 1;//?????
+ 113   3            case 0x05:
+ 114   3              SetClaw( CLAW_RELEASE );
+ 115   3              break;
+ 116   3            /* ???? */
+ 117   3            case 0x09:
+ 118   3              SetClaw( CLAW_HOLD );
+ 119   3              break;    
+ 120   3            default :
+ 121   3              SetArm( ARM_STOP );
+ 122   3              SetClaw( CLAW_STOP );       
+ 123   3              break;
+ 124   3          } 
+ 125   2      
+ 126   2      //    /* ???? */
+ 127   2      //    motorOutFlag = 0;
+ 128   2      //    switch( dataPacket0 )
+ 129   2      //    {
+ 130   2      //      /* ?? */
+ 131   2      //      case 0x72:
+ 132   2      //        SetMotor_L( 0 , 1 );
+ 133   2      //        SetMotor_R( 180 , 0 );
+ 134   2      //        break;
+ 135   2      //      /* ?? */
+ 136   2      //      case 0x73:
+ 137   2      //        SetMotor_L( 180 , 0 );
+ 138   2      //        SetMotor_R( 0 , 1 );
+ 139   2      //        break;
+ 140   2      //      /* ?? */
+ 141   2      //      case 0x74:
+ 142   2      //        SetMotor_L( speed , 0 );
+ 143   2      //        SetMotor_R( speed , 0 );
+ 144   2      //        break;
+ 145   2      //      /* ?? */
+ 146   2      //      case 0x75:
+ 147   2      //        SetMotor_L( speed , 1 );
+ 148   2      //        SetMotor_R( speed , 1 );
  149   2      //        break;
- 150   2      //    }
- 151   2      
- 152   2      //    dataPacket0 = 0x00;//???????,???????
- 153   2      //                          
- 154   2      //    //????,????????,????
- 155   2      //    if( motorOutFlag == 0 )
- 156   2      //    {
- 157   2      //      timeOutSonix = 0;
- 158   2      //    }   
- 159   2        }
- 160   1      }
- 161          
- 162          /*
- 163          应用层的一些初始化
- 164          */
- 165          static void AppInit(void)
- 166          {
- 167   1        
- 168   1      }
- 169          
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 17:05:40 PAGE 4   
+ 150   2      //      /* ?? */
+ 151   2      //      default:
+ 152   2      //        motorOutFlag = 1;//?????
+ 153   2      //        break;
+ 154   2      //    }
+ 155   2      
+ 156   2      //    dataPacket0 = 0x00;//???????,???????
+ 157   2      //                          
+ 158   2      //    //????,????????,????
+ 159   2      //    if( motorOutFlag == 0 )
+ 160   2      //    {
+ 161   2      //      timeOutSonix = 0;
+ 162   2      //    }   
+ 163   2        }
+ 164   1      }
+ 165          
+ 166          /*
+ 167          应用层的一些初始化
+ 168          */
+ 169          static void AppInit(void)
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 4   
 
- 170          /*
- 171          应用层任务
- 172          */
- 173          static void AppTask(void)
- 174          {
- 175   1         
- 176   1      }
- 177          
- 178          /*
- 179            接收数据解析
- 180            RX_Handle
- 181          */
- 182          void Rx_Package_Handle(uint8_t *uartBuf)
- 183          {
- 184   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
- 185   1        {
- 186   2          Control_Motor(uartBuf[2],uartBuf[1]);
- 187   2          
- 188   2          Set_TimeOut_Motor();//复位超时计数
- 189   2        }
- 190   1        
- 191   1            if(uartBuf[3] != 0x00)//空闲信号
- 192   1            {
- 193   2              dataPacket1 = 0x00;
- 194   2              
- 195   2              if( uartBuf[3] <= 0x40 )
- 196   2                dataPacket1=0x71;
- 197   2              else if( uartBuf[3] >= 0xD0 )
- 198   2                dataPacket1=0x70;
- 199   2              else if( uartBuf[4] <= 0x40 )
- 200   2                dataPacket1=0x09;
- 201   2              else if( uartBuf[4] >= 0xC0 )
- 202   2                dataPacket1=0x05;
- 203   2            }
- 204   1      //      dataPacket0=0x00;
- 205   1      //      if( uartBuf[1]<=0x40 )
- 206   1      //        dataPacket0=0x72;//??
- 207   1      //      else if( uartBuf[1]>=0xC0 )
- 208   1      //        dataPacket0=0x73;//??
- 209   1      //      else if( uartBuf[2] < 0x7a )
- 210   1      //      {
- 211   1      //        dataPacket0=0x75;//??
- 212   1      //        speed = (0x80 - uartBuf[2])*2;
- 213   1      //      }
- 214   1      //      else if( uartBuf[2] > 0x85 )
- 215   1      //      {
- 216   1      //        dataPacket0=0x74;//??
- 217   1      //        speed = (uartBuf[2] - 0x80)*2;
- 218   1      //        if(speed >= 0xFE)
- 219   1      //          speed = 0xFF;
- 220   1      //      }
- 221   1      }
- 222          
- 223          //void RX_Handle(u8 uartData)
- 224          //{
- 225          //  //uartData = UART1_DR;
- 226          //  
- 227          //  if( num >= DATA_LEN )//???????,???????
- 228          //  {
- 229          //    if( uartData == 0x66 )//??
- 230          //      num = 0;
- 231          //  }  
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 17:05:40 PAGE 5   
+ 170          {
+ 171   1        
+ 172   1      }
+ 173          
+ 174          /*
+ 175          应用层任务
+ 176          */
+ 177          static void AppTask(void)
+ 178          {
+ 179   1         
+ 180   1      }
+ 181          
+ 182          /*
+ 183            接收数据解析
+ 184            RX_Handle
+ 185          */
+ 186          void Rx_Package_Handle(uint8_t *uartBuf)
+ 187          {
+ 188   1        SetWifiStatus();//设置WIFI为连接状态
+ 189   1        
+ 190   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+ 191   1        {
+ 192   2          Control_Motor(uartBuf[2],uartBuf[1]);
+ 193   2          
+ 194   2          Set_TimeOut_Motor();//复位超时计数
+ 195   2        }
+ 196   1        
+ 197   1            if(uartBuf[3] != 0x00)//空闲信号
+ 198   1            {
+ 199   2              dataPacket1 = 0x00;
+ 200   2              
+ 201   2              if( uartBuf[3] <= 0x40 )
+ 202   2                dataPacket1=0x71;
+ 203   2              else if( uartBuf[3] >= 0xD0 )
+ 204   2                dataPacket1=0x70;
+ 205   2              else if( uartBuf[4] <= 0x40 )
+ 206   2                dataPacket1=0x09;
+ 207   2              else if( uartBuf[4] >= 0xC0 )
+ 208   2                dataPacket1=0x05;
+ 209   2            }
+ 210   1      //      dataPacket0=0x00;
+ 211   1      //      if( uartBuf[1]<=0x40 )
+ 212   1      //        dataPacket0=0x72;//??
+ 213   1      //      else if( uartBuf[1]>=0xC0 )
+ 214   1      //        dataPacket0=0x73;//??
+ 215   1      //      else if( uartBuf[2] < 0x7a )
+ 216   1      //      {
+ 217   1      //        dataPacket0=0x75;//??
+ 218   1      //        speed = (0x80 - uartBuf[2])*2;
+ 219   1      //      }
+ 220   1      //      else if( uartBuf[2] > 0x85 )
+ 221   1      //      {
+ 222   1      //        dataPacket0=0x74;//??
+ 223   1      //        speed = (uartBuf[2] - 0x80)*2;
+ 224   1      //        if(speed >= 0xFE)
+ 225   1      //          speed = 0xFF;
+ 226   1      //      }
+ 227   1      }
+ 228          
+ 229          //void RX_Handle(u8 uartData)
+ 230          //{
+ 231          //  //uartData = UART1_DR;
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 5   
 
  232          //  
- 233          //  if( num < DATA_LEN )
+ 233          //  if( num >= DATA_LEN )//???????,???????
  234          //  {
- 235          //    uartBuf[num++] = uartData;
- 236          //    if( ( num>=DATA_LEN ) && ( uartBuf[0]==0x66 ) )//???????,??0x66
- 237          //    {
- 238          //      SendDataUart(uartBuf,DATA_LEN);
- 239          //      dataPacket1 = 0x00;
- 240          //      if( uartBuf[3] <= 0x40 )
- 241          //        dataPacket1=0x71;//?????
- 242          //      else if( uartBuf[3] >= 0xD0 )
- 243          //        dataPacket1=0x70;//?????
- 244          //      else if( uartBuf[4] <= 0x40 )
- 245          //        dataPacket1=0x09;//????
- 246          //      else if( uartBuf[4] >= 0xC0 )
- 247          //        dataPacket1=0x05;//????
- 248          
- 249          //      dataPacket0=0x00;
- 250          //      if( uartBuf[1]<=0x40 )
- 251          //        dataPacket0=0x72;//??
- 252          //      else if( uartBuf[1]>=0xC0 )
- 253          //        dataPacket0=0x73;//??
- 254          //      else if( uartBuf[2] < 0x7a )
- 255          //      {
- 256          //        dataPacket0=0x75;//??
- 257          //        speed = 0x80 - uartBuf[2];
- 258          //      }
- 259          //      else if( uartBuf[2] > 0x85 )
- 260          //      {
- 261          //        dataPacket0=0x74;//??
- 262          //        speed = uartBuf[2] - 0x80;
- 263          //      }
- 264          //    }
- 265          //  }
- 266          //}
- 267          
- 268          //void SerialPort0_ISR(void) interrupt 4
- 269          //{
- 270          //    if (RI==1) 
- 271          //    {                                       /* if reception occur */
- 272          //      clr_RI;                             /* clear reception flag for next reception */
- 273          //      //Send_Data_To_UART0(SBUF);
- 274          //      RX_Handle(SBUF);
- 275          //    }
- 276          //    if(TI==1)
- 277          //    {
- 278          //      clr_TI;                             /* if emission occur */
- 279          //    }
- 280          //}
- 281          
+ 235          //    if( uartData == 0x66 )//??
+ 236          //      num = 0;
+ 237          //  }  
+ 238          //  
+ 239          //  if( num < DATA_LEN )
+ 240          //  {
+ 241          //    uartBuf[num++] = uartData;
+ 242          //    if( ( num>=DATA_LEN ) && ( uartBuf[0]==0x66 ) )//???????,??0x66
+ 243          //    {
+ 244          //      SendDataUart(uartBuf,DATA_LEN);
+ 245          //      dataPacket1 = 0x00;
+ 246          //      if( uartBuf[3] <= 0x40 )
+ 247          //        dataPacket1=0x71;//?????
+ 248          //      else if( uartBuf[3] >= 0xD0 )
+ 249          //        dataPacket1=0x70;//?????
+ 250          //      else if( uartBuf[4] <= 0x40 )
+ 251          //        dataPacket1=0x09;//????
+ 252          //      else if( uartBuf[4] >= 0xC0 )
+ 253          //        dataPacket1=0x05;//????
+ 254          
+ 255          //      dataPacket0=0x00;
+ 256          //      if( uartBuf[1]<=0x40 )
+ 257          //        dataPacket0=0x72;//??
+ 258          //      else if( uartBuf[1]>=0xC0 )
+ 259          //        dataPacket0=0x73;//??
+ 260          //      else if( uartBuf[2] < 0x7a )
+ 261          //      {
+ 262          //        dataPacket0=0x75;//??
+ 263          //        speed = 0x80 - uartBuf[2];
+ 264          //      }
+ 265          //      else if( uartBuf[2] > 0x85 )
+ 266          //      {
+ 267          //        dataPacket0=0x74;//??
+ 268          //        speed = uartBuf[2] - 0x80;
+ 269          //      }
+ 270          //    }
+ 271          //  }
+ 272          //}
+ 273          
+ 274          //void SerialPort0_ISR(void) interrupt 4
+ 275          //{
+ 276          //    if (RI==1) 
+ 277          //    {                                       /* if reception occur */
+ 278          //      clr_RI;                             /* clear reception flag for next reception */
+ 279          //      //Send_Data_To_UART0(SBUF);
+ 280          //      RX_Handle(SBUF);
+ 281          //    }
+ 282          //    if(TI==1)
+ 283          //    {
+ 284          //      clr_TI;                             /* if emission occur */
+ 285          //    }
+ 286          //}
+ 287          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    285    ----
+   CODE SIZE        =    297    ----
    CONSTANT SIZE    =     18    ----
    XDATA SIZE       =      8       1
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 6   
+
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3
    IDATA SIZE       =   ----    ----

@@ -6,6 +6,7 @@
 #include "PWM.h"
 #include "Audio.h"
 #include "Board.h"
+#include "LED.h"
 
 /*
 **********************************************************************
@@ -37,6 +38,7 @@ EUINT16 mTick_1s;
 void BoardInit(void)
 {
 	GPIO_Init();
+	LED_Init();
 	
 	Timer3Init(Timer3_IntHandler);//1ms interrupt
 	
