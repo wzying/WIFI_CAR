@@ -1,0 +1,333 @@
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE BOARD
+OBJECT MODULE PLACED IN .\Output\Board.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\BSP\Board.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\
+                    -Code\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Board.lst) TABS(2) OBJECT(.\Output\Board.
+                    -obj)
+
+line level    source
+
+   1          #include "Common.h"
+   2          //#include "stdlib.h"
+   3          #include "Timer.h"
+   4          #include "GPIO.h"
+   5          #include "UART.h"
+   6          #include "PWM.h"
+   7          #include "Audio.h"
+   8          #include "Board.h"
+   9          
+  10          /*
+  11          **********************************************************************
+  12          * 硬件抽象层
+  13          * 
+  14          * 
+  15          * 
+  16          *
+  17          ***********************************************************************
+  18          */
+  19          
+  20          /***********************Local function Define***********************/
+  21           
+  22          static void Timer3_IntHandler(void);
+  23           
+  24          /***********************Global Variables Define***********************/
+  25          EUINT16 mTimerCnt[MAX_TIMER_NUM];
+  26           
+  27          EUINT8 mTock;
+  28          EUINT8 mTIFlg;
+  29          EUINT8 mlstock;
+  30          EUINT8 mTick_1ms;
+  31          EUINT16 mTick_1s;
+  32           
+  33           
+  34          /*
+  35          板级的初始化
+  36          */
+  37          void BoardInit(void)
+  38          {
+  39   1        GPIO_Init();
+  40   1        
+  41   1        Timer3Init(Timer3_IntHandler);//1ms interrupt
+  42   1        
+  43   1        InitialUART0_Timer1(4800);
+  44   1        PWM_Init();
+  45   1        
+  46   1        GlobalInterruptEnable();//使能中断全局GIE。
+  47   1        StartTimer3();
+  48   1      }
+  49           
+  50          ///*********************************************************************
+  51          //Brief: MT_SetFoot_Left ,control the left foot motor 
+  52          //Return: void
+  53          //Called: 
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 2   
+
+  54          // 
+  55          //**********************************************************************/
+  56          //void MT_SetFoot_Left(UINT8 dir,UINT8 spd)
+  57          //{
+  58          
+  59          //  if(spd==0)
+  60          //  {//stop
+  61          //    
+  62          //  }
+  63          //}
+  64           
+  65          
+  66           
+  67          /*********************************************************************
+  68          Brief: SysShutdown ,进入低功耗状态
+  69          Return: void
+  70          Called: mainapp.c
+  71           
+  72          **********************************************************************/
+  73          void SysShutdown(void)
+  74          {
+  75   1      
+  76   1      }
+  77          
+  78          /*********************************************************************
+  79          Brief: printstr ,测试打印
+  80          Return: void
+  81          Called: mainapp.c
+  82           
+  83          **********************************************************************/
+  84          void printstr(UINT8* pdin,UINT8 dlen)
+  85          {
+  86   1        UART0SendData(pdin,dlen);
+  87   1      }
+  88          
+  89           
+  90          /*********************************************************************
+  91          Brief: HW_Board_Poll ,硬件轮询函数入口
+  92          Return: void
+  93          Called: mainapp.c
+  94           
+  95          **********************************************************************/
+  96          void HW_Board_Poll(void)
+  97          {
+  98   1       
+  99   1      //////////////////////////Timer/////////////////////////////////    
+ 100   1        if(mTIFlg)
+ 101   1        {
+ 102   2          mTIFlg=0;
+ 103   2        }
+ 104   1        
+ 105   1        //1ms flag
+ 106   1        if(mTock==1 && mlstock==0)
+ 107   1        {
+ 108   2          mTick_1ms=1;
+ 109   2          mTick_1s++;
+ 110   2       
+ 111   2        }
+ 112   1        
+ 113   1        mlstock=mTock;
+ 114   1      }
+ 115          
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 3   
+
+ 116           
+ 117          /*********************************************************************
+ 118          Brief: GetIRTick ,IR 计数器 , 750us记一次
+ 119          Return: void
+ 120          Called: mainapp.c
+ 121           
+ 122          **********************************************************************/
+ 123          UINT16 GetIRTick(void)
+ 124          {
+ 125   1        return GetTimer0Cnt();
+ 126   1      }
+ 127          
+ 128           
+ 129          
+ 130          /*********************************************************************
+ 131          Brief: GetTick_1s ,每秒输出1个脉冲
+ 132          Return: void
+ 133          Called: unkown
+ 134           
+ 135          **********************************************************************/
+ 136          UINT8 GetTick_1s(void)
+ 137          {
+ 138   1        if(mTick_1s>=1000) 
+ 139   1        {
+ 140   2          mTick_1s=0;
+ 141   2          return 1;
+ 142   2        }
+ 143   1        else
+ 144   1        {
+ 145   2          return 0;
+ 146   2        }
+ 147   1      }
+ 148          
+ 149           
+ 150          /*********************************************************************
+ 151          Brief: GetTick_1ms ,每毫秒输出1个脉冲
+ 152          Return: void
+ 153          Called: unkown
+ 154           
+ 155          **********************************************************************/
+ 156          UINT8 GetTick_1ms(void)
+ 157          {
+ 158   1        UINT8 ret;
+ 159   1        
+ 160   1        ret=mTick_1ms;
+ 161   1        mTick_1ms=0;
+ 162   1        return ret;
+ 163   1      }
+ 164          
+ 165           
+ 166          /*********************************************************************
+ 167          Brief: GetTickCount ,得到计数器的tick 用于产生伪随机数等场景
+ 168          Return: void
+ 169          Called: unkown
+ 170           
+ 171          **********************************************************************/
+ 172          UINT16 GetTickCount(void)
+ 173          {
+ 174   1        return GetTimer3Count();
+ 175   1      }
+ 176          
+ 177           
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 4   
+
+ 178          /*********************************************************************
+ 179          Brief: SetTimer ,设置定时器  设定对应 id 定时器的周期
+ 180          Return: void
+ 181          Called: unkown
+ 182           
+ 183          **********************************************************************/
+ 184          UINT8 SetTimer(UINT8 id,UINT16 ms)
+ 185          {
+ 186   1        if(id>=MAX_TIMER_NUM) return 0xFF;
+ 187   1        
+ 188   1        mTimerCnt[id]=ms;
+ 189   1        
+ 190   1        return id;
+ 191   1      }
+ 192           
+ 193          /*********************************************************************
+ 194          Brief: GetTimer 查询定时器的计数状态
+ 195          return: 0 ,停止; 否则当前的计数值
+ 196          Called: unkown
+ 197           
+ 198          **********************************************************************/
+ 199          UINT16 GetTimer(UINT8 id)
+ 200          {
+ 201   1        return mTimerCnt[id];
+ 202   1      }
+ 203           
+ 204           
+ 205          /*********************************************************************
+ 206          Brief: GetIOLevel IR 4个接收引脚电平
+ 207          return: 0 ,停止; 否则当前的计数值
+ 208          Called: IRComm.c
+ 209           
+ 210          **********************************************************************/
+ 211          UINT8 GetIOLevel(UINT8 i)
+ 212          {
+ 213   1        UINT8 ret;
+ 214   1        
+ 215   1        switch(i)
+ 216   1        {
+ 217   2          case 0://front
+ 218   2            ret=GetPort1Val(7);
+ 219   2          break;
+ 220   2          case 1://back
+ 221   2            ret=GetPort3Val(0);
+ 222   2          break;
+ 223   2          case 2://left
+ 224   2            ret=GetPort0Val(5);
+ 225   2          break;
+ 226   2          case 3://right
+ 227   2            ret=GetPort0Val(7);
+ 228   2          break;
+ 229   2        }
+ 230   1        
+ 231   1        return ret;
+ 232   1      }
+ 233           
+ 234          /*********************************************************************
+ 235          Brief: SetAttackPin IR   IR 攻击输出 ,有问题,需要改
+ 236          return: 
+ 237          Called: IRComm.c
+ 238           
+ 239          **********************************************************************/
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 5   
+
+ 240          void  SetAttackPin(UINT8 val)
+ 241          {
+ 242   1        SetPort2Val(0,val); //
+ 243   1      } 
+ 244          ////////////////////////////////////Interrupt handler////////////////////////////////////
+ 245          
+ 246          void RegGPIOIntHandler(UINT8 flg,FN_INT_HANDLER fn)
+ 247          {
+ 248   1        switch(flg)
+ 249   1        {
+ 250   2          case EXTI_INT0:
+ 251   2            SetEX0IntHandler(fn);
+ 252   2          break;
+ 253   2          case EXTI_INT1:
+ 254   2            SetEX1IntHandler(fn);
+ 255   2          break;
+ 256   2          case EXTI_Px5:
+ 257   2            SetGPx5IntHandler(fn);
+ 258   2          break;
+ 259   2          case EXTI_Px6:
+ 260   2            SetGPx6IntHandler(fn);
+ 261   2          break;
+ 262   2        
+ 263   2        }
+ 264   1      
+ 265   1      }
+ 266          
+ 267          u8 sysClockFlag = 0;
+ 268          void SetSysClock(void)
+ 269          {
+ 270   1        sysClockFlag = 1;
+ 271   1      }
+ 272          void ResetSysClock(void)
+ 273          {
+ 274   1        sysClockFlag = 0;
+ 275   1      }
+ 276          u8 GetSysClock(void)
+ 277          {
+ 278   1        return sysClockFlag;
+ 279   1      }
+ 280          
+ 281          /*
+ 282          timer3 interrupt handler   1mS interrpt
+ 283          */
+ 284          static void Timer3_IntHandler(void)
+ 285          {
+ 286   1        SetSysClock();
+ 287   1        
+ 288   1        //超时复位接收Buf
+ 289   1        if(CheckTimeOut())
+ 290   1        {
+ 291   2          ResetIndexRx();
+ 292   2          //MyPrintf("Reset Index\r\n");
+ 293   2        }
+ 294   1        
+ 295   1      }
+ 296          
+ 297          
+ 298           
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.52.0.0   BOARD                                                             09/15/2017 16:26:48 PAGE 6   
+
+   CODE SIZE        =    325    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     15    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

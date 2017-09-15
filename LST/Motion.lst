@@ -1,0 +1,74 @@
+C51 COMPILER V9.52.0.0   MOTION                                                            09/08/2017 15:00:04 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTION
+OBJECT MODULE PLACED IN .\Output\Motion.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\Motion.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Cod
+                    -e\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Motion.lst) TABS(2) OBJECT(.\Output\Motion.o
+                    -bj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Buta Technology Corp. All rights reserved.                                         */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.ptahtoy.com
+   9          //  E-Mail : linshigao@ptahtoy.com
+  10          //  Date   : Jun/24/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: CoreXtalRobot 
+  15          //********************************************************************************************************
+             -***
+  16          
+  17          #include "Common.h"
+  18          #include "Board.h"
+  19          #include "PWM.h"
+  20          #include "Motion.h"
+  21          
+  22           
+  23          EUINT8 mMotorSta;
+  24          EUINT8 mCoilSta;
+  25           
+  26          void Motion_Init(void)
+  27          {
+  28   1        mMotorSta=0;
+  29   1       
+  30   1      }
+  31          
+  32          //监控电机与电磁铁的运动时间
+  33          //call per 1ms
+  34          //限位器监测
+  35          void Motion_Sta(void)
+  36          {
+  37   1       
+  38   1          
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      7    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2    ----
+C51 COMPILER V9.52.0.0   MOTION                                                            09/08/2017 15:00:04 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

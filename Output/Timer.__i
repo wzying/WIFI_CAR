@@ -1,0 +1,1 @@
+"Code\N76E003_HW\Timer.c" OPTIMIZE (4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Code\BSP;.\Code\N76E003_HW) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Timer.lst) TABS (2) OBJECT(.\Output\Timer.obj)

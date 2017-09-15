@@ -1,0 +1,447 @@
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ACTION
+OBJECT MODULE PLACED IN .\Output\Action.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\Action.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Cod
+                    -e\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Action.lst) TABS(2) OBJECT(.\Output\Action.o
+                    -bj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Buta Technology Corp. All rights reserved.                                         */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.ptahtoy.com
+   9          //  E-Mail : linshigao@ptahtoy.com
+  10          //  Date   : Jun/24/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: BabyMonkey(Finger Toy) 
+  15          //********************************************************************************************************
+             -***
+  16          
+  17          #include "Common.h"
+  18          #include "Board.h"
+  19          #include "Motion.h"
+  20          #include "Audio.h"
+  21          #include "Action.h"
+  22          
+  23          EUINT8 mactsta=0;
+  24          EUINT8 mactinputflg=0;// 有动作输入标志
+  25          
+  26          EUINT8 Act_MotorNum[4];
+  27          EUINT16 Act_CoilNum[4][2];
+  28          EUINT8 Act_MusicNum;
+  29           
+  30          void SetAction(UINT8 act)
+  31          {
+  32   1        UINT8 branch;
+  33   1        
+  34   1        if(mactsta==ACT_WAKEUP) return;
+  35   1        mactsta=act;
+  36   1        
+  37   1        mactinputflg=1;
+  38   1        
+  39   1        switch(act)
+  40   1        {
+  41   2          case ACT_WAKEUP:
+  42   2              Act_MusicNum=ACT_WAKEUP;
+  43   2              Act_MotorNum[0]=3;Act_MotorNum[1]=1;
+  44   2              SetMotorAction(2,Act_MotorNum);
+  45   2              
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 2   
+
+  46   2              Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+  47   2              Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+  48   2              SetCoilActoin(2,Act_CoilNum);
+  49   2          break;
+  50   2          case ACT_IDLE_60S:
+  51   2              Act_MusicNum=ACT_IDLE_60S;
+  52   2              Act_MotorNum[0]=3;
+  53   2              SetMotorAction(1,Act_MotorNum);
+  54   2              
+  55   2              Act_CoilNum[0][0]=500; Act_CoilNum[0][1]=700;
+  56   2              Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+  57   2              SetCoilActoin(2,Act_CoilNum);
+  58   2          break;
+  59   2          case ACT_IDLE_30S:
+  60   2              Act_MusicNum=ACT_IDLE_30S;
+  61   2          
+  62   2              Act_MotorNum[0]=4;
+  63   2              SetMotorAction(1,Act_MotorNum);
+  64   2              
+  65   2              Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+  66   2              Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+  67   2              SetCoilActoin(2,Act_CoilNum);
+  68   2          break;
+  69   2          case ACT_TOUCH_LEFT:
+  70   2       
+  71   2              branch=GetRandom() %4;
+  72   2              
+  73   2              switch(branch)
+  74   2              {
+  75   3                case 0:
+  76   3                  Act_MusicNum=4;
+  77   3                
+  78   3                  Act_MotorNum[0]=1;Act_MotorNum[1]=1;
+  79   3                  SetMotorAction(2,Act_MotorNum);
+  80   3                
+  81   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+  82   3                  Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+  83   3                  SetCoilActoin(2,Act_CoilNum);
+  84   3                break;
+  85   3                case 1:
+  86   3                  Act_MusicNum=5;
+  87   3                
+  88   3                  Act_MotorNum[0]=1;
+  89   3                  SetMotorAction(1,Act_MotorNum);
+  90   3                
+  91   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+  92   3                  SetCoilActoin(1,Act_CoilNum);
+  93   3                break;
+  94   3                case 2:
+  95   3                  Act_MusicNum=6;
+  96   3                
+  97   3                  Act_MotorNum[0]=1;Act_MotorNum[1]=1;
+  98   3                  SetMotorAction(2,Act_MotorNum);
+  99   3                
+ 100   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 101   3                  Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 102   3                  SetCoilActoin(2,Act_CoilNum);
+ 103   3                break;
+ 104   3                case 3:
+ 105   3                  Act_MusicNum=7;
+ 106   3                
+ 107   3                  Act_MotorNum[0]=1;Act_MotorNum[1]=1;Act_MotorNum[2]=1;
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 3   
+
+ 108   3                  SetMotorAction(3,Act_MotorNum);
+ 109   3                
+ 110   3                  Act_CoilNum[0][0]=2700; Act_CoilNum[0][1]=2900;
+ 111   3                  SetCoilActoin(1,Act_CoilNum);
+ 112   3                break;
+ 113   3              }
+ 114   2      
+ 115   2          break;
+ 116   2          case ACT_TOUCH_RIGHT:
+ 117   2       
+ 118   2              branch=GetRandom() %4;
+ 119   2              
+ 120   2              switch(branch)
+ 121   2              {
+ 122   3                case 0:
+ 123   3                  Act_MusicNum=4;
+ 124   3                
+ 125   3                  Act_MotorNum[0]=2;Act_MotorNum[1]=2;
+ 126   3                  SetMotorAction(2,Act_MotorNum);
+ 127   3                
+ 128   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 129   3                  Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 130   3                  SetCoilActoin(2,Act_CoilNum);
+ 131   3                break;
+ 132   3                case 1:
+ 133   3                  Act_MusicNum=5;
+ 134   3                
+ 135   3                  Act_MotorNum[0]=2;
+ 136   3                  SetMotorAction(1,Act_MotorNum);
+ 137   3                
+ 138   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 139   3                  SetCoilActoin(1,Act_CoilNum);
+ 140   3                break;
+ 141   3                case 2:
+ 142   3                  Act_MusicNum=6;
+ 143   3                
+ 144   3                  Act_MotorNum[0]=2;Act_MotorNum[1]=2;
+ 145   3                  SetMotorAction(2,Act_MotorNum);
+ 146   3                
+ 147   3                  Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 148   3                  Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 149   3                  SetCoilActoin(2,Act_CoilNum);
+ 150   3                break;
+ 151   3                case 3:
+ 152   3                  Act_MusicNum=7;
+ 153   3                
+ 154   3                  Act_MotorNum[0]=2;Act_MotorNum[1]=2;Act_MotorNum[2]=2;
+ 155   3                  SetMotorAction(3,Act_MotorNum);
+ 156   3                
+ 157   3                  Act_CoilNum[0][0]=2700; Act_CoilNum[0][1]=2900;
+ 158   3                  SetCoilActoin(1,Act_CoilNum);
+ 159   3                break;
+ 160   3              }
+ 161   2      
+ 162   2          break;    
+ 163   2          case ACT_TOUCH_BOTH:  //6号 同时触摸
+ 164   2            Act_MusicNum=8;
+ 165   2          
+ 166   2            Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 167   2            Act_CoilNum[1][0]=300; Act_CoilNum[1][1]=300;
+ 168   2            Act_CoilNum[2][0]=600; Act_CoilNum[2][1]=800;
+ 169   2            Act_CoilNum[3][0]=900; Act_CoilNum[3][1]=1100;
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 4   
+
+ 170   2            SetCoilActoin(4,Act_CoilNum);
+ 171   2          break;
+ 172   2          case ACT_TOUCH_ALWAYS://7号 同时长时触摸
+ 173   2            Act_MusicNum=9;
+ 174   2          
+ 175   2            Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=2000;
+ 176   2            SetCoilActoin(1,Act_CoilNum);
+ 177   2          break;
+ 178   2          case ACT_BLEEZE: //8 号动作 吹风
+ 179   2            branch=GetRandom() %4;
+ 180   2              
+ 181   2            switch(branch)
+ 182   2            {
+ 183   3              case 0:
+ 184   3                Act_MusicNum=10;
+ 185   3              
+ 186   3                Act_MotorNum[0]=3;//Act_MotorNum[1]=1;
+ 187   3                SetMotorAction(1,Act_MotorNum);
+ 188   3              
+ 189   3                Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 190   3                Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 191   3                SetCoilActoin(2,Act_CoilNum);
+ 192   3              break;
+ 193   3              case 1:
+ 194   3                Act_MusicNum=11;
+ 195   3              
+ 196   3                Act_MotorNum[0]=3;Act_MotorNum[1]=3;
+ 197   3                SetMotorAction(2,Act_MotorNum);
+ 198   3              
+ 199   3                Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 200   3                Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 201   3                Act_CoilNum[2][0]=2000; Act_CoilNum[2][1]=2200;
+ 202   3                Act_CoilNum[3][0]=3500; Act_CoilNum[3][1]=3700;
+ 203   3                SetCoilActoin(4,Act_CoilNum);
+ 204   3              break;
+ 205   3              case 2:
+ 206   3                Act_MusicNum=12;
+ 207   3              
+ 208   3                Act_MotorNum[0]=5;Act_MotorNum[1]=5;Act_MotorNum[2]=5;
+ 209   3                SetMotorAction(3,Act_MotorNum);
+ 210   3      
+ 211   3                Act_CoilNum[0][0]=1500; Act_CoilNum[0][1]=1700;
+ 212   3                SetCoilActoin(1,Act_CoilNum);
+ 213   3              break;
+ 214   3              case 3:
+ 215   3                Act_MusicNum=13;
+ 216   3              
+ 217   3                Act_MotorNum[0]=5;Act_MotorNum[1]=5;Act_MotorNum[2]=5;
+ 218   3                SetMotorAction(3,Act_MotorNum);
+ 219   3              
+ 220   3               
+ 221   3              break;
+ 222   3            }
+ 223   2          break;
+ 224   2          case ACT_INV:
+ 225   2            Act_MusicNum=14;
+ 226   2          
+ 227   2            Act_MotorNum[0]=4;Act_MotorNum[1]=4;
+ 228   2            SetMotorAction(2,Act_MotorNum);
+ 229   2            
+ 230   2            Act_CoilNum[0][0]=1500; Act_CoilNum[0][1]=2000;
+ 231   2            Act_CoilNum[1][0]=3000; Act_CoilNum[1][1]=3500;
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 5   
+
+ 232   2            SetCoilActoin(2,Act_CoilNum);
+ 233   2          break;
+ 234   2      
+ 235   2          case ACT_SHAKE: //14 摇晃
+ 236   2            branch=GetRandom() %3;
+ 237   2              
+ 238   2            switch(branch)
+ 239   2            {
+ 240   3              case 0:
+ 241   3                Act_MusicNum=18;
+ 242   3              
+ 243   3                Act_MotorNum[0]=5;Act_MotorNum[1]=5;Act_MotorNum[2]=5;
+ 244   3                SetMotorAction(3,Act_MotorNum);
+ 245   3              
+ 246   3                Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=1200;
+ 247   3                Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 248   3                SetCoilActoin(2,Act_CoilNum);
+ 249   3              break;
+ 250   3              case 1:
+ 251   3                Act_MusicNum=19;
+ 252   3              
+ 253   3                Act_MotorNum[0]=3;Act_MotorNum[1]=3;
+ 254   3                SetMotorAction(2,Act_MotorNum);
+ 255   3              
+ 256   3                Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 257   3                Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 258   3                Act_CoilNum[2][0]=2000; Act_CoilNum[2][1]=2200;
+ 259   3                Act_CoilNum[3][0]=3500; Act_CoilNum[3][1]=3700;
+ 260   3                SetCoilActoin(4,Act_CoilNum);
+ 261   3              break;
+ 262   3              case 2:
+ 263   3                Act_MusicNum=20;
+ 264   3              
+ 265   3                Act_MotorNum[0]=5;Act_MotorNum[1]=5;Act_MotorNum[2]=5;
+ 266   3                SetMotorAction(3,Act_MotorNum);
+ 267   3                Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=1200;
+ 268   3                Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 269   3                SetCoilActoin(2,Act_CoilNum);
+ 270   3              break;
+ 271   3               
+ 272   3            } 
+ 273   2          break;
+ 274   2          case ACT_HLAY: // 16 睡觉/ 平躺
+ 275   2              Act_MusicNum=22;
+ 276   2           
+ 277   2              Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=2000;
+ 278   2         
+ 279   2              SetCoilActoin(1,Act_CoilNum);
+ 280   2          break;  
+ 281   2          case ACT_ADHERE: // 20 遮掩
+ 282   2              Act_MusicNum=24;
+ 283   2          
+ 284   2              Act_MotorNum[0]=4; 
+ 285   2              SetMotorAction(1,Act_MotorNum);
+ 286   2              
+ 287   2              Act_CoilNum[0][0]=1500; Act_CoilNum[0][1]=2000;
+ 288   2         
+ 289   2              SetCoilActoin(1,Act_CoilNum);
+ 290   2          break;  
+ 291   2          case ACT_TOFACE:
+ 292   2              Act_MusicNum=24;
+ 293   2          
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 6   
+
+ 294   2              Act_MotorNum[0]=3; Act_MotorNum[1]=4; 
+ 295   2              SetMotorAction(2,Act_MotorNum);
+ 296   2              
+ 297   2              Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 298   2              Act_CoilNum[1][0]=1500; Act_CoilNum[1][1]=1700;
+ 299   2              Act_CoilNum[2][0]=1800; Act_CoilNum[2][1]=2000;
+ 300   2              Act_CoilNum[3][0]=2100; Act_CoilNum[3][1]=2300;
+ 301   2              SetCoilActoin(4,Act_CoilNum);
+ 302   2          break;  
+ 303   2          
+ 304   2          case ACT_PIAPIA:
+ 305   2              Act_MusicNum=10;
+ 306   2          
+ 307   2              Act_MotorNum[0]=1;Act_MotorNum[1]=2;
+ 308   2              SetMotorAction(2,Act_MotorNum);
+ 309   2              
+ 310   2              Act_CoilNum[0][0]=0; Act_CoilNum[0][1]=200;
+ 311   2              Act_CoilNum[1][0]=800; Act_CoilNum[1][1]=1000;
+ 312   2              Act_CoilNum[2][0]=1100; Act_CoilNum[2][1]=1300;
+ 313   2              Act_CoilNum[3][0]=1800; Act_CoilNum[3][1]=2000;
+ 314   2              SetCoilActoin(4,Act_CoilNum);
+ 315   2          break;  
+ 316   2          case ACT_DOUBLE_PIA:
+ 317   2              Act_MusicNum=17;
+ 318   2          
+ 319   2              Act_MotorNum[0]=2;Act_MotorNum[1]=2;Act_MotorNum[2]=1;Act_MotorNum[3]=1;
+ 320   2              SetMotorAction(4,Act_MotorNum);
+ 321   2              
+ 322   2              Act_CoilNum[0][0]=500; Act_CoilNum[0][1]=700;
+ 323   2              Act_CoilNum[1][0]=800; Act_CoilNum[1][1]=1000;
+ 324   2              Act_CoilNum[2][0]=1500; Act_CoilNum[2][1]=1700;
+ 325   2              Act_CoilNum[3][0]=1800; Act_CoilNum[3][1]=2000;
+ 326   2              SetCoilActoin(4,Act_CoilNum);
+ 327   2          break;  
+ 328   2            
+ 329   2        }
+ 330   1        
+ 331   1        PlayOneSong(Act_MusicNum);
+ 332   1      }
+ 333          
+ 334          UINT8 GetActInputFlg(void)
+ 335          {
+ 336   1        return mactinputflg;
+ 337   1      }
+ 338           
+ 339          void ClearActInputFlg(void)
+ 340          {
+ 341   1      
+ 342   1        mactinputflg=0;
+ 343   1        return ;
+ 344   1      }
+ 345          
+ 346          void ActionSta(void)
+ 347          {
+ 348   1        
+ 349   1        if(mactsta!=ACT_IDLE)
+ 350   1        {
+ 351   2          if(MotorActDone())
+ 352   2          {
+ 353   3            mactsta=ACT_IDLE;
+ 354   3          }
+ 355   2        }
+C51 COMPILER V9.56.0.0   ACTION                                                            08/11/2017 15:50:36 PAGE 7   
+
+ 356   1       /*
+ 357   1        switch(mactsta)
+ 358   1        {
+ 359   1          case ACT_STA_IDLE:
+ 360   1          break;
+ 361   1          
+ 362   1          case ACT_STA_STEP1_0: // 插入电机和电磁铁动作时间和方式
+ 363   1            SetMotorAction(Act_MotorNum[0]);
+ 364   1            SetCoilActoin(Act_CoilNum[0]);
+ 365   1            PlayOneSong(Act_MusicNum);
+ 366   1            mactsta=ACT_STA_STEP1_1;
+ 367   1          
+ 368   1          break;
+ 369   1          case ACT_STA_STEP1_1:
+ 370   1            if(MotorActDone())
+ 371   1            {
+ 372   1              mactsta=ACT_STA_STEP2_0;
+ 373   1            }
+ 374   1          break;
+ 375   1          case ACT_STA_STEP2_0: // 插入电机和电磁铁动作时间和方式
+ 376   1            SetMotorAction(Act_MotorNum[1]);
+ 377   1            SetCoilActoin(Act_CoilNum[1]);
+ 378   1            PlayOneSong(Act_MusicNum);  
+ 379   1          break;
+ 380   1          case ACT_STA_STEP2_1:
+ 381   1            if(MotorActDone())
+ 382   1            {
+ 383   1              mactsta=ACT_STA_STEP2_0;
+ 384   1            }
+ 385   1          break;
+ 386   1          case ACT_STA_STEP3_0: // 插入电机和电磁铁动作时间和方式
+ 387   1            SetMotorAction(Act_MotorNum[2]);
+ 388   1            SetCoilActoin(Act_CoilNum[2]);
+ 389   1            mactsta=ACT_STA_STEP3_1;
+ 390   1          
+ 391   1          break;
+ 392   1          case ACT_STA_STEP3_1:
+ 393   1            if(MotorActDone())
+ 394   1            {
+ 395   1              mactsta=ACT_STA_IDLE;
+ 396   1            }
+ 397   1          break;
+ 398   1         
+ 399   1        }
+ 400   1         
+ 401   1        */
+ 402   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2005    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     23    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

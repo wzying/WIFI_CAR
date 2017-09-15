@@ -1,0 +1,397 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+D:\work\wifi_car\MCU工程\新唐\WiFiCar_NV\CoreRobot_Master\CoreRobot.uvproj
+Project File Date:  09/08/2017
+
+<h2>Output:</h2>
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=71 code=2983
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2983 bytes programmed.
+Flash Verify Done: 2983 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+Code\motor.c(179): warning C280: 'speed_dif': unreferenced local variable
+linking...
+Program Size: data=65.1 xdata=71 code=2983
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2983
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2983 bytes programmed.
+Flash Verify Done: 2983 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+Code\motor.c(176): warning C280: 'speed': unreferenced local variable
+linking...
+Program Size: data=68.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+Flash Verify Done: 2967 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2983
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2983 bytes programmed.
+Flash Verify Done: 2983 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+Code\motor.c(176): warning C280: 'speed': unreferenced local variable
+linking...
+Program Size: data=68.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+*** Error: Flash Verify Failed at 0x0000
+Build target 'CoreRobot'
+linking...
+Program Size: data=68.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+Flash Verify Done: 2967 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+Code\motor.c(176): warning C280: 'speed': unreferenced local variable
+linking...
+Program Size: data=66.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Build target 'CoreRobot'
+linking...
+Program Size: data=66.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+Flash Verify Done: 2967 bytes verified.
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+Flash Verify Done: 2967 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+Flash Verify Done: 2989 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+Code\motor.c(176): warning C280: 'speed': unreferenced local variable
+linking...
+Program Size: data=66.1 xdata=70 code=2967
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2967 bytes programmed.
+Flash Verify Done: 2967 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+Flash Verify Done: 2989 bytes verified.
+compiling Board.c...
+Code\BSP\Board.c(46): error C202: 'pwm': undefined identifier
+Code\BSP\Board.c - 1 Error(s), 0 Warning(s).
+compiling Board.c...
+Code\BSP\Board.c(46): error C202: 'MOTOR_PWM_DIF': undefined identifier
+Code\BSP\Board.c - 1 Error(s), 0 Warning(s).
+Build target 'CoreRobot'
+compiling Board.c...
+Code\BSP\Board.c(46): error C202: 'MOTOR_PWM_DIF': undefined identifier
+Target not created
+compiling Board.c...
+Code\BSP\Board.c(49): warning C294: unreachable code
+Code\BSP\Board.c - 0 Error(s), 1 Warning(s).
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling Board.c...
+Code\BSP\Board.c(51): warning C294: unreachable code
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling Board.c...
+Code\BSP\Board.c(51): warning C294: unreachable code
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling mainapp.c...
+compiling Common.c...
+compiling Delay.c...
+compiling GPIO.c...
+compiling Timer.c...
+compiling UART.c...
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2985
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2985 bytes programmed.
+Flash Verify Done: 2985 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2985
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2985 bytes programmed.
+Flash Verify Done: 2985 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling Board.c...
+Code\BSP\Board.c(51): warning C294: unreachable code
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling Board.c...
+Code\BSP\Board.c(51): warning C294: unreachable code
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 1 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+*** Error: Flash Verify Failed at 0x0000
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=70 code=2988
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+*** Error: Flash Verify Failed at 0x0000
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2988 bytes programmed.
+Flash Verify Done: 2988 bytes verified.
+Build target 'CoreRobot'
+compiling Board.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+*** Error: Flash Verify Failed at 0x0000
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+Flash Verify Done: 2989 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2986
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2986 bytes programmed.
+Flash Verify Done: 2986 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+Flash Verify Done: 2989 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2989
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2989 bytes programmed.
+Flash Verify Done: 2989 bytes verified.
+Build target 'CoreRobot'
+compiling PWM.c...
+linking...
+Program Size: data=65.1 xdata=70 code=2986
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 2986 bytes programmed.
+Flash Verify Done: 2986 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=3003
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Build target 'CoreRobot'
+linking...
+Program Size: data=65.1 xdata=70 code=3003
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 3003 bytes programmed.
+Flash Verify Done: 3003 bytes verified.
+Build target 'CoreRobot'
+compiling motor.c...
+linking...
+Program Size: data=65.1 xdata=70 code=3003
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 3003 bytes programmed.
+Flash Verify Done: 3003 bytes verified.
+Build target 'CoreRobot'
+compiling mainapp.c...
+linking...
+Program Size: data=65.1 xdata=70 code=3011
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 3011 bytes programmed.
+Flash Verify Done: 3011 bytes verified.
+Build target 'CoreRobot'
+compiling mainapp.c...
+linking...
+Program Size: data=65.1 xdata=70 code=3016
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 3016 bytes programmed.
+Flash Verify Done: 3016 bytes verified.
+Build target 'CoreRobot'
+compiling mainapp.c...
+linking...
+Program Size: data=65.1 xdata=70 code=3011
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\MCU工程\\新唐\\WiFiCar_NV\\CoreRobot_Master\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 3011 bytes programmed.
+Flash Verify Done: 3011 bytes verified.

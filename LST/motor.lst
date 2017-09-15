@@ -1,0 +1,271 @@
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
+OBJECT MODULE PLACED IN .\Output\motor.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\motor.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Code
+                    -\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\motor.lst) TABS(2) OBJECT(.\Output\motor.obj)
+
+line level    source
+
+   1          /***********************************************************************************
+   2           Company  :   布塔科技
+   3           File Name  : motor.c
+   4           Author   : WANG 
+   5           Create Data  :   2017-05-12
+   6           Last Modified  : 2017-05-12
+   7           Description  : 电机驱动函数  
+   8           Version  :   1.0
+   9          ************************************************************************************/
+  10          #include "N76E003.h"
+  11          #include "Common.h"
+  12          #include "motor.h"
+  13          #include "PWM.h"
+  14          
+  15          /**************************************************
+  16          *函数名： SetMotor_L
+  17          *功能  ： 控制“左电机”的转速与方向
+  18                    左电机 ： PWM1 + PWM4
+  19          *参数  ：
+  20                pwm：0-255  0->停止   255->最大速度
+  21                direction：控制电机的正反转   0->正转   1->反转
+  22          *返回  ： 无
+  23          ***************************************************/
+  24          void SetMotor_L(u8 pwm , u8 direction)
+  25          {
+  26   1        if(pwm!=0)
+  27   1          pwm += MOTOR_PWM_DIF;
+  28   1        
+  29   1        if(direction)//反转
+  30   1        {
+  31   2          SetPWM(1 , 0);
+  32   2          SetPWM(4 , pwm);  
+  33   2        }
+  34   1        else//正转
+  35   1        {
+  36   2          SetPWM(1 , pwm);
+  37   2          SetPWM(4 , 0);
+  38   2        }
+  39   1      }
+  40          
+  41          /**************************************************
+  42          *函数名： SetMotor_R
+  43          *功能  ： 控制“右电机”的转速与方向
+  44                    右电机 ： PWM3 + PWM0
+  45          *参数  ：
+  46                pwm：0-255  0->停止   255->最大速度
+  47                direction：控制电机的正反转   0->正转   1->反转
+  48          *返回  ： 无
+  49          ***************************************************/
+  50          void SetMotor_R(u8 pwm , u8 direction)
+  51          {
+  52   1        if(pwm!=0)
+  53   1          pwm += MOTOR_PWM_DIF;
+  54   1        
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 2   
+
+  55   1        if(direction)//反转
+  56   1        {
+  57   2          SetPWM(3 , pwm);
+  58   2          SetPWM(0 , 0);
+  59   2        }
+  60   1        else//正转
+  61   1        {
+  62   2          SetPWM(3 , 0);
+  63   2          SetPWM(0 , pwm);
+  64   2        }
+  65   1      }
+  66          
+  67          /**************************************************
+  68          *函数名： SetMotor_STOP
+  69          *功能  ： 电机停止转动（不刹车）
+  70          *参数  ： 无
+  71          *返回  ： 无
+  72          ***************************************************/
+  73          void SetMotor_STOP(void)
+  74          {
+  75   1          SetPWM(1 , 0);
+  76   1          SetPWM(4 , 0);
+  77   1          SetPWM(3 , 0);
+  78   1          SetPWM(0 , 0);
+  79   1      }
+  80          
+  81          /**************************************************
+  82          *函数名： SetMotor_Brake
+  83          *功能  ： 刹车
+  84          *参数  ： 无
+  85          *返回  ： 无
+  86          ***************************************************/
+  87          void SetMotor_Brake(void)
+  88          {
+  89   1          SetPWM(1 , 0xff);
+  90   1          SetPWM(4 , 0xff);
+  91   1          SetPWM(3 , 0xff);
+  92   1          SetPWM(0 , 0xff);
+  93   1      }
+  94          
+  95          /* 机械臂 */
+  96          void SetArm( ARM_DIR dir)
+  97          {
+  98   1        switch(dir)
+  99   1        {
+ 100   2        case ARM_UP:
+ 101   2          MOTOR_ARM_A = 1;
+ 102   2          MOTOR_ARM_B = 0;
+ 103   2          break;
+ 104   2        case ARM_DOWN:
+ 105   2          MOTOR_ARM_A = 0;
+ 106   2          MOTOR_ARM_B = 1;
+ 107   2          break;
+ 108   2        case ARM_STOP:
+ 109   2        default:
+ 110   2          MOTOR_ARM_A = 0;
+ 111   2          MOTOR_ARM_B = 0;
+ 112   2          break;
+ 113   2        }
+ 114   1      }
+ 115          
+ 116          /* 前爪 */
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 3   
+
+ 117          void SetClaw( CLAW_DIR dir )
+ 118          {
+ 119   1        switch(dir)
+ 120   1        {
+ 121   2        case CLAW_RELEASE:
+ 122   2          MOTOR_CLAW_A = 1;
+ 123   2          MOTOR_CLAW_B = 0;
+ 124   2          break;
+ 125   2        case CLAW_HOLD:
+ 126   2          MOTOR_CLAW_A = 0;
+ 127   2          MOTOR_CLAW_B = 1;
+ 128   2          break;
+ 129   2        case CLAW_STOP: 
+ 130   2        default:
+ 131   2          MOTOR_CLAW_A = 0;
+ 132   2          MOTOR_CLAW_B = 0;
+ 133   2          break;
+ 134   2        } 
+ 135   1      }
+ 136          
+ 137          /*
+ 138            左电机
+ 139            speed < 0 反转
+ 140            speed > 0 正转
+ 141          */
+ 142          void Control_Motor_L(s16 speed)
+ 143          {
+ 144   1        if(speed >= 0)
+ 145   1        {
+ 146   2          SetMotor_L(speed,0);
+ 147   2        }
+ 148   1        else
+ 149   1        {
+ 150   2          SetMotor_L(-speed,1);
+ 151   2        }
+ 152   1      }
+ 153          /*
+ 154            右电机
+ 155            speed < 0 反转
+ 156            speed > 0 正转
+ 157          */
+ 158          void Control_Motor_R(s16 speed)
+ 159          {
+ 160   1        if(speed >= 0)
+ 161   1        {
+ 162   2          SetMotor_R(speed,0);
+ 163   2        }
+ 164   1        else
+ 165   1        {
+ 166   2          SetMotor_R(-speed,1);
+ 167   2        }
+ 168   1      }
+ 169          
+ 170          
+ 171          /*
+ 172            小车前后左右控制
+ 173            speed : 前后速度控制量
+ 174            dir   : 转向信号控制量
+ 175          */
+ 176          void Control_Motor(u8 speed,u8 dir)
+ 177          {
+ 178   1        s16 carSpeed_L=0,carSpeed_R=0;
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 4   
+
+ 179   1        //u8 speed_dif;
+ 180   1        u8 flag=0;
+ 181   1        
+ 182   1          carSpeed_L = speed - 0x80;
+ 183   1          carSpeed_R = speed - 0x80;
+ 184   1      
+ 185   1          if( dir != 0x80 )
+ 186   1          {
+ 187   2            if( dir > 0x80 )//
+ 188   2            {
+ 189   3              carSpeed_L = 0;
+ 190   3              carSpeed_R = dir - 0x80;
+ 191   3            }
+ 192   2            if( dir < 0x80 )
+ 193   2            {
+ 194   3              carSpeed_R = 0;
+ 195   3              carSpeed_L = 0x80 - dir;
+ 196   3            }
+ 197   2            
+ 198   2      //      if( dir > 0x80 )//右转，右电机减速
+ 199   2      //      {
+ 200   2      //        speed_dif = dir-0x80;
+ 201   2      //        if(carSpeed_R>=0)
+ 202   2      //          carSpeed_R = carSpeed_R-speed_dif;
+ 203   2      //        else
+ 204   2      //          carSpeed_R = carSpeed_R+speed_dif;
+ 205   2      //      }
+ 206   2      //      else//左转，左电机减速
+ 207   2      //      {
+ 208   2      //        speed_dif = 0x80 - dir;
+ 209   2      //        if(carSpeed_L>=0)
+ 210   2      //          carSpeed_L = carSpeed_L-speed_dif;  
+ 211   2      //        else
+ 212   2      //          carSpeed_L = carSpeed_L+speed_dif;
+ 213   2      //      }
+ 214   2          } 
+ 215   1        
+ 216   1        Control_Motor_L(carSpeed_L);
+ 217   1        Control_Motor_R(carSpeed_R);
+ 218   1      }
+ 219          
+ 220          /*
+ 221            接收超时检测
+ 222            超时则停车
+ 223          */
+ 224          #define TIMEOUT_MOTOR 500
+ 225          u16 timeOut_Motor=0;
+ 226          u8 CheckTimeOut_Motor(void)
+ 227          {
+ 228   1        if(timeOut_Motor)
+ 229   1          timeOut_Motor--;
+ 230   1        else
+ 231   1          return 1;
+ 232   1        
+ 233   1        return 0;
+ 234   1      }
+ 235          void Set_TimeOut_Motor(void)
+ 236          {
+ 237   1        timeOut_Motor = TIMEOUT_MOTOR;
+ 238   1      }
+ 239          
+
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 16:40:42 PAGE 5   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    376    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

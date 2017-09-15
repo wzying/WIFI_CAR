@@ -1,0 +1,168 @@
+C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Output\UART.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\N76E003_HW\UART.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\C
+                    -ode;.\Code\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\UART.lst) TABS(2) OBJECT(.\Output\U
+                    -ART.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Buta Technology Corp. All rights reserved.                                         */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.ptahtoy.com
+   9          //  E-Mail : linshigao@ptahtoy.com
+  10          //  Date   : Jun/24/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: BabyMonkey(Finger Toy) 
+  15          //********************************************************************************************************
+             -***
+  16          #include "N76E003.h"
+  17          #include "SFR_Macro.h"
+  18          #include "Function_define.h"
+  19          #include "Common.h"
+  20          #include "string.h"
+  21          #include "UART.h"
+  22          
+  23          EUINT8 mdlen;
+  24          EUINT8 mTxIdx;
+  25          EUINT8 mRxLen;
+  26          EUINT8 mRxBuf[20];
+  27          EUINT8 mTxBuf[20];
+  28          /*
+  29          init uart0 with the pin mapped in p06,p07
+  30          and the baudrate is drived by timer1
+  31          */
+  32          void TestUartInit(void)
+  33          {
+  34   1          UINT32 u32Baudrate;
+  35   1        
+  36   1          mRxLen=0;
+  37   1          u32Baudrate=9600;
+  38   1        
+  39   1          P06_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  40   1          P07_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  41   1        
+  42   1          SCON = 0x50;      //UART0 Mode1,REN=1,TI=1
+  43   1          TMOD |= 0x20;     //Timer1 Mode1
+  44   1          
+  45   1          set_SMOD;         //UART0 Double Rate Enable
+C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 2   
+
+  46   1          set_T1M;
+  47   1          clr_BRCK;         //Serial port 0 baud rate clock source = Timer1
+  48   1       
+  49   1          TH1 = 256 - (1000000/u32Baudrate+1);               /*16 MHz */
+  50   1       
+  51   1          set_TR1;
+  52   1          set_TI;           //For printf function must setting TI = 1
+  53   1        
+  54   1          set_ES;         //For interrupt enable
+  55   1      }
+  56          
+  57          
+  58          
+  59          void UART0SendData(UINT8* pdin,UINT8 dlen)
+  60          {
+  61   1        if(dlen<=20)
+  62   1        {
+  63   2          mdlen=dlen;
+  64   2        }
+  65   1        else
+  66   1        {
+  67   2          mdlen=20;
+  68   2        }
+  69   1        memcpy(mTxBuf,pdin,mdlen);
+  70   1        
+  71   1        SBUF = *mTxBuf;
+  72   1        mTxIdx=0;
+  73   1        
+  74   1      }
+  75          
+  76          //接收到的数据包
+  77          #define LEN_PACKET_MAX 20
+  78          uint8_t RX_Packet[LEN_PACKET_MAX];
+  79          static uint8_t index_Rx = 0;
+  80          #define TIME_OUT_RX_MAX 10
+  81          uint16_t timeOut_Rx = 0;//接收超时
+  82          void RecievePacket(uint8_t d)
+  83          {
+  84   1        timeOut_Rx = TIME_OUT_RX_MAX;//接收超时计数值
+  85   1        if(index_Rx < LEN_PACKET_MAX)
+  86   1        {
+  87   2          RX_Packet[index_Rx] = d;
+  88   2      
+  89   2          if(index_Rx == (DATA_LEN-1))
+  90   2          {
+  91   3            if(RX_Packet[0] == 0x66)//包头0x66
+  92   3            {
+  93   4              //SendDataUart(RX_Packet,DATA_LEN);
+  94   4              Rx_Package_Handle(RX_Packet);
+  95   4              
+  96   4              //ResetIndexRx();//成功接收完一个包，复位下次接收
+  97   4            }
+  98   3          }
+  99   2          index_Rx++;
+ 100   2        }
+ 101   1      }  
+ 102          //
+ 103          void ResetIndexRx(void)
+ 104          {
+ 105   1        index_Rx = 0;
+ 106   1      }
+ 107          //检测超时
+C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 3   
+
+ 108          uint8_t CheckTimeOut(void)
+ 109          {
+ 110   1        if(timeOut_Rx)
+ 111   1          timeOut_Rx--;
+ 112   1        else
+ 113   1          return 1; //timeOut_Rx==0,返回1
+ 114   1        
+ 115   1        return 0; 
+ 116   1      }
+ 117          
+ 118          
+ 119          void SerialPort0_ISR(void) interrupt 4
+ 120          {
+ 121   1          if (RI==1) 
+ 122   1          {                                       /* if reception occur */
+ 123   2            clr_RI;                             /* clear reception flag for next reception */
+ 124   2            //Send_Data_To_UART0(SBUF);
+ 125   2            RecievePacket(SBUF);
+ 126   2          }
+ 127   1          if(TI==1)
+ 128   1          {
+ 129   2            clr_TI;                             /* if emission occur */
+ 130   2          }
+ 131   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    247    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     43    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     23    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

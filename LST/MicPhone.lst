@@ -1,0 +1,175 @@
+C51 COMPILER V9.56.0.0   MICPHONE                                                          08/11/2017 15:50:36 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MICPHONE
+OBJECT MODULE PLACED IN .\Output\MicPhone.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\MicPhone.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\C
+                    -ode\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\MicPhone.lst) TABS(2) OBJECT(.\Output\MicP
+                    -hone.obj)
+
+line level    source
+
+   1          /*
+   2          **********************************************************************
+   3          *完成麦克风的吹起声和拍掌声的侦测
+   4          *1.长度大于1000ms的扰动是吹气声，长度小于50ms的是拍掌声
+   5          *
+   6          ***********************************************************************
+   7          */
+   8          
+   9          #include "Common.h"
+  10          #include "Board.h"
+  11          #include "MicPhone.h"
+  12          /***********************Local function ***********************/
+  13          /***********************Local Defination***********************/
+  14          #define MIC_IDLE  0
+  15          #define MIC_WAITSTABLE 1
+  16          #define MIC_WAITNEXTPIA 2
+  17          
+  18          #define MIC_STABLE_MS   100 // 稳定时间
+  19          #define MIC_PIAPIA_MS   50 //啪啪时间
+  20          #define MIC_BREAHE_MS   300//吹气时间
+  21          #define MIC_PIAINTER_MS    300 
+  22          
+  23          #define MIC_PIAPIA_CNT  20 
+  24          #define MIC_BREATH_CNT  100
+  25          /***********************Global Variables ***********************/
+  26          EUINT8 mMicSta;
+  27          EUINT8 mMicActType;
+  28          EUINT16 mMicTLen;
+  29          EUINT8 mIntNum;
+  30          EUINT8 mStableCnt;
+  31          /*
+  32          初始操作
+  33          */
+  34          void Mic_Init(void)
+  35          {
+  36   1        mMicSta=0;
+  37   1      }
+  38          
+  39          
+  40          /*
+  41          麦克风的信号侦测状态机
+  42          */
+  43          void MicSta(void)
+  44          {
+  45   1        switch(mMicSta)
+  46   1        {
+  47   2          case MIC_IDLE:
+  48   2            if(GetMicLowDetected())
+  49   2            {
+  50   3              SetTimer(MIC_TIMER,MIC_STABLE_MS);//1ms timer
+  51   3            //  StartCountMicTime();
+  52   3              mMicSta=MIC_WAITSTABLE;
+  53   3              mIntNum=1;
+C51 COMPILER V9.56.0.0   MICPHONE                                                          08/11/2017 15:50:36 PAGE 2   
+
+  54   3            }
+  55   2          break;
+  56   2          case MIC_WAITSTABLE:
+  57   2            if(GetMicLowDetected())
+  58   2            {
+  59   3              SetTimer(MIC_TIMER,MIC_STABLE_MS);//1ms timer
+  60   3              mMicSta=MIC_WAITSTABLE;
+  61   3              if(mIntNum<250)
+  62   3              {
+  63   4                mIntNum++;
+  64   4              }
+  65   3            }
+  66   2            else if(GetTimer(MIC_TIMER)==0)// count to zero
+  67   2            {
+  68   3       
+  69   3              if(mIntNum<=MIC_PIAPIA_CNT)
+  70   3              {
+  71   4                
+  72   4                SetTimer(MIC_TIMER,MIC_PIAINTER_MS);
+  73   4                mMicSta=MIC_WAITNEXTPIA;
+  74   4                mIntNum=0;
+  75   4                mStableCnt=0;
+  76   4              }
+  77   3              else if(mIntNum>=MIC_BREATH_CNT)
+  78   3              {
+  79   4                mMicActType=MIC_ACTYPE_BREATH;
+  80   4                mMicSta=MIC_IDLE;
+  81   4              }
+  82   3             /*
+  83   3              StopCountMicTime();
+  84   3              mMicTLen=GetCountMicTime();
+  85   3              if(mMicTLen>=MIC_BREAHE_MS)
+  86   3              {
+  87   3                mMicActType=MIC_ACTYPE_BREATH;
+  88   3              }
+  89   3              else if(mMicTLen<=MIC_PIAPIA_MS)
+  90   3              {
+  91   3                mMicActType=MIC_ACTYPE_PIAPIA;
+  92   3              }
+  93   3              
+  94   3              */
+  95   3              
+  96   3            }
+  97   2          break;
+  98   2            
+  99   2          case MIC_WAITNEXTPIA://等待是否有另外一个Pia
+ 100   2            if(GetMicLowDetected())
+ 101   2            {
+ 102   3              if(mIntNum<250)
+ 103   3              {
+ 104   4                mIntNum++;
+ 105   4              }
+ 106   3            }
+ 107   2            else if(GetTimer(MIC_TIMER)==0)// count to zero
+ 108   2            {
+ 109   3              mStableCnt++;
+ 110   3              if(mStableCnt>2)
+ 111   3              {
+ 112   4                if(mIntNum>0 && mIntNum<MIC_PIAPIA_CNT)
+ 113   4                {
+ 114   5                  mMicActType=MIC_ACTYPE_DOUBLE_PIA;
+ 115   5                }
+C51 COMPILER V9.56.0.0   MICPHONE                                                          08/11/2017 15:50:36 PAGE 3   
+
+ 116   4                else
+ 117   4                {
+ 118   5                  mMicActType=MIC_ACTYPE_PIAPIA;
+ 119   5                }
+ 120   4                mMicSta=MIC_IDLE;
+ 121   4              }
+ 122   3              else
+ 123   3              {
+ 124   4                SetTimer(MIC_TIMER,MIC_STABLE_MS);//1ms timer
+ 125   4              }
+ 126   3              
+ 127   3            }
+ 128   2          break;
+ 129   2        
+ 130   2        }
+ 131   1      }
+ 132          
+ 133          
+ 134          /*
+ 135          麦克风状态检测
+ 136          */
+ 137          
+ 138          UINT8 MicSignalDetect(void)
+ 139          {
+ 140   1        UINT8 ret;
+ 141   1        
+ 142   1        ret=mMicActType;
+ 143   1        mMicActType=0;
+ 144   1        
+ 145   1        return ret;
+ 146   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    249    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

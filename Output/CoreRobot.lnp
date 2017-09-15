@@ -1,0 +1,13 @@
+".\Output\mainapp.obj",
+".\Output\motor.obj",
+".\Output\Common.obj",
+".\Output\Delay.obj",
+".\Output\STARTUP_PORDIS.obj",
+".\Output\Board.obj",
+".\Output\GPIO.obj",
+".\Output\Timer.obj",
+".\Output\UART.obj",
+".\Output\PWM.obj" 
+TO ".\Output\CoreRobot" 
+PRINT(".\LST\CoreRobot.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

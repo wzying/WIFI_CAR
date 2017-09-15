@@ -1,0 +1,120 @@
+C51 COMPILER V9.56.0.0   AUDIO                                                             08/11/2017 18:35:51 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE AUDIO
+OBJECT MODULE PLACED IN .\Output\Audio.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\BSP\Audio.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\
+                    -Code\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Audio.lst) TABS(2) OBJECT(.\Output\Audio.
+                    -obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Buta Technology Corp. All rights reserved.                                         */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.ptahtoy.com
+   9          //  E-Mail : linshigao@ptahtoy.com
+  10          //  Date   : Jun/24/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: BabyMonkey(Finger Toy) 
+  15          //********************************************************************************************************
+             -***
+  16          #include "Common.h"
+  17          #include "SX50X0.h"
+  18          #include "Audio.h"
+  19           
+  20          
+  21          #define MAX_SONG_NUM  ((UINT8)29)
+  22          
+  23          //初始化声音
+  24          void Audio_Init(void)
+  25          {
+  26   1        Sx50x0_IO_Init();
+  27   1       
+  28   1      }
+  29          
+  30          void AudioSta(void)
+  31          {
+  32   1        Sx50x0SendStateMachine();
+  33   1      }
+  34          
+  35          void Period_task_500us(void)
+  36          {   
+  37   1        
+  38   1        
+  39   1        Sx50x_DriveTickCount();
+  40   1      }
+  41          
+  42          
+  43          
+  44          
+  45          //播放第idx段语音
+C51 COMPILER V9.56.0.0   AUDIO                                                             08/11/2017 18:35:51 PAGE 2   
+
+  46          //idx:0x01~0x1D
+  47          UINT8 PlayOneSong(UINT8 idx)
+  48          {
+  49   1        if(idx>0x10)return 0xE1;//参数错误
+  50   1        
+  51   1        Sx50x0SendData(&idx);
+  52   1        return 0x00;//执行成功
+  53   1      }
+  54           #if(0)
+              //循环播放第idx段语音
+              //idx:0x01~0x10
+              void LoopPlayOneSong(UINT8 idx)
+              {
+                UINT8 sLoopMark=0xF2;
+                
+                if(idx>0x10)return;
+                
+                Sx50x0SendData(&idx);
+                Sx50x0SendData(&sLoopMark);
+              }
+               
+              //设置音量
+              //size:0x00~0x0F
+              void SetAudioVol(UINT8 isize)
+              {
+                if(isize>0x0F)return;
+                isize+=0xE0;
+                Sx50x0SendData(&isize);
+                
+              }
+              
+              //停止当前的播放
+              void StopPlay(void)
+              {
+                UINT8 sStopMark=0xFE;
+                
+                Sx50x0SendData(&sStopMark);
+              }
+              
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     36    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
