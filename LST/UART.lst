@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 1   
+C51 COMPILER V9.52.0.0   UART                                                              09/16/2017 11:37:49 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
@@ -62,7 +62,7 @@ line level    source
   43   1          TMOD |= 0x20;     //Timer1 Mode1
   44   1          
   45   1          set_SMOD;         //UART0 Double Rate Enable
-C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 2   
+C51 COMPILER V9.52.0.0   UART                                                              09/16/2017 11:37:49 PAGE 2   
 
   46   1          set_T1M;
   47   1          clr_BRCK;         //Serial port 0 baud rate clock source = Timer1
@@ -94,70 +94,86 @@ line level    source
   73   1        
   74   1      }
   75          
-  76          //接收到的数据包
-  77          #define LEN_PACKET_MAX 20
-  78          uint8_t RX_Packet[LEN_PACKET_MAX];
-  79          static uint8_t index_Rx = 0;
-  80          #define TIME_OUT_RX_MAX 10
-  81          uint16_t timeOut_Rx = 0;//接收超时
-  82          void RecievePacket(uint8_t d)
-  83          {
-  84   1        timeOut_Rx = TIME_OUT_RX_MAX;//接收超时计数值
-  85   1        if(index_Rx < LEN_PACKET_MAX)
-  86   1        {
-  87   2          RX_Packet[index_Rx] = d;
-  88   2      
-  89   2          if(index_Rx == (DATA_LEN-1))
-  90   2          {
-  91   3            if(RX_Packet[0] == 0x66)//包头0x66
-  92   3            {
-  93   4              //SendDataUart(RX_Packet,DATA_LEN);
-  94   4              Rx_Package_Handle(RX_Packet);
-  95   4              
-  96   4              //ResetIndexRx();//成功接收完一个包，复位下次接收
-  97   4            }
-  98   3          }
-  99   2          index_Rx++;
- 100   2        }
- 101   1      }  
- 102          //
- 103          void ResetIndexRx(void)
- 104          {
- 105   1        index_Rx = 0;
- 106   1      }
- 107          //检测超时
-C51 COMPILER V9.52.0.0   UART                                                              09/15/2017 16:15:38 PAGE 3   
+  76          /*
+  77            接收到有效的数据包
+  78          */
+  79          u8 valid_R = 0;
+  80          u8 Check_Recieve_Valid(void)
+  81          {
+  82   1        u8 res;
+  83   1        res = valid_R;
+  84   1        valid_R = 0;//复位
+  85   1        return res;
+  86   1      }
+  87          void Set_Recieve_valid(void)
+  88          {
+  89   1        valid_R = 1;
+  90   1      }
+  91          
+  92          //接收到的数据包
+  93          uint8_t RX_Packet[LEN_PACKET_MAX];
+  94          static uint8_t index_Rx = 0;
+  95          #define TIME_OUT_RX_MAX 10
+  96          uint16_t timeOut_Rx = 0;//接收超时
+  97          void RecievePacket(uint8_t d)
+  98          {
+  99   1        timeOut_Rx = TIME_OUT_RX_MAX;//接收超时计数值
+ 100   1        if(index_Rx < LEN_PACKET_MAX)
+ 101   1        {
+ 102   2          RX_Packet[index_Rx] = d;
+ 103   2      
+ 104   2          if(index_Rx == (DATA_LEN-1))
+ 105   2          {
+ 106   3            if(RX_Packet[0] == 0x66)//包头0x66
+ 107   3            {
+C51 COMPILER V9.52.0.0   UART                                                              09/16/2017 11:37:49 PAGE 3   
 
- 108          uint8_t CheckTimeOut(void)
- 109          {
- 110   1        if(timeOut_Rx)
- 111   1          timeOut_Rx--;
- 112   1        else
- 113   1          return 1; //timeOut_Rx==0,返回1
- 114   1        
- 115   1        return 0; 
- 116   1      }
- 117          
- 118          
- 119          void SerialPort0_ISR(void) interrupt 4
+ 108   4              Set_Recieve_valid();//接收到有效的数据包
+ 109   4              //SendDataUart(RX_Packet,DATA_LEN);
+ 110   4              //Rx_Package_Handle(RX_Packet);
+ 111   4              
+ 112   4              //ResetIndexRx();//成功接收完一个包，复位下次接收
+ 113   4            }
+ 114   3          }
+ 115   2          index_Rx++;
+ 116   2        }
+ 117   1      }  
+ 118          //
+ 119          void ResetIndexRx(void)
  120          {
- 121   1          if (RI==1) 
- 122   1          {                                       /* if reception occur */
- 123   2            clr_RI;                             /* clear reception flag for next reception */
- 124   2            //Send_Data_To_UART0(SBUF);
- 125   2            RecievePacket(SBUF);
- 126   2          }
- 127   1          if(TI==1)
- 128   1          {
- 129   2            clr_TI;                             /* if emission occur */
- 130   2          }
- 131   1      }
+ 121   1        index_Rx = 0;
+ 122   1      }
+ 123          //检测超时
+ 124          uint8_t CheckTimeOut(void)
+ 125          {
+ 126   1        if(timeOut_Rx)
+ 127   1          timeOut_Rx--;
+ 128   1        else
+ 129   1          return 1; //timeOut_Rx==0,返回1
+ 130   1        
+ 131   1        return 0; 
+ 132   1      }
+ 133          
+ 134          
+ 135          void SerialPort0_ISR(void) interrupt 4
+ 136          {
+ 137   1          if (RI==1) 
+ 138   1          {                                       /* if reception occur */
+ 139   2            clr_RI;                             /* clear reception flag for next reception */
+ 140   2            //Send_Data_To_UART0(SBUF);
+ 141   2            RecievePacket(SBUF);
+ 142   2          }
+ 143   1          if(TI==1)
+ 144   1          {
+ 145   2            clr_TI;                             /* if emission occur */
+ 146   2          }
+ 147   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    247    ----
+   CODE SIZE        =    239    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     43    ----
+   XDATA SIZE       =     44       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     23    ----
    IDATA SIZE       =   ----    ----

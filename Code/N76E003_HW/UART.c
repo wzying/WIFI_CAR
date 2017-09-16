@@ -73,8 +73,23 @@ void UART0SendData(UINT8* pdin,UINT8 dlen)
   
 }
 
+/*
+	接收到有效的数据包
+*/
+u8 valid_R = 0;
+u8 Check_Recieve_Valid(void)
+{
+	u8 res;
+	res = valid_R;
+	valid_R = 0;//复位
+	return res;
+}
+void Set_Recieve_valid(void)
+{
+	valid_R = 1;
+}
+
 //接收到的数据包
-#define LEN_PACKET_MAX 20
 uint8_t RX_Packet[LEN_PACKET_MAX];
 static uint8_t index_Rx = 0;
 #define TIME_OUT_RX_MAX 10
@@ -90,8 +105,9 @@ void RecievePacket(uint8_t d)
 		{
 			if(RX_Packet[0] == 0x66)//包头0x66
 			{
+				Set_Recieve_valid();//接收到有效的数据包
 				//SendDataUart(RX_Packet,DATA_LEN);
-				Rx_Package_Handle(RX_Packet);
+				//Rx_Package_Handle(RX_Packet);
 				
 				//ResetIndexRx();//成功接收完一个包，复位下次接收
 			}

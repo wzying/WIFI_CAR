@@ -69,6 +69,12 @@ void main (void)
 		if(GetSysClock())//500uS
 		{
 			ResetSysClock();
+			
+			if(Check_Recieve_Valid())//接收到有效的数据包
+			{
+				Rx_Package_Handle(RX_Packet);
+			}
+			
 			if(CheckTimeOut_Wifi())//WIFI信号超时
 			{
 				SetMotor_Brake();//刹车
