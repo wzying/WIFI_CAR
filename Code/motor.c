@@ -237,3 +237,56 @@ void Set_TimeOut_Motor(void)
 	timeOut_Motor = TIMEOUT_MOTOR;
 }
 
+/*
+	WiFi信号接收超时
+*/
+#define TIMEOUT_WIFI 1000
+u16 timeOut_Wifi=0;
+u8 CheckTimeOut_Wifi(void)
+{
+	if(timeOut_Wifi)
+		timeOut_Wifi--;
+	else
+		return 1;
+	
+	return 0;
+}
+void Set_TimeOut_Wifi(void)
+{
+	timeOut_Wifi = TIMEOUT_WIFI;
+}
+
+
+/*
+	机械臂控制
+	参数： arm -> WiFi控制信号
+*/
+void Control_ARM(u8 arm)
+{
+	if( arm <= 0x40 )
+	{
+		SetArm( ARM_UP );
+	}
+	else if( arm >= 0xD0 )
+	{
+		SetArm( ARM_DOWN );
+	}
+	else
+	{
+		SetArm( ARM_STOP );
+	}
+
+}
+/*
+	前爪控制
+	
+*/
+void Control_Claw(u8 claw)
+{
+	if( claw <= 0x40 )
+		SetClaw( CLAW_HOLD );
+	else if( claw >= 0xC0 )
+		SetClaw( CLAW_RELEASE );
+	else
+		SetClaw( CLAW_STOP );		
+}

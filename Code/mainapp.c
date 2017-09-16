@@ -66,14 +66,22 @@ void main (void)
 	
 	while(1)
 	{
-		
 		if(GetSysClock())//500uS
 		{
 			ResetSysClock();
-			//接收超时，刹车
-			if(CheckTimeOut_Motor())
+			if(CheckTimeOut_Wifi())//WIFI信号超时
 			{
 				SetMotor_Brake();//刹车
+				SetArm( ARM_STOP );
+				SetClaw( CLAW_STOP );
+			}	
+			else 
+			{
+				//前后信号接收超时，刹车
+				if(CheckTimeOut_Motor())
+				{
+					SetMotor_Brake();//刹车
+				}
 			}
 			
 			Indicator_Light();//指示灯显示
@@ -99,29 +107,29 @@ void main (void)
 //    else
 //      timeOutSonix++;
 //                
-    switch( dataPacket1 )
-    {
-      /* ????? */
-      case 0x70:
-        SetArm( ARM_DOWN );
-        break;
-      /* ????? */
-      case 0x71:
-				SetArm( ARM_UP );
-        break;
-      /* ???? */
-      case 0x05:
-        SetClaw( CLAW_RELEASE );
-        break;
-      /* ???? */
-      case 0x09:
-        SetClaw( CLAW_HOLD );
-        break;		
-      default :
-        SetArm( ARM_STOP );
-        SetClaw( CLAW_STOP );				
-        break;
-    } 
+//    switch( dataPacket1 )
+//    {
+//      /* ????? */
+//      case 0x70:
+//        SetArm( ARM_DOWN );
+//        break;
+//      /* ????? */
+//      case 0x71:
+//				SetArm( ARM_UP );
+//        break;
+//      /* ???? */
+//      case 0x05:
+//        SetClaw( CLAW_RELEASE );
+//        break;
+//      /* ???? */
+//      case 0x09:
+//        SetClaw( CLAW_HOLD );
+//        break;		
+//      default :
+//        SetArm( ARM_STOP );
+//        SetClaw( CLAW_STOP );				
+//        break;
+//    } 
 
 //    /* ???? */
 //    motorOutFlag = 0;
@@ -185,6 +193,7 @@ static void AppTask(void)
 */
 void Rx_Package_Handle(uint8_t *uartBuf)
 {
+	Set_TimeOut_Wifi();//WIFI超时复位
 	SetWifiStatus();//设置WIFI为连接状态
 	
 	if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
@@ -194,94 +203,9 @@ void Rx_Package_Handle(uint8_t *uartBuf)
 		Set_TimeOut_Motor();//复位超时计数
 	}
 	
-			if(uartBuf[3] != 0x00)//空闲信号
-			{
-				dataPacket1 = 0x00;
-				
-				if( uartBuf[3] <= 0x40 )
-					dataPacket1=0x71;
-				else if( uartBuf[3] >= 0xD0 )
-					dataPacket1=0x70;
-				else if( uartBuf[4] <= 0x40 )
-					dataPacket1=0x09;
-				else if( uartBuf[4] >= 0xC0 )
-					dataPacket1=0x05;
-			}
-//      dataPacket0=0x00;
-//      if( uartBuf[1]<=0x40 )
-//        dataPacket0=0x72;//??
-//      else if( uartBuf[1]>=0xC0 )
-//        dataPacket0=0x73;//??
-//      else if( uartBuf[2] < 0x7a )
-//      {
-//        dataPacket0=0x75;//??
-//        speed = (0x80 - uartBuf[2])*2;
-//      }
-//      else if( uartBuf[2] > 0x85 )
-//      {
-//        dataPacket0=0x74;//??
-//        speed = (uartBuf[2] - 0x80)*2;
-//				if(speed >= 0xFE)
-//					speed = 0xFF;
-//      }
+	if(uartBuf[3] != 0x00)//0x00空闲信号
+	{
+		Control_ARM (uartBuf[3]);
+		Control_Claw(uartBuf[4]);
+	}
 }
-
-//void RX_Handle(u8 uartData)
-//{
-//	//uartData = UART1_DR;
-//  
-//  if( num >= DATA_LEN )//???????,???????
-//  {
-//    if( uartData == 0x66 )//??
-//      num = 0;
-//  }  
-//  
-//  if( num < DATA_LEN )
-//  {
-//    uartBuf[num++] = uartData;
-//    if( ( num>=DATA_LEN ) && ( uartBuf[0]==0x66 ) )//???????,??0x66
-//    {
-//			SendDataUart(uartBuf,DATA_LEN);
-//      dataPacket1 = 0x00;
-//      if( uartBuf[3] <= 0x40 )
-//        dataPacket1=0x71;//?????
-//      else if( uartBuf[3] >= 0xD0 )
-//        dataPacket1=0x70;//?????
-//      else if( uartBuf[4] <= 0x40 )
-//        dataPacket1=0x09;//????
-//      else if( uartBuf[4] >= 0xC0 )
-//        dataPacket1=0x05;//????
-
-//      dataPacket0=0x00;
-//      if( uartBuf[1]<=0x40 )
-//        dataPacket0=0x72;//??
-//      else if( uartBuf[1]>=0xC0 )
-//        dataPacket0=0x73;//??
-//      else if( uartBuf[2] < 0x7a )
-//      {
-//        dataPacket0=0x75;//??
-//        speed = 0x80 - uartBuf[2];
-//      }
-//      else if( uartBuf[2] > 0x85 )
-//      {
-//        dataPacket0=0x74;//??
-//        speed = uartBuf[2] - 0x80;
-//      }
-//    }
-//  }
-//}
-
-//void SerialPort0_ISR(void) interrupt 4
-//{
-//    if (RI==1) 
-//    {                                       /* if reception occur */
-//			clr_RI;                             /* clear reception flag for next reception */
-//			//Send_Data_To_UART0(SBUF);
-//			RX_Handle(SBUF);
-//		}
-//    if(TI==1)
-//    {
-//      clr_TI;                             /* if emission occur */
-//    }
-//}
-

@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52   1        if(pwm!=0)
   53   1          pwm += MOTOR_PWM_DIF;
   54   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 2   
 
   55   1        if(direction)//反转
   56   1        {
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          /* 前爪 */
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 3   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 3   
 
  117          void SetClaw( CLAW_DIR dir )
  118          {
@@ -190,7 +190,7 @@ line level    source
  176          void Control_Motor(u8 speed,u8 dir)
  177          {
  178   1        s16 carSpeed_L=0,carSpeed_R=0;
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 4   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 4   
 
  179   1        //u8 speed_dif;
  180   1        u8 flag=0;
@@ -253,18 +253,73 @@ line level    source
  237   1        timeOut_Motor = TIMEOUT_MOTOR;
  238   1      }
  239          
+ 240          /*
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 5   
 
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/15/2017 18:07:32 PAGE 5   
+ 241            WiFi信号接收超时
+ 242          */
+ 243          #define TIMEOUT_WIFI 1000
+ 244          u16 timeOut_Wifi=0;
+ 245          u8 CheckTimeOut_Wifi(void)
+ 246          {
+ 247   1        if(timeOut_Wifi)
+ 248   1          timeOut_Wifi--;
+ 249   1        else
+ 250   1          return 1;
+ 251   1        
+ 252   1        return 0;
+ 253   1      }
+ 254          void Set_TimeOut_Wifi(void)
+ 255          {
+ 256   1        timeOut_Wifi = TIMEOUT_WIFI;
+ 257   1      }
+ 258          
+ 259          
+ 260          /*
+ 261            机械臂控制
+ 262            参数： arm -> WiFi控制信号
+ 263          */
+ 264          void Control_ARM(u8 arm)
+ 265          {
+ 266   1        if( arm <= 0x40 )
+ 267   1        {
+ 268   2          SetArm( ARM_UP );
+ 269   2        }
+ 270   1        else if( arm >= 0xD0 )
+ 271   1        {
+ 272   2          SetArm( ARM_DOWN );
+ 273   2        }
+ 274   1        else
+ 275   1        {
+ 276   2          SetArm( ARM_STOP );
+ 277   2        }
+ 278   1      
+ 279   1      }
+ 280          /*
+ 281            前爪控制
+ 282            
+ 283          */
+ 284          void Control_Claw(u8 claw)
+ 285          {
+ 286   1        if( claw <= 0x40 )
+ 287   1          SetClaw( CLAW_HOLD );
+ 288   1        else if( claw >= 0xC0 )
+ 289   1          SetClaw( CLAW_RELEASE );
+ 290   1        else
+ 291   1          SetClaw( CLAW_STOP );   
+ 292   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    376    ----
+   CODE SIZE        =    483    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      2       1
+   XDATA SIZE       =      4       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       8
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 6   
+
 END OF MODULE INFORMATION.
 
 

@@ -55,5 +55,9 @@ void SetArm( ARM_DIR dir);
 void Control_Motor(u8 speed,u8 dir);
 void Set_TimeOut_Motor(void);
 u8 CheckTimeOut_Motor(void);
+void Control_Claw(u8 claw);
+void Control_ARM(u8 arm);
+void Set_TimeOut_Wifi(void);
+u8 CheckTimeOut_Wifi(void);
 
 #endif

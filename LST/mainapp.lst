@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/16/2017 11:10:29 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -62,7 +62,7 @@ line level    source
   43          u8 dataPacket1;
   44          u8 speed = 0x00;
   45          u16 timeOutSonix = 0;//?????????
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 2   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/16/2017 11:10:29 PAGE 2   
 
   46          
   47          /* ???? */
@@ -87,239 +87,159 @@ line level    source
   66   1        
   67   1        while(1)
   68   1        {
-  69   2          
-  70   2          if(GetSysClock())//500uS
-  71   2          {
-  72   3            ResetSysClock();
-  73   3            //接收超时，刹车
-  74   3            if(CheckTimeOut_Motor())
-  75   3            {
-  76   4              SetMotor_Brake();//刹车
-  77   4            }
-  78   3            
-  79   3            Indicator_Light();//指示灯显示
-  80   3          }
-  81   2      //      if(GetTick_1ms())
-  82   2      //      {//1ms event
-  83   2      
-  84   2      //      }
-  85   2      //     HW_Board_Poll();
-  86   2      //      AppTask();
-  87   2          
-  88   2      //    delay();
-  89   2      //    
-  90   2      //    /* ???? */
-  91   2      //    if (timeOutSonix > 3000)
-  92   2      //    {
-  93   2      //      SetMotor_Brake();//刹车
-  94   2      //      //SetMotor_STOP();//不刹车
-  95   2      //      //SetArm( ARM_STOP );
-  96   2      //      //SetClaw( CLAW_STOP );
-  97   2      //      speed = 0;
-  98   2      //    }
-  99   2      //    else
- 100   2      //      timeOutSonix++;
- 101   2      //                
- 102   2          switch( dataPacket1 )
- 103   2          {
- 104   3            /* ????? */
- 105   3            case 0x70:
- 106   3              SetArm( ARM_DOWN );
- 107   3              break;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 3   
+  69   2          if(GetSysClock())//500uS
+  70   2          {
+  71   3            ResetSysClock();
+  72   3            if(CheckTimeOut_Wifi())//WIFI信号超时
+  73   3            {
+  74   4              SetMotor_Brake();//刹车
+  75   4              SetArm( ARM_STOP );
+  76   4              SetClaw( CLAW_STOP );
+  77   4            } 
+  78   3            else 
+  79   3            {
+  80   4              //前后信号接收超时，刹车
+  81   4              if(CheckTimeOut_Motor())
+  82   4              {
+  83   5                SetMotor_Brake();//刹车
+  84   5              }
+  85   4            }
+  86   3            
+  87   3            Indicator_Light();//指示灯显示
+  88   3          }
+  89   2      //      if(GetTick_1ms())
+  90   2      //      {//1ms event
+  91   2      
+  92   2      //      }
+  93   2      //     HW_Board_Poll();
+  94   2      //      AppTask();
+  95   2          
+  96   2      //    delay();
+  97   2      //    
+  98   2      //    /* ???? */
+  99   2      //    if (timeOutSonix > 3000)
+ 100   2      //    {
+ 101   2      //      SetMotor_Brake();//刹车
+ 102   2      //      //SetMotor_STOP();//不刹车
+ 103   2      //      //SetArm( ARM_STOP );
+ 104   2      //      //SetClaw( CLAW_STOP );
+ 105   2      //      speed = 0;
+ 106   2      //    }
+ 107   2      //    else
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/16/2017 11:10:29 PAGE 3   
 
- 108   3            /* ????? */
- 109   3            case 0x71:
- 110   3              SetArm( ARM_UP );
- 111   3              break;
- 112   3            /* ???? */
- 113   3            case 0x05:
- 114   3              SetClaw( CLAW_RELEASE );
- 115   3              break;
- 116   3            /* ???? */
- 117   3            case 0x09:
- 118   3              SetClaw( CLAW_HOLD );
- 119   3              break;    
- 120   3            default :
- 121   3              SetArm( ARM_STOP );
- 122   3              SetClaw( CLAW_STOP );       
- 123   3              break;
- 124   3          } 
- 125   2      
- 126   2      //    /* ???? */
- 127   2      //    motorOutFlag = 0;
- 128   2      //    switch( dataPacket0 )
- 129   2      //    {
- 130   2      //      /* ?? */
- 131   2      //      case 0x72:
- 132   2      //        SetMotor_L( 0 , 1 );
- 133   2      //        SetMotor_R( 180 , 0 );
- 134   2      //        break;
- 135   2      //      /* ?? */
- 136   2      //      case 0x73:
- 137   2      //        SetMotor_L( 180 , 0 );
- 138   2      //        SetMotor_R( 0 , 1 );
- 139   2      //        break;
- 140   2      //      /* ?? */
- 141   2      //      case 0x74:
- 142   2      //        SetMotor_L( speed , 0 );
- 143   2      //        SetMotor_R( speed , 0 );
- 144   2      //        break;
- 145   2      //      /* ?? */
- 146   2      //      case 0x75:
- 147   2      //        SetMotor_L( speed , 1 );
- 148   2      //        SetMotor_R( speed , 1 );
- 149   2      //        break;
- 150   2      //      /* ?? */
- 151   2      //      default:
- 152   2      //        motorOutFlag = 1;//?????
- 153   2      //        break;
- 154   2      //    }
- 155   2      
- 156   2      //    dataPacket0 = 0x00;//???????,???????
- 157   2      //                          
- 158   2      //    //????,????????,????
- 159   2      //    if( motorOutFlag == 0 )
- 160   2      //    {
- 161   2      //      timeOutSonix = 0;
- 162   2      //    }   
- 163   2        }
- 164   1      }
- 165          
- 166          /*
- 167          应用层的一些初始化
- 168          */
- 169          static void AppInit(void)
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 4   
+ 108   2      //      timeOutSonix++;
+ 109   2      //                
+ 110   2      //    switch( dataPacket1 )
+ 111   2      //    {
+ 112   2      //      /* ????? */
+ 113   2      //      case 0x70:
+ 114   2      //        SetArm( ARM_DOWN );
+ 115   2      //        break;
+ 116   2      //      /* ????? */
+ 117   2      //      case 0x71:
+ 118   2      //        SetArm( ARM_UP );
+ 119   2      //        break;
+ 120   2      //      /* ???? */
+ 121   2      //      case 0x05:
+ 122   2      //        SetClaw( CLAW_RELEASE );
+ 123   2      //        break;
+ 124   2      //      /* ???? */
+ 125   2      //      case 0x09:
+ 126   2      //        SetClaw( CLAW_HOLD );
+ 127   2      //        break;    
+ 128   2      //      default :
+ 129   2      //        SetArm( ARM_STOP );
+ 130   2      //        SetClaw( CLAW_STOP );       
+ 131   2      //        break;
+ 132   2      //    } 
+ 133   2      
+ 134   2      //    /* ???? */
+ 135   2      //    motorOutFlag = 0;
+ 136   2      //    switch( dataPacket0 )
+ 137   2      //    {
+ 138   2      //      /* ?? */
+ 139   2      //      case 0x72:
+ 140   2      //        SetMotor_L( 0 , 1 );
+ 141   2      //        SetMotor_R( 180 , 0 );
+ 142   2      //        break;
+ 143   2      //      /* ?? */
+ 144   2      //      case 0x73:
+ 145   2      //        SetMotor_L( 180 , 0 );
+ 146   2      //        SetMotor_R( 0 , 1 );
+ 147   2      //        break;
+ 148   2      //      /* ?? */
+ 149   2      //      case 0x74:
+ 150   2      //        SetMotor_L( speed , 0 );
+ 151   2      //        SetMotor_R( speed , 0 );
+ 152   2      //        break;
+ 153   2      //      /* ?? */
+ 154   2      //      case 0x75:
+ 155   2      //        SetMotor_L( speed , 1 );
+ 156   2      //        SetMotor_R( speed , 1 );
+ 157   2      //        break;
+ 158   2      //      /* ?? */
+ 159   2      //      default:
+ 160   2      //        motorOutFlag = 1;//?????
+ 161   2      //        break;
+ 162   2      //    }
+ 163   2      
+ 164   2      //    dataPacket0 = 0x00;//???????,???????
+ 165   2      //                          
+ 166   2      //    //????,????????,????
+ 167   2      //    if( motorOutFlag == 0 )
+ 168   2      //    {
+ 169   2      //      timeOutSonix = 0;
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/16/2017 11:10:29 PAGE 4   
 
- 170          {
- 171   1        
+ 170   2      //    }   
+ 171   2        }
  172   1      }
  173          
  174          /*
- 175          应用层任务
+ 175          应用层的一些初始化
  176          */
- 177          static void AppTask(void)
+ 177          static void AppInit(void)
  178          {
- 179   1         
+ 179   1        
  180   1      }
  181          
  182          /*
- 183            接收数据解析
- 184            RX_Handle
- 185          */
- 186          void Rx_Package_Handle(uint8_t *uartBuf)
- 187          {
- 188   1        SetWifiStatus();//设置WIFI为连接状态
- 189   1        
- 190   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
- 191   1        {
- 192   2          Control_Motor(uartBuf[2],uartBuf[1]);
- 193   2          
- 194   2          Set_TimeOut_Motor();//复位超时计数
- 195   2        }
- 196   1        
- 197   1            if(uartBuf[3] != 0x00)//空闲信号
- 198   1            {
- 199   2              dataPacket1 = 0x00;
- 200   2              
- 201   2              if( uartBuf[3] <= 0x40 )
- 202   2                dataPacket1=0x71;
- 203   2              else if( uartBuf[3] >= 0xD0 )
- 204   2                dataPacket1=0x70;
- 205   2              else if( uartBuf[4] <= 0x40 )
- 206   2                dataPacket1=0x09;
- 207   2              else if( uartBuf[4] >= 0xC0 )
- 208   2                dataPacket1=0x05;
- 209   2            }
- 210   1      //      dataPacket0=0x00;
- 211   1      //      if( uartBuf[1]<=0x40 )
- 212   1      //        dataPacket0=0x72;//??
- 213   1      //      else if( uartBuf[1]>=0xC0 )
- 214   1      //        dataPacket0=0x73;//??
- 215   1      //      else if( uartBuf[2] < 0x7a )
- 216   1      //      {
- 217   1      //        dataPacket0=0x75;//??
- 218   1      //        speed = (0x80 - uartBuf[2])*2;
- 219   1      //      }
- 220   1      //      else if( uartBuf[2] > 0x85 )
- 221   1      //      {
- 222   1      //        dataPacket0=0x74;//??
- 223   1      //        speed = (uartBuf[2] - 0x80)*2;
- 224   1      //        if(speed >= 0xFE)
- 225   1      //          speed = 0xFF;
- 226   1      //      }
- 227   1      }
- 228          
- 229          //void RX_Handle(u8 uartData)
- 230          //{
- 231          //  //uartData = UART1_DR;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 5   
-
- 232          //  
- 233          //  if( num >= DATA_LEN )//???????,???????
- 234          //  {
- 235          //    if( uartData == 0x66 )//??
- 236          //      num = 0;
- 237          //  }  
- 238          //  
- 239          //  if( num < DATA_LEN )
- 240          //  {
- 241          //    uartBuf[num++] = uartData;
- 242          //    if( ( num>=DATA_LEN ) && ( uartBuf[0]==0x66 ) )//???????,??0x66
- 243          //    {
- 244          //      SendDataUart(uartBuf,DATA_LEN);
- 245          //      dataPacket1 = 0x00;
- 246          //      if( uartBuf[3] <= 0x40 )
- 247          //        dataPacket1=0x71;//?????
- 248          //      else if( uartBuf[3] >= 0xD0 )
- 249          //        dataPacket1=0x70;//?????
- 250          //      else if( uartBuf[4] <= 0x40 )
- 251          //        dataPacket1=0x09;//????
- 252          //      else if( uartBuf[4] >= 0xC0 )
- 253          //        dataPacket1=0x05;//????
- 254          
- 255          //      dataPacket0=0x00;
- 256          //      if( uartBuf[1]<=0x40 )
- 257          //        dataPacket0=0x72;//??
- 258          //      else if( uartBuf[1]>=0xC0 )
- 259          //        dataPacket0=0x73;//??
- 260          //      else if( uartBuf[2] < 0x7a )
- 261          //      {
- 262          //        dataPacket0=0x75;//??
- 263          //        speed = 0x80 - uartBuf[2];
- 264          //      }
- 265          //      else if( uartBuf[2] > 0x85 )
- 266          //      {
- 267          //        dataPacket0=0x74;//??
- 268          //        speed = uartBuf[2] - 0x80;
- 269          //      }
- 270          //    }
- 271          //  }
- 272          //}
- 273          
- 274          //void SerialPort0_ISR(void) interrupt 4
- 275          //{
- 276          //    if (RI==1) 
- 277          //    {                                       /* if reception occur */
- 278          //      clr_RI;                             /* clear reception flag for next reception */
- 279          //      //Send_Data_To_UART0(SBUF);
- 280          //      RX_Handle(SBUF);
- 281          //    }
- 282          //    if(TI==1)
- 283          //    {
- 284          //      clr_TI;                             /* if emission occur */
- 285          //    }
- 286          //}
- 287          
+ 183          应用层任务
+ 184          */
+ 185          static void AppTask(void)
+ 186          {
+ 187   1         
+ 188   1      }
+ 189          
+ 190          /*
+ 191            接收数据解析
+ 192            RX_Handle
+ 193          */
+ 194          void Rx_Package_Handle(uint8_t *uartBuf)
+ 195          {
+ 196   1        Set_TimeOut_Wifi();//WIFI超时复位
+ 197   1        SetWifiStatus();//设置WIFI为连接状态
+ 198   1        
+ 199   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+ 200   1        {
+ 201   2          Control_Motor(uartBuf[2],uartBuf[1]);
+ 202   2          
+ 203   2          Set_TimeOut_Motor();//复位超时计数
+ 204   2        }
+ 205   1        
+ 206   1        if(uartBuf[3] != 0x00)//0x00空闲信号
+ 207   1        {
+ 208   2          Control_ARM (uartBuf[3]);
+ 209   2          Control_Claw(uartBuf[4]);
+ 210   2        }
+ 211   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    297    ----
+   CODE SIZE        =    194    ----
    CONSTANT SIZE    =     18    ----
    XDATA SIZE       =      8       1
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/15/2017 18:07:32 PAGE 6   
-
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3
    IDATA SIZE       =   ----    ----
