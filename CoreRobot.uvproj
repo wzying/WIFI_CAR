@@ -481,6 +481,11 @@
               <FileType>1</FileType>
               <FilePath>.\Code\N76E003_HW\PWM.c</FilePath>
             </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\LED.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
