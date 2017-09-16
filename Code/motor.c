@@ -26,12 +26,12 @@ void SetMotor_L(u8 pwm , u8 direction)
 	if(pwm!=0)
 		pwm += MOTOR_PWM_DIF;
 	
-  if(direction)//反转
+  if(direction)//??
   {
 		SetPWM(1 , 0);
 		SetPWM(4 , pwm);	
   }
-  else//正转
+  else//??
   {
 		SetPWM(1 , pwm);
 		SetPWM(4 , 0);
@@ -52,12 +52,12 @@ void SetMotor_R(u8 pwm , u8 direction)
 	if(pwm!=0)
 		pwm += MOTOR_PWM_DIF;
 	
-	if(direction)//反转
+	if(direction)//??
 	{
 		SetPWM(3 , pwm);
 		SetPWM(0 , 0);
 	}
-	else//正转
+	else//??
 	{
 		SetPWM(3 , 0);
 		SetPWM(0 , pwm);

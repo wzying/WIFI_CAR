@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -36,12 +36,12 @@ line level    source
   26   1        if(pwm!=0)
   27   1          pwm += MOTOR_PWM_DIF;
   28   1        
-  29   1        if(direction)//反转
+  29   1        if(direction)//??
   30   1        {
   31   2          SetPWM(1 , 0);
   32   2          SetPWM(4 , pwm);  
   33   2        }
-  34   1        else//正转
+  34   1        else//??
   35   1        {
   36   2          SetPWM(1 , pwm);
   37   2          SetPWM(4 , 0);
@@ -62,14 +62,14 @@ line level    source
   52   1        if(pwm!=0)
   53   1          pwm += MOTOR_PWM_DIF;
   54   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 2   
 
-  55   1        if(direction)//反转
+  55   1        if(direction)//??
   56   1        {
   57   2          SetPWM(3 , pwm);
   58   2          SetPWM(0 , 0);
   59   2        }
-  60   1        else//正转
+  60   1        else//??
   61   1        {
   62   2          SetPWM(3 , 0);
   63   2          SetPWM(0 , pwm);
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116          /* 前爪 */
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 3   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 3   
 
  117          void SetClaw( CLAW_DIR dir )
  118          {
@@ -190,7 +190,7 @@ line level    source
  176          void Control_Motor(u8 speed,u8 dir)
  177          {
  178   1        s16 carSpeed_L=0,carSpeed_R=0;
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 4   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 4   
 
  179   1        //u8 speed_dif;
  180   1        u8 flag=0;
@@ -254,7 +254,7 @@ line level    source
  238   1      }
  239          
  240          /*
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 5   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 5   
 
  241            WiFi信号接收超时
  242          */
@@ -318,7 +318,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =   ----       8
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 11:12:09 PAGE 6   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/16/2017 17:32:41 PAGE 6   
 
 END OF MODULE INFORMATION.
 
