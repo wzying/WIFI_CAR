@@ -7,7 +7,7 @@
 #include "Audio.h"
 #include "Board.h"
 #include "LED.h"
-
+#include "ADC.h"
 /*
 **********************************************************************
 * Ó²¼þ³éÏó²ã
@@ -39,6 +39,7 @@ void BoardInit(void)
 {
 	GPIO_Init();
 	LED_Init();
+	Init_ADC();
 	
 	Timer3Init(Timer3_IntHandler);//1ms interrupt
 	

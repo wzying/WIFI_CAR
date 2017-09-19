@@ -486,6 +486,11 @@
               <FileType>1</FileType>
               <FilePath>.\Code\LED.c</FilePath>
             </File>
+            <File>
+              <FileName>ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ADC.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

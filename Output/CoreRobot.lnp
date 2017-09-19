@@ -8,7 +8,8 @@
 ".\Output\Timer.obj",
 ".\Output\UART.obj",
 ".\Output\PWM.obj",
-".\Output\LED.obj" 
+".\Output\LED.obj",
+".\Output\ADC.obj" 
 TO ".\Output\CoreRobot" 
 PRINT(".\LST\CoreRobot.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 

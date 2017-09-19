@@ -1,0 +1,64 @@
+C51 COMPILER V9.52.0.0   ADC                                                               09/19/2017 09:41:52 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ADC
+OBJECT MODULE PLACED IN .\Output\ADC.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ADC.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Code\BSP;.\
+                    -Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\ADC.lst) TABS(2) OBJECT(.\Output\ADC.obj)
+
+line level    source
+
+   1          
+   2          #include "N76E003.h"
+   3          #include "Common.h"
+   4          #include "Delay.h"
+   5          #include "Audio.h"
+   6          #include "Board.h"
+   7          #include "PWM.h"
+   8          #include "motor.h"
+   9          #include "SFR_Macro.h"
+  10          #include "Function_define.h"
+  11          #include "string.h"
+  12          #include "UART.h"
+  13          #include "LED.h"
+  14          
+  15          
+  16          void Init_ADC(void)
+  17          {
+  18   1        //P0.4 AIN5
+  19   1        P04_Input_Mode;
+  20   1        
+  21   1        Enable_ADC_AIN5;
+  22   1      }
+  23          
+  24          u16 Get_ADC(void)
+  25          {
+  26   1        u16 adc;
+  27   1        
+  28   1        clr_ADCF;
+  29   1        set_ADCS;                 // ADC start trig signal
+  30   1      //  MyPrintf("W ");
+  31   1        while(ADCF == 0);
+  32   1      //  MyPrintf("L\r\n");
+  33   1      //  printf ("\n Value = 0x%bx",ADCRH);
+  34   1      //  printf ("\n Value = 0x%bx",ADCRL);  
+  35   1        
+  36   1        adc = ADCRH*16 + ADCRL;
+  37   1        
+  38   1        return adc;
+  39   1      }
+  40          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     67    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

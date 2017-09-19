@@ -25,6 +25,7 @@
 #include "string.h"
 #include "UART.h"
 #include "LED.h"
+#include "ADC.h"
 
 /***********************Local function Define***********************/
 static void AppInit(void);
@@ -58,17 +59,38 @@ void main (void)
 {
 //	UINT16 minus;
 	u8 motorOutFlag = 0;
+	u16 i=0;
+	u16 adc_val;
 	
 	AppInit();
 	BoardInit();
 	
 	MyPrintf("Hello WiFI Car \r\n");
-	
+
 	while(1)
 	{
 		if(GetSysClock())//500uS
 		{
 			ResetSysClock();
+			
+			if(i>20)
+			{
+				i=0;
+				adc_val = Get_ADC();
+				if(adc_val > 200)
+					SetMotor_STOP();
+				
+				//MyPrintf("ADC = ");
+//				Send_Data_To_UART0(adc_val/1000 + '0');
+//				Send_Data_To_UART0(adc_val%1000/100 + '0');
+//				Send_Data_To_UART0(adc_val%100/10 + '0');
+//				Send_Data_To_UART0(adc_val%10 + '0');
+//				MyPrintf("\r\n");
+			}
+			else
+			{
+				i++;
+			}
 			
 			if(Check_Recieve_Valid())//接收到有效的数据包
 			{
@@ -92,88 +114,6 @@ void main (void)
 			
 			Indicator_Light();//指示灯显示
 		}
-//			if(GetTick_1ms())
-//			{//1ms event
-
-//			}
-//		 HW_Board_Poll();
-//			AppTask();
-		
-//    delay();
-//    
-//    /* ???? */
-//    if (timeOutSonix > 3000)
-//    {
-//      SetMotor_Brake();//刹车
-//			//SetMotor_STOP();//不刹车
-//      //SetArm( ARM_STOP );
-//      //SetClaw( CLAW_STOP );
-//      speed = 0;
-//    }
-//    else
-//      timeOutSonix++;
-//                
-//    switch( dataPacket1 )
-//    {
-//      /* ????? */
-//      case 0x70:
-//        SetArm( ARM_DOWN );
-//        break;
-//      /* ????? */
-//      case 0x71:
-//				SetArm( ARM_UP );
-//        break;
-//      /* ???? */
-//      case 0x05:
-//        SetClaw( CLAW_RELEASE );
-//        break;
-//      /* ???? */
-//      case 0x09:
-//        SetClaw( CLAW_HOLD );
-//        break;		
-//      default :
-//        SetArm( ARM_STOP );
-//        SetClaw( CLAW_STOP );				
-//        break;
-//    } 
-
-//    /* ???? */
-//    motorOutFlag = 0;
-//    switch( dataPacket0 )
-//    {
-//      /* ?? */
-//      case 0x72:
-//        SetMotor_L( 0 , 1 );
-//        SetMotor_R( 180 , 0 );
-//        break;
-//      /* ?? */
-//      case 0x73:
-//        SetMotor_L( 180 , 0 );
-//        SetMotor_R( 0 , 1 );
-//        break;
-//      /* ?? */
-//      case 0x74:
-//        SetMotor_L( speed , 0 );
-//        SetMotor_R( speed , 0 );
-//        break;
-//      /* ?? */
-//      case 0x75:
-//        SetMotor_L( speed , 1 );
-//        SetMotor_R( speed , 1 );
-//        break;
-//      /* ?? */
-//      default:
-//        motorOutFlag = 1;//?????
-//        break;
-//    }
-
-//    dataPacket0 = 0x00;//???????,???????
-//                          
-//    //????,????????,????
-//    if( motorOutFlag == 0 )
-//    {
-//      timeOutSonix = 0;
-//    }		
 	}
 }
 
