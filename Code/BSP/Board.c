@@ -286,15 +286,32 @@ timer3 interrupt handler   1mS interrpt
 */
 static void Timer3_IntHandler(void)
 {
-	SetSysClock();
+	static u8 i=0;
 	
-	//超时复位接收Buf
-	if(CheckTimeOut())
+	if(i<10)
 	{
-		ResetIndexRx();
-		//MyPrintf("Reset Index\r\n");
+		i++;
+	}
+	else
+	{
+		i = 0;
+		
+		SetSysClock();
+		
+		//超时复位接收Buf
+		if(CheckTimeOut())
+		{
+			ResetIndexRx();
+			//MyPrintf("Reset Index\r\n");
+		}		
 	}
 	
+
+	if(Get_ADC() > 200)
+	{
+		SetPWM_Stop();
+		SetPWM_Start();
+	}
 }
 
 

@@ -11,7 +11,7 @@
 #include "Common.h"
 #include "motor.h"
 #include "PWM.h"
-
+#include "SFR_Macro.h"
 /**************************************************
 *函数名：	SetMotor_L
 *功能  ：	控制“左电机”的转速与方向
@@ -72,10 +72,14 @@ void SetMotor_R(u8 pwm , u8 direction)
 ***************************************************/
 void SetMotor_STOP(void)
 {
-		SetPWM(1 , 0);
-		SetPWM(4 , 0);
-		SetPWM(3 , 0);
-		SetPWM(0 , 0);
+//	clr_PWMRUN;
+
+//	P12=0;P11=0; P00=0;P01=0;
+	
+	SetPWM(1 , 0);
+	SetPWM(4 , 0);
+	SetPWM(3 , 0);
+	SetPWM(0 , 0);
 }
 
 /**************************************************

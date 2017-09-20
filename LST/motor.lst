@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -21,7 +21,7 @@ line level    source
   11          #include "Common.h"
   12          #include "motor.h"
   13          #include "PWM.h"
-  14          
+  14          #include "SFR_Macro.h"
   15          /**************************************************
   16          *函数名： SetMotor_L
   17          *功能  ： 控制“左电机”的转速与方向
@@ -62,7 +62,7 @@ line level    source
   52   1        if(pwm!=0)
   53   1          pwm += MOTOR_PWM_DIF;
   54   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 2   
 
   55   1        if(direction)//??
   56   1        {
@@ -84,242 +84,246 @@ line level    source
   72          ***************************************************/
   73          void SetMotor_STOP(void)
   74          {
-  75   1          SetPWM(1 , 0);
-  76   1          SetPWM(4 , 0);
-  77   1          SetPWM(3 , 0);
-  78   1          SetPWM(0 , 0);
-  79   1      }
-  80          
-  81          /**************************************************
-  82          *函数名： SetMotor_Brake
-  83          *功能  ： 刹车
-  84          *参数  ： 无
-  85          *返回  ： 无
-  86          ***************************************************/
-  87          void SetMotor_Brake(void)
-  88          {
-  89   1          SetPWM(1 , 0xff);
-  90   1          SetPWM(4 , 0xff);
-  91   1          SetPWM(3 , 0xff);
-  92   1          SetPWM(0 , 0xff);
-  93   1      }
-  94          
-  95          /* 机械臂 */
-  96          void SetArm( ARM_DIR dir)
-  97          {
-  98   1        switch(dir)
-  99   1        {
- 100   2        case ARM_UP:
- 101   2          MOTOR_ARM_A = 1;
- 102   2          MOTOR_ARM_B = 0;
- 103   2          break;
- 104   2        case ARM_DOWN:
- 105   2          MOTOR_ARM_A = 0;
- 106   2          MOTOR_ARM_B = 1;
+  75   1      //  clr_PWMRUN;
+  76   1      
+  77   1      //  P12=0;P11=0; P00=0;P01=0;
+  78   1        
+  79   1        SetPWM(1 , 0);
+  80   1        SetPWM(4 , 0);
+  81   1        SetPWM(3 , 0);
+  82   1        SetPWM(0 , 0);
+  83   1      }
+  84          
+  85          /**************************************************
+  86          *函数名： SetMotor_Brake
+  87          *功能  ： 刹车
+  88          *参数  ： 无
+  89          *返回  ： 无
+  90          ***************************************************/
+  91          void SetMotor_Brake(void)
+  92          {
+  93   1          SetPWM(1 , 0xff);
+  94   1          SetPWM(4 , 0xff);
+  95   1          SetPWM(3 , 0xff);
+  96   1          SetPWM(0 , 0xff);
+  97   1      }
+  98          
+  99          /* 机械臂 */
+ 100          void SetArm( ARM_DIR dir)
+ 101          {
+ 102   1        switch(dir)
+ 103   1        {
+ 104   2        case ARM_UP:
+ 105   2          MOTOR_ARM_A = 1;
+ 106   2          MOTOR_ARM_B = 0;
  107   2          break;
- 108   2        case ARM_STOP:
- 109   2        default:
- 110   2          MOTOR_ARM_A = 0;
- 111   2          MOTOR_ARM_B = 0;
- 112   2          break;
- 113   2        }
- 114   1      }
- 115          
- 116          /* 前爪 */
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 3   
+ 108   2        case ARM_DOWN:
+ 109   2          MOTOR_ARM_A = 0;
+ 110   2          MOTOR_ARM_B = 1;
+ 111   2          break;
+ 112   2        case ARM_STOP:
+ 113   2        default:
+ 114   2          MOTOR_ARM_A = 0;
+ 115   2          MOTOR_ARM_B = 0;
+ 116   2          break;
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 3   
 
- 117          void SetClaw( CLAW_DIR dir )
- 118          {
- 119   1        switch(dir)
- 120   1        {
- 121   2        case CLAW_RELEASE:
- 122   2          MOTOR_CLAW_A = 1;
- 123   2          MOTOR_CLAW_B = 0;
- 124   2          break;
- 125   2        case CLAW_HOLD:
- 126   2          MOTOR_CLAW_A = 0;
- 127   2          MOTOR_CLAW_B = 1;
+ 117   2        }
+ 118   1      }
+ 119          
+ 120          /* 前爪 */
+ 121          void SetClaw( CLAW_DIR dir )
+ 122          {
+ 123   1        switch(dir)
+ 124   1        {
+ 125   2        case CLAW_RELEASE:
+ 126   2          MOTOR_CLAW_A = 1;
+ 127   2          MOTOR_CLAW_B = 0;
  128   2          break;
- 129   2        case CLAW_STOP: 
- 130   2        default:
- 131   2          MOTOR_CLAW_A = 0;
- 132   2          MOTOR_CLAW_B = 0;
- 133   2          break;
- 134   2        } 
- 135   1      }
- 136          
- 137          /*
- 138            左电机
- 139            speed < 0 反转
- 140            speed > 0 正转
- 141          */
- 142          void Control_Motor_L(s16 speed)
- 143          {
- 144   1        if(speed >= 0)
- 145   1        {
- 146   2          SetMotor_L(speed,0);
- 147   2        }
- 148   1        else
+ 129   2        case CLAW_HOLD:
+ 130   2          MOTOR_CLAW_A = 0;
+ 131   2          MOTOR_CLAW_B = 1;
+ 132   2          break;
+ 133   2        case CLAW_STOP: 
+ 134   2        default:
+ 135   2          MOTOR_CLAW_A = 0;
+ 136   2          MOTOR_CLAW_B = 0;
+ 137   2          break;
+ 138   2        } 
+ 139   1      }
+ 140          
+ 141          /*
+ 142            左电机
+ 143            speed < 0 反转
+ 144            speed > 0 正转
+ 145          */
+ 146          void Control_Motor_L(s16 speed)
+ 147          {
+ 148   1        if(speed >= 0)
  149   1        {
- 150   2          SetMotor_L(-speed,1);
+ 150   2          SetMotor_L(speed,0);
  151   2        }
- 152   1      }
- 153          /*
- 154            右电机
- 155            speed < 0 反转
- 156            speed > 0 正转
- 157          */
- 158          void Control_Motor_R(s16 speed)
- 159          {
- 160   1        if(speed >= 0)
- 161   1        {
- 162   2          SetMotor_R(speed,0);
- 163   2        }
- 164   1        else
+ 152   1        else
+ 153   1        {
+ 154   2          SetMotor_L(-speed,1);
+ 155   2        }
+ 156   1      }
+ 157          /*
+ 158            右电机
+ 159            speed < 0 反转
+ 160            speed > 0 正转
+ 161          */
+ 162          void Control_Motor_R(s16 speed)
+ 163          {
+ 164   1        if(speed >= 0)
  165   1        {
- 166   2          SetMotor_R(-speed,1);
+ 166   2          SetMotor_R(speed,0);
  167   2        }
- 168   1      }
- 169          
- 170          
- 171          /*
- 172            小车前后左右控制
- 173            speed : 前后速度控制量
- 174            dir   : 转向信号控制量
- 175          */
- 176          void Control_Motor(u8 speed,u8 dir)
- 177          {
- 178   1        s16 carSpeed_L=0,carSpeed_R=0;
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 4   
+ 168   1        else
+ 169   1        {
+ 170   2          SetMotor_R(-speed,1);
+ 171   2        }
+ 172   1      }
+ 173          
+ 174          
+ 175          /*
+ 176            小车前后左右控制
+ 177            speed : 前后速度控制量
+ 178            dir   : 转向信号控制量
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 4   
 
- 179   1        //u8 speed_dif;
- 180   1        u8 flag=0;
- 181   1        
- 182   1          carSpeed_L = speed - 0x80;
- 183   1          carSpeed_R = speed - 0x80;
- 184   1      
- 185   1          if( dir != 0x80 )
- 186   1          {
- 187   2            if( dir > 0x80 )//
- 188   2            {
- 189   3              carSpeed_L = 0;
- 190   3              carSpeed_R = dir - 0x80;
- 191   3            }
- 192   2            if( dir < 0x80 )
- 193   2            {
- 194   3              carSpeed_R = 0;
- 195   3              carSpeed_L = 0x80 - dir;
- 196   3            }
- 197   2            
- 198   2      //      if( dir > 0x80 )//右转，右电机减速
- 199   2      //      {
- 200   2      //        speed_dif = dir-0x80;
- 201   2      //        if(carSpeed_R>=0)
- 202   2      //          carSpeed_R = carSpeed_R-speed_dif;
- 203   2      //        else
- 204   2      //          carSpeed_R = carSpeed_R+speed_dif;
- 205   2      //      }
- 206   2      //      else//左转，左电机减速
- 207   2      //      {
- 208   2      //        speed_dif = 0x80 - dir;
- 209   2      //        if(carSpeed_L>=0)
- 210   2      //          carSpeed_L = carSpeed_L-speed_dif;  
- 211   2      //        else
- 212   2      //          carSpeed_L = carSpeed_L+speed_dif;
- 213   2      //      }
- 214   2          } 
- 215   1        
- 216   1        Control_Motor_L(carSpeed_L);
- 217   1        Control_Motor_R(carSpeed_R);
- 218   1      }
- 219          
- 220          /*
- 221            接收超时检测
- 222            超时则停车
- 223          */
- 224          #define TIMEOUT_MOTOR 500
- 225          u16 timeOut_Motor=0;
- 226          u8 CheckTimeOut_Motor(void)
- 227          {
- 228   1        if(timeOut_Motor)
- 229   1          timeOut_Motor--;
- 230   1        else
- 231   1          return 1;
- 232   1        
- 233   1        return 0;
- 234   1      }
- 235          void Set_TimeOut_Motor(void)
- 236          {
- 237   1        timeOut_Motor = TIMEOUT_MOTOR;
+ 179          */
+ 180          void Control_Motor(u8 speed,u8 dir)
+ 181          {
+ 182   1        s16 carSpeed_L=0,carSpeed_R=0;
+ 183   1        //u8 speed_dif;
+ 184   1        u8 flag=0;
+ 185   1        
+ 186   1          carSpeed_L = speed - 0x80;
+ 187   1          carSpeed_R = speed - 0x80;
+ 188   1      
+ 189   1          if( dir != 0x80 )
+ 190   1          {
+ 191   2            if( dir > 0x80 )//
+ 192   2            {
+ 193   3              carSpeed_L = 0;
+ 194   3              carSpeed_R = dir - 0x80;
+ 195   3            }
+ 196   2            if( dir < 0x80 )
+ 197   2            {
+ 198   3              carSpeed_R = 0;
+ 199   3              carSpeed_L = 0x80 - dir;
+ 200   3            }
+ 201   2            
+ 202   2      //      if( dir > 0x80 )//右转，右电机减速
+ 203   2      //      {
+ 204   2      //        speed_dif = dir-0x80;
+ 205   2      //        if(carSpeed_R>=0)
+ 206   2      //          carSpeed_R = carSpeed_R-speed_dif;
+ 207   2      //        else
+ 208   2      //          carSpeed_R = carSpeed_R+speed_dif;
+ 209   2      //      }
+ 210   2      //      else//左转，左电机减速
+ 211   2      //      {
+ 212   2      //        speed_dif = 0x80 - dir;
+ 213   2      //        if(carSpeed_L>=0)
+ 214   2      //          carSpeed_L = carSpeed_L-speed_dif;  
+ 215   2      //        else
+ 216   2      //          carSpeed_L = carSpeed_L+speed_dif;
+ 217   2      //      }
+ 218   2          } 
+ 219   1        
+ 220   1        Control_Motor_L(carSpeed_L);
+ 221   1        Control_Motor_R(carSpeed_R);
+ 222   1      }
+ 223          
+ 224          /*
+ 225            接收超时检测
+ 226            超时则停车
+ 227          */
+ 228          #define TIMEOUT_MOTOR 500
+ 229          u16 timeOut_Motor=0;
+ 230          u8 CheckTimeOut_Motor(void)
+ 231          {
+ 232   1        if(timeOut_Motor)
+ 233   1          timeOut_Motor--;
+ 234   1        else
+ 235   1          return 1;
+ 236   1        
+ 237   1        return 0;
  238   1      }
- 239          
- 240          /*
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 5   
+ 239          void Set_TimeOut_Motor(void)
+ 240          {
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 5   
 
- 241            WiFi信号接收超时
- 242          */
- 243          #define TIMEOUT_WIFI 1000
- 244          u16 timeOut_Wifi=0;
- 245          u8 CheckTimeOut_Wifi(void)
- 246          {
- 247   1        if(timeOut_Wifi)
- 248   1          timeOut_Wifi--;
- 249   1        else
- 250   1          return 1;
- 251   1        
- 252   1        return 0;
- 253   1      }
- 254          void Set_TimeOut_Wifi(void)
- 255          {
- 256   1        timeOut_Wifi = TIMEOUT_WIFI;
+ 241   1        timeOut_Motor = TIMEOUT_MOTOR;
+ 242   1      }
+ 243          
+ 244          /*
+ 245            WiFi信号接收超时
+ 246          */
+ 247          #define TIMEOUT_WIFI 1000
+ 248          u16 timeOut_Wifi=0;
+ 249          u8 CheckTimeOut_Wifi(void)
+ 250          {
+ 251   1        if(timeOut_Wifi)
+ 252   1          timeOut_Wifi--;
+ 253   1        else
+ 254   1          return 1;
+ 255   1        
+ 256   1        return 0;
  257   1      }
- 258          
- 259          
- 260          /*
- 261            机械臂控制
- 262            参数： arm -> WiFi控制信号
- 263          */
- 264          void Control_ARM(u8 arm)
- 265          {
- 266   1        if( arm <= 0x40 )
- 267   1        {
- 268   2          SetArm( ARM_UP );
- 269   2        }
- 270   1        else if( arm >= 0xD0 )
+ 258          void Set_TimeOut_Wifi(void)
+ 259          {
+ 260   1        timeOut_Wifi = TIMEOUT_WIFI;
+ 261   1      }
+ 262          
+ 263          
+ 264          /*
+ 265            机械臂控制
+ 266            参数： arm -> WiFi控制信号
+ 267          */
+ 268          void Control_ARM(u8 arm)
+ 269          {
+ 270   1        if( arm <= 0x40 )
  271   1        {
- 272   2          SetArm( ARM_DOWN );
+ 272   2          SetArm( ARM_UP );
  273   2        }
- 274   1        else
+ 274   1        else if( arm >= 0xD0 )
  275   1        {
- 276   2          SetArm( ARM_STOP );
+ 276   2          SetArm( ARM_DOWN );
  277   2        }
- 278   1      
- 279   1      }
- 280          /*
- 281            前爪控制
- 282            
- 283          */
- 284          void Control_Claw(u8 claw)
- 285          {
- 286   1        if( claw <= 0x40 )
- 287   1          SetClaw( CLAW_HOLD );
- 288   1        else if( claw >= 0xC0 )
- 289   1          SetClaw( CLAW_RELEASE );
- 290   1        else
- 291   1          SetClaw( CLAW_STOP );   
- 292   1      }
+ 278   1        else
+ 279   1        {
+ 280   2          SetArm( ARM_STOP );
+ 281   2        }
+ 282   1      
+ 283   1      }
+ 284          /*
+ 285            前爪控制
+ 286            
+ 287          */
+ 288          void Control_Claw(u8 claw)
+ 289          {
+ 290   1        if( claw <= 0x40 )
+ 291   1          SetClaw( CLAW_HOLD );
+ 292   1        else if( claw >= 0xC0 )
+ 293   1          SetClaw( CLAW_RELEASE );
+ 294   1        else
+ 295   1          SetClaw( CLAW_STOP );   
+ 296   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    483    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4       1
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/19/2017 14:33:23 PAGE 6   
+
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       8
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/18/2017 18:11:05 PAGE 6   
-
 END OF MODULE INFORMATION.
 
 

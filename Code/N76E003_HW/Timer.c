@@ -39,8 +39,8 @@ void Timer3Init(FN_INT_HANDLER handler)
 {
 	mTimer3IntHandler=handler;
 	T3CON = 0x02;                           		//Timer3 Clock = Fsys/4
-	RH3 = HIBYTE(TIMER_DIV4_VALUE_500us);                       //initial counter values 
-	RL3 = LOBYTE(TIMER_DIV4_VALUE_500us);    
+	RH3 = HIBYTE(TIMER_DIV4_VALUE_50us);                       //initial counter values 
+	RL3 = LOBYTE(TIMER_DIV4_VALUE_50us);    
 	
 	set_ET3;                                    //enable Timer3 interrupt
  

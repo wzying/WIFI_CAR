@@ -60,7 +60,7 @@ void main (void)
 //	UINT16 minus;
 	u8 motorOutFlag = 0;
 	u16 i=0;
-	u16 adc_val;
+//	u16 adc_val;
 	
 	AppInit();
 	BoardInit();
@@ -73,24 +73,30 @@ void main (void)
 		{
 			ResetSysClock();
 			
-			if(i>20)
-			{
-				i=0;
-				adc_val = Get_ADC();
-				if(adc_val > 200)
-					SetMotor_STOP();
-				
-				//MyPrintf("ADC = ");
-//				Send_Data_To_UART0(adc_val/1000 + '0');
-//				Send_Data_To_UART0(adc_val%1000/100 + '0');
-//				Send_Data_To_UART0(adc_val%100/10 + '0');
-//				Send_Data_To_UART0(adc_val%10 + '0');
-//				MyPrintf("\r\n");
-			}
-			else
-			{
-				i++;
-			}
+//			if(i>=0)
+//			{
+//				i=0;
+//				adc_val = Get_ADC();
+//				if(adc_val > 200)
+//				{
+//					SetPWM_Stop();
+//					continue;
+//				}
+//				else
+//				{
+//					SetPWM_Start();
+//				}
+//				//MyPrintf("ADC = ");
+////				Send_Data_To_UART0(adc_val/1000 + '0');
+////				Send_Data_To_UART0(adc_val%1000/100 + '0');
+////				Send_Data_To_UART0(adc_val%100/10 + '0');
+////				Send_Data_To_UART0(adc_val%10 + '0');
+////				MyPrintf("\r\n");
+//			}
+//			else
+//			{
+//				i++;
+//			}
 			
 			if(Check_Recieve_Valid())//接收到有效的数据包
 			{

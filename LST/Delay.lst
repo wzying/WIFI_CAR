@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   DELAY                                                             09/18/2017 18:11:05 PAGE 1   
+C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE DELAY
@@ -62,7 +62,7 @@ line level    source
   44          //        TL0 = LOBYTE(TIMER_DIV12_VALUE_1ms);    //Find  define in "Function_define.h" "TIMER VALUE"
   45          //        TH0 = HIBYTE(TIMER_DIV12_VALUE_1ms);
   46          //        while (TF0 != 1);                       //Check Timer0 Time-Out Flag
-C51 COMPILER V9.52.0.0   DELAY                                                             09/18/2017 18:11:05 PAGE 2   
+C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 2   
 
   47          //        clr_TF0;
   48          //        u32CNT --;
@@ -126,7 +126,7 @@ line level    source
  106          //    while (u32CNT != 0)
  107          //    {
  108          //        RL3 = LOBYTE(TIMER_DIV4_VALUE_10us); //Find  define in "Function_define.h" "TIMER VALUE"
-C51 COMPILER V9.52.0.0   DELAY                                                             09/18/2017 18:11:05 PAGE 3   
+C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 3   
 
  109          //        RH3 = HIBYTE(TIMER_DIV4_VALUE_10us);
  110          //        while ((T3CON&SET_BIT4) != SET_BIT4);   //Check Timer3 Time-Out Flag

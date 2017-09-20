@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 1   
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE BOARD
@@ -62,7 +62,7 @@ line level    source
   51   1      }
   52           
   53          ///*********************************************************************
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 2   
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 2   
 
   54          //Brief: MT_SetFoot_Left ,control the left foot motor 
   55          //Return: void
@@ -126,7 +126,7 @@ line level    source
  113   2       
  114   2        }
  115   1        
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 3   
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 3   
 
  116   1        mlstock=mTock;
  117   1      }
@@ -190,7 +190,7 @@ line level    source
  175          UINT16 GetTickCount(void)
  176          {
  177   1        return GetTimer3Count();
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 4   
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 4   
 
  178   1      }
  179          
@@ -254,7 +254,7 @@ line level    source
  237          /*********************************************************************
  238          Brief: SetAttackPin IR   IR 攻击输出 ,有问题,需要改
  239          return: 
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 5   
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 5   
 
  240          Called: IRComm.c
  241           
@@ -305,27 +305,44 @@ line level    source
  286          */
  287          static void Timer3_IntHandler(void)
  288          {
- 289   1        SetSysClock();
+ 289   1        static u8 i=0;
  290   1        
- 291   1        //超时复位接收Buf
- 292   1        if(CheckTimeOut())
- 293   1        {
- 294   2          ResetIndexRx();
- 295   2          //MyPrintf("Reset Index\r\n");
- 296   2        }
- 297   1        
- 298   1      }
- 299          
- 300          
- 301           
-C51 COMPILER V9.52.0.0   BOARD                                                             09/18/2017 18:11:05 PAGE 6   
+ 291   1        if(i<10)
+ 292   1        {
+ 293   2          i++;
+ 294   2        }
+ 295   1        else
+ 296   1        {
+ 297   2          i = 0;
+ 298   2          
+ 299   2          SetSysClock();
+ 300   2          
+ 301   2          //超时复位接收Buf
+C51 COMPILER V9.52.0.0   BOARD                                                             09/19/2017 16:58:19 PAGE 6   
 
+ 302   2          if(CheckTimeOut())
+ 303   2          {
+ 304   3            ResetIndexRx();
+ 305   3            //MyPrintf("Reset Index\r\n");
+ 306   3          }   
+ 307   2        }
+ 308   1        
+ 309   1      
+ 310   1        if(Get_ADC() > 200)
+ 311   1        {
+ 312   2          SetPWM_Stop();
+ 313   2          SetPWM_Start();
+ 314   2        }
+ 315   1      }
+ 316          
+ 317          
+ 318           
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    331    ----
+   CODE SIZE        =    368    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     15    ----
+   XDATA SIZE       =     16    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       4
    IDATA SIZE       =   ----    ----

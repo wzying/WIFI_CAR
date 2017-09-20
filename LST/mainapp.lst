@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 10:16:41 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 14:49:17 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -62,7 +62,7 @@ line level    source
   43          u8 dataPacket0;
   44          u8 dataPacket1;
   45          u8 speed = 0x00;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 10:16:41 PAGE 2   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 14:49:17 PAGE 2   
 
   46          u16 timeOutSonix = 0;//?????????
   47          
@@ -81,7 +81,7 @@ line level    source
   60   1      //  UINT16 minus;
   61   1        u8 motorOutFlag = 0;
   62   1        u16 i=0;
-  63   1        u16 adc_val;
+  63   1      //  u16 adc_val;
   64   1        
   65   1        AppInit();
   66   1        BoardInit();
@@ -94,96 +94,104 @@ line level    source
   73   2          {
   74   3            ResetSysClock();
   75   3            
-  76   3            if(i>20)
-  77   3            {
-  78   4              i=0;
-  79   4              adc_val = Get_ADC();
-  80   4              if(adc_val > 200)
-  81   4                SetMotor_STOP();
-  82   4              
-  83   4              //MyPrintf("ADC = ");
-  84   4      //        Send_Data_To_UART0(adc_val/1000 + '0');
-  85   4      //        Send_Data_To_UART0(adc_val%1000/100 + '0');
-  86   4      //        Send_Data_To_UART0(adc_val%100/10 + '0');
-  87   4      //        Send_Data_To_UART0(adc_val%10 + '0');
-  88   4      //        MyPrintf("\r\n");
-  89   4            }
-  90   3            else
-  91   3            {
-  92   4              i++;
-  93   4            }
-  94   3            
-  95   3            if(Check_Recieve_Valid())//接收到有效的数据包
-  96   3            {
-  97   4              Rx_Package_Handle(RX_Packet);
-  98   4            }
-  99   3            
- 100   3            if(CheckTimeOut_Wifi())//WIFI信号超时
- 101   3            {
- 102   4              SetMotor_Brake();//刹车
- 103   4              SetArm( ARM_STOP );
- 104   4              SetClaw( CLAW_STOP );
- 105   4            } 
- 106   3            else 
+  76   3      //      if(i>=0)
+  77   3      //      {
+  78   3      //        i=0;
+  79   3      //        adc_val = Get_ADC();
+  80   3      //        if(adc_val > 200)
+  81   3      //        {
+  82   3      //          SetPWM_Stop();
+  83   3      //          continue;
+  84   3      //        }
+  85   3      //        else
+  86   3      //        {
+  87   3      //          SetPWM_Start();
+  88   3      //        }
+  89   3      //        //MyPrintf("ADC = ");
+  90   3      ////        Send_Data_To_UART0(adc_val/1000 + '0');
+  91   3      ////        Send_Data_To_UART0(adc_val%1000/100 + '0');
+  92   3      ////        Send_Data_To_UART0(adc_val%100/10 + '0');
+  93   3      ////        Send_Data_To_UART0(adc_val%10 + '0');
+  94   3      ////        MyPrintf("\r\n");
+  95   3      //      }
+  96   3      //      else
+  97   3      //      {
+  98   3      //        i++;
+  99   3      //      }
+ 100   3            
+ 101   3            if(Check_Recieve_Valid())//接收到有效的数据包
+ 102   3            {
+ 103   4              Rx_Package_Handle(RX_Packet);
+ 104   4            }
+ 105   3            
+ 106   3            if(CheckTimeOut_Wifi())//WIFI信号超时
  107   3            {
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 10:16:41 PAGE 3   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 14:49:17 PAGE 3   
 
- 108   4              //前后信号接收超时，刹车
- 109   4              if(CheckTimeOut_Motor())
- 110   4              {
- 111   5                SetMotor_Brake();//刹车
- 112   5              }
- 113   4            }
- 114   3            
- 115   3            Indicator_Light();//指示灯显示
- 116   3          }
- 117   2        }
- 118   1      }
- 119          
- 120          /*
- 121          应用层的一些初始化
- 122          */
- 123          static void AppInit(void)
- 124          {
- 125   1        
- 126   1      }
- 127          
- 128          /*
- 129          应用层任务
- 130          */
- 131          static void AppTask(void)
- 132          {
- 133   1         
- 134   1      }
- 135          
- 136          /*
- 137            接收数据解析
- 138            RX_Handle
- 139          */
- 140          void Rx_Package_Handle(uint8_t *uartBuf)
- 141          {
- 142   1        Set_TimeOut_Wifi();//WIFI超时复位
- 143   1        SetWifiStatus();//设置WIFI为连接状态
- 144   1        
- 145   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
- 146   1        {
- 147   2          Control_Motor(uartBuf[2],uartBuf[1]);
- 148   2          
- 149   2          Set_TimeOut_Motor();//复位超时计数
- 150   2        }
- 151   1        
- 152   1        if(uartBuf[3] != 0x00)//0x00空闲信号
- 153   1        {
- 154   2          Control_ARM (uartBuf[3]);
- 155   2          Control_Claw(uartBuf[4]);
+ 108   4              SetMotor_Brake();//刹车
+ 109   4              SetArm( ARM_STOP );
+ 110   4              SetClaw( CLAW_STOP );
+ 111   4            } 
+ 112   3            else 
+ 113   3            {
+ 114   4              //前后信号接收超时，刹车
+ 115   4              if(CheckTimeOut_Motor())
+ 116   4              {
+ 117   5                SetMotor_Brake();//刹车
+ 118   5              }
+ 119   4            }
+ 120   3            
+ 121   3            Indicator_Light();//指示灯显示
+ 122   3          }
+ 123   2        }
+ 124   1      }
+ 125          
+ 126          /*
+ 127          应用层的一些初始化
+ 128          */
+ 129          static void AppInit(void)
+ 130          {
+ 131   1        
+ 132   1      }
+ 133          
+ 134          /*
+ 135          应用层任务
+ 136          */
+ 137          static void AppTask(void)
+ 138          {
+ 139   1         
+ 140   1      }
+ 141          
+ 142          /*
+ 143            接收数据解析
+ 144            RX_Handle
+ 145          */
+ 146          void Rx_Package_Handle(uint8_t *uartBuf)
+ 147          {
+ 148   1        Set_TimeOut_Wifi();//WIFI超时复位
+ 149   1        SetWifiStatus();//设置WIFI为连接状态
+ 150   1        
+ 151   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+ 152   1        {
+ 153   2          Control_Motor(uartBuf[2],uartBuf[1]);
+ 154   2          
+ 155   2          Set_TimeOut_Motor();//复位超时计数
  156   2        }
- 157   1      }
+ 157   1        
+ 158   1        if(uartBuf[3] != 0x00)//0x00空闲信号
+ 159   1        {
+ 160   2          Control_ARM (uartBuf[3]);
+ 161   2          Control_Claw(uartBuf[4]);
+ 162   2        }
+ 163   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    274    ----
+   CODE SIZE        =    213    ----
    CONSTANT SIZE    =     18    ----
-   XDATA SIZE       =      8       5
+   XDATA SIZE       =      8       3
+C51 COMPILER V9.52.0.0   MAINAPP                                                           09/19/2017 14:49:17 PAGE 4   
+
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3
    IDATA SIZE       =   ----    ----

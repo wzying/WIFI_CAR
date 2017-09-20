@@ -219,6 +219,7 @@
 		#define TIMER_DIV12_VALUE_10ms			65536-13334	//13334*12/16000000 = 10 mS 		// Timer divider = 12 
 		#define TIMER_DIV12_VALUE_40ms			65536-53336	//53336*12/16000000 = 40 ms			// Timer divider = 12 
 		#define TIMER_DIV4_VALUE_10us				65536-40		//40*4/16000000 = 10 uS,    		// Timer divider = 4	for TM2/TM3
+		#define TIMER_DIV4_VALUE_50us			  65536-200		//200*4/16000000 = 50 us				// Timer divider = 4
 		#define TIMER_DIV4_VALUE_100us			65536-400		//400*4/16000000 = 100 us				// Timer divider = 4
 		#define TIMER_DIV4_VALUE_200us			65536-800		//800*4/16000000 = 200 us				// Timer divider = 4
 		#define TIMER_DIV4_VALUE_500us			65536-2000	//2000*4/16000000 = 500 us			// Timer divider = 4
