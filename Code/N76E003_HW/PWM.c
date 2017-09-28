@@ -56,7 +56,7 @@ void PWM_Init(void)
 
 	PWM_IMDEPENDENT_MODE;
 	PWM_CLOCK_FSYS;// selecte sysclk=16MHz as the input clock
-	PWM_CLOCK_DIV_128;// pwm clock=16/16=1MHz
+	PWM_CLOCK_DIV_4;// pwm clock=16/16=1MHz
 	PWMPH = 0x00;
 	PWMPL = (0x7E + MOTOR_PWM_DIF);//
 	/**********************************************************************
@@ -81,6 +81,7 @@ void PWM_Init(void)
 
 void SetPWM_Start(void)
 {
+	//恢复PWM输出
 	PWM0_P12_OUTPUT_ENABLE;
 	PWM1_P11_OUTPUT_ENABLE;
 	
@@ -91,6 +92,11 @@ void SetPWM_Start(void)
 	//PWM5_P03_OUTPUT_ENABLE;
 	
 	set_PWMRUN;
+	
+	//恢复机械臂
+	SetArm(GetArmStatus());
+	//恢复前爪
+	SetClaw(GetClawStatus());
 }
 
 void SetPWM_Stop(void)
@@ -100,15 +106,23 @@ void SetPWM_Stop(void)
 	PWM0_P12_OUTPUT_DISABLE;
 	PWM1_P11_OUTPUT_DISABLE;
 	
-	PWM2_P10_OUTPUT_DISABLE;
+	//PWM2_P10_OUTPUT_DISABLE;
 	PWM3_P00_OUTPUT_DISABLE;
 	
 	PWM4_P01_OUTPUT_DISABLE;
-	PWM5_P03_OUTPUT_DISABLE;
+	//PWM5_P03_OUTPUT_DISABLE;
 
 	P12=0;P11=0; P00=0;P01=0;	
 	
-//	SetPWM(1 , 0);
+	//短时间关闭机械臂
+	MOTOR_ARM_A = 0;
+	MOTOR_ARM_B = 0;	
+	
+	//短时间关闭前爪
+	MOTOR_CLAW_A = 0;
+	MOTOR_CLAW_B = 0;	
+	
+//	SetPWM(1 , 0); //占空比需要保留，不能清除。等电流降低后重新恢复输出
 //	SetPWM(4 , 0);
 //	SetPWM(3 , 0);
 //	SetPWM(0 , 0);

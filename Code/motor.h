@@ -11,7 +11,7 @@
 #ifndef _MOTOR_H_
 #define	_MOTOR_H_
 
-#define MOTOR_PWM_DIF  50 
+#define MOTOR_PWM_DIF  60 
 
 /* 	×óµç»ú 	IO£ºPWM1 + PC7	*/
 #define	MOTOR_L	PC_ODR_bit.ODR7
@@ -21,10 +21,10 @@
 
 /* 
 	»úÐµ±Û 
-	P0.5 + P1.5
+	P1.4 + P1.3
 */
-#define MOTOR_ARM_A P05
-#define MOTOR_ARM_B P15
+#define MOTOR_ARM_A P14
+#define MOTOR_ARM_B P13
 typedef enum {
 	ARM_STOP,
 	ARM_UP,
@@ -59,5 +59,7 @@ void Control_Claw(u8 claw);
 void Control_ARM(u8 arm);
 void Set_TimeOut_Wifi(void);
 u8 CheckTimeOut_Wifi(void);
+ARM_DIR GetArmStatus(void);
+CLAW_DIR GetClawStatus(void);
 
 #endif

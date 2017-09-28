@@ -15,25 +15,30 @@
 void LED_Init(void)
 {
 	P17_PushPull_Mode;
-	LED_STATUS=0;
+	LED1_STATUS=1;
+	
+	P30_PushPull_Mode;
+	LED2_STATUS=1;	
 }
 
 void Set_LED_WIFI(void)
 {
-	LED_STATUS=1;
+	LED1_STATUS=0;
+	LED2_STATUS=0;
 }
 
 void Reset_LED_WIFI(void)
 {
-	LED_STATUS=0;
+	LED1_STATUS=1;
+	LED2_STATUS=1;
 }
 
 void Turn_LED(void)
 {
-	if(LED_STATUS)
-		LED_STATUS = 0;
+	if(LED1_STATUS)
+		Set_LED_WIFI();
 	else
-		LED_STATUS = 1;
+		Reset_LED_WIFI();
 }
 
 u16 wifi_connect_timeout = 0;

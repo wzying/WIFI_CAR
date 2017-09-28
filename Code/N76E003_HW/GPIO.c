@@ -31,12 +31,12 @@ void GPIO_Init(void)
 {
 	/*
 		»úÐµ±Û
-		P0.5 + P1.5
+		P1.4 + P1.3
 	*/
-	P05_PushPull_Mode;
-	P05=0;
-	P15_PushPull_Mode;
-	P15=0;	
+	P14_PushPull_Mode;
+	P14=0;
+	P13_PushPull_Mode;
+	P13=0;	
 	
 	/*
 		Ç°×¦

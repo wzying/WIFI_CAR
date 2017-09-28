@@ -3,5 +3,6 @@
 
 void Init_ADC(void);
 u16 Get_ADC(void);
+u16 Get_ADC_BAT(void);
 
 #endif

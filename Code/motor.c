@@ -97,8 +97,10 @@ void SetMotor_Brake(void)
 }
 
 /* 机械臂 */
+static ARM_DIR arm_Dir_Tem;
 void SetArm( ARM_DIR dir)
 {
+	arm_Dir_Tem = dir;
 	switch(dir)
 	{
 	case ARM_UP:
@@ -116,10 +118,20 @@ void SetArm( ARM_DIR dir)
 		break;
 	}
 }
+/*
+	获取机械臂状态
+*/
+ARM_DIR GetArmStatus(void)
+{
+	return arm_Dir_Tem;
+}
+
 
 /* 前爪 */
+static CLAW_DIR claw_Dir_Tem;
 void SetClaw( CLAW_DIR dir )
 {
+	claw_Dir_Tem = dir;
 	switch(dir)
 	{
 	case CLAW_RELEASE:
@@ -137,6 +149,11 @@ void SetClaw( CLAW_DIR dir )
 		break;
 	}	
 }
+CLAW_DIR GetClawStatus(void)
+{
+	return claw_Dir_Tem;
+}
+
 
 /*
 	左电机
@@ -225,7 +242,7 @@ void Control_Motor(u8 speed,u8 dir)
 	接收超时检测
 	超时则停车
 */
-#define TIMEOUT_MOTOR 500
+#define TIMEOUT_MOTOR 700
 u16 timeOut_Motor=0;
 u8 CheckTimeOut_Motor(void)
 {

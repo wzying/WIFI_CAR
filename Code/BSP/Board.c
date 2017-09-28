@@ -39,7 +39,7 @@ void BoardInit(void)
 {
 	GPIO_Init();
 	LED_Init();
-	Init_ADC();
+	//Init_ADC();
 	
 	Timer3Init(Timer3_IntHandler);//1ms interrupt
 	
@@ -307,11 +307,17 @@ static void Timer3_IntHandler(void)
 	}
 	
 
+	//修改：让电流阈值随电池电压的降低而降低
 	if(Get_ADC() > 200)
 	{
 		SetPWM_Stop();
+		//SetPWM_Start();
+	}
+	else
+	{
 		SetPWM_Start();
 	}
+	
 }
 
 

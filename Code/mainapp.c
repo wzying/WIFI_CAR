@@ -73,25 +73,25 @@ void main (void)
 		{
 			ResetSysClock();
 			
-//			if(i>=0)
+//			if(i>=1000)
 //			{
 //				i=0;
-//				adc_val = Get_ADC();
-//				if(adc_val > 200)
-//				{
-//					SetPWM_Stop();
-//					continue;
-//				}
-//				else
-//				{
-//					SetPWM_Start();
-//				}
+//				adc_val = Get_ADC_BAT();
+////				if(adc_val > 200)
+////				{
+////					SetPWM_Stop();
+////					continue;
+////				}
+////				else
+////				{
+////					SetPWM_Start();
+////				}
 //				//MyPrintf("ADC = ");
-////				Send_Data_To_UART0(adc_val/1000 + '0');
-////				Send_Data_To_UART0(adc_val%1000/100 + '0');
-////				Send_Data_To_UART0(adc_val%100/10 + '0');
-////				Send_Data_To_UART0(adc_val%10 + '0');
-////				MyPrintf("\r\n");
+//				Send_Data_To_UART0(adc_val/1000 + '0');
+//				Send_Data_To_UART0(adc_val%1000/100 + '0');
+//				Send_Data_To_UART0(adc_val%100/10 + '0');
+//				Send_Data_To_UART0(adc_val%10 + '0');
+//				MyPrintf("\r\n");
 //			}
 //			else
 //			{
