@@ -302,12 +302,70 @@ void Control_ARM(u8 arm)
 	前爪控制
 	
 */
+static u8 claw_Turn_Flag = 0;
+static u8 claw_EN = 0;
+void Set_Claw_EN(void)
+{
+	claw_EN = 1;
+}
+void Reset_Claw_EN(void)
+{
+	claw_EN = 0;
+}
+u8 Check_Claw_EN(void)
+{
+	return claw_EN;
+}
+void Claw_Trun(void)
+{
+	if(claw_Turn_Flag)
+		claw_Turn_Flag = 0;
+	else
+		claw_Turn_Flag = 1;
+}
+void Claw_Dir(void)
+{
+	Set_Claw_EN();
+	Set_TimeOut_Claw();
+	if(claw_Turn_Flag)
+		SetClaw( CLAW_HOLD );
+	else
+		SetClaw( CLAW_RELEASE );
+}
+
 void Control_Claw(u8 claw)
 {
+	
 	if( claw <= 0x40 )
-		SetClaw( CLAW_HOLD );
+	{
+		//SetClaw( CLAW_HOLD );
+		Claw_Dir();
+	}
 	else if( claw >= 0xC0 )
-		SetClaw( CLAW_RELEASE );
+	{
+		//SetClaw( CLAW_RELEASE );
+		Claw_Dir();
+	}
 	else
+	{
 		SetClaw( CLAW_STOP );		
+	}
+}
+/*
+	前爪 信号接收超时
+*/
+#define TIMEOUT_CLAW 600
+u16 timeOut_Claw=0;
+u8 CheckTimeOut_Claw(void)
+{
+	if(timeOut_Claw)
+		timeOut_Claw--;
+	else
+		return 1;
+	
+	return 0;
+}
+void Set_TimeOut_Claw(void)
+{
+	timeOut_Claw = TIMEOUT_CLAW;
 }

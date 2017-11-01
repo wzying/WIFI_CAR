@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52   1        if(pwm!=0)
   53   1          pwm += MOTOR_PWM_DIF;
   54   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 2   
 
   55   1        if(direction)//??
   56   1        {
@@ -126,7 +126,7 @@ line level    source
  114   2        case ARM_STOP:
  115   2        default:
  116   2          MOTOR_ARM_A = 0;
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 3   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 3   
 
  117   2          MOTOR_ARM_B = 0;
  118   2          break;
@@ -190,7 +190,7 @@ line level    source
  176            speed < 0 反转
  177            speed > 0 正转
  178          */
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 4   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 4   
 
  179          void Control_Motor_R(s16 speed)
  180          {
@@ -254,7 +254,7 @@ line level    source
  238   1        Control_Motor_R(carSpeed_R);
  239   1      }
  240          
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 5   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 5   
 
  241          /*
  242            接收超时检测
@@ -318,27 +318,87 @@ line level    source
  300   1      }
  301          /*
  302            前爪控制
-C51 COMPILER V9.52.0.0   MOTOR                                                             09/28/2017 10:54:58 PAGE 6   
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 6   
 
  303            
  304          */
- 305          void Control_Claw(u8 claw)
- 306          {
- 307   1        if( claw <= 0x40 )
- 308   1          SetClaw( CLAW_HOLD );
- 309   1        else if( claw >= 0xC0 )
- 310   1          SetClaw( CLAW_RELEASE );
- 311   1        else
- 312   1          SetClaw( CLAW_STOP );   
- 313   1      }
+ 305          static u8 claw_Turn_Flag = 0;
+ 306          static u8 claw_EN = 0;
+ 307          void Set_Claw_EN(void)
+ 308          {
+ 309   1        claw_EN = 1;
+ 310   1      }
+ 311          void Reset_Claw_EN(void)
+ 312          {
+ 313   1        claw_EN = 0;
+ 314   1      }
+ 315          u8 Check_Claw_EN(void)
+ 316          {
+ 317   1        return claw_EN;
+ 318   1      }
+ 319          void Claw_Trun(void)
+ 320          {
+ 321   1        if(claw_Turn_Flag)
+ 322   1          claw_Turn_Flag = 0;
+ 323   1        else
+ 324   1          claw_Turn_Flag = 1;
+ 325   1      }
+ 326          void Claw_Dir(void)
+ 327          {
+ 328   1        Set_Claw_EN();
+ 329   1        Set_TimeOut_Claw();
+ 330   1        if(claw_Turn_Flag)
+ 331   1          SetClaw( CLAW_HOLD );
+ 332   1        else
+ 333   1          SetClaw( CLAW_RELEASE );
+ 334   1      }
+ 335          
+ 336          void Control_Claw(u8 claw)
+ 337          {
+ 338   1        
+ 339   1        if( claw <= 0x40 )
+ 340   1        {
+ 341   2          //SetClaw( CLAW_HOLD );
+ 342   2          Claw_Dir();
+ 343   2        }
+ 344   1        else if( claw >= 0xC0 )
+ 345   1        {
+ 346   2          //SetClaw( CLAW_RELEASE );
+ 347   2          Claw_Dir();
+ 348   2        }
+ 349   1        else
+ 350   1        {
+ 351   2          SetClaw( CLAW_STOP );   
+ 352   2        }
+ 353   1      }
+ 354          /*
+ 355            前爪 信号接收超时
+ 356          */
+ 357          #define TIMEOUT_CLAW 600
+ 358          u16 timeOut_Claw=0;
+ 359          u8 CheckTimeOut_Claw(void)
+ 360          {
+ 361   1        if(timeOut_Claw)
+ 362   1          timeOut_Claw--;
+ 363   1        else
+ 364   1          return 1;
+C51 COMPILER V9.52.0.0   MOTOR                                                             09/30/2017 10:36:13 PAGE 7   
+
+ 365   1        
+ 366   1        return 0;
+ 367   1      }
+ 368          void Set_TimeOut_Claw(void)
+ 369          {
+ 370   1        timeOut_Claw = TIMEOUT_CLAW;
+ 371   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    493    ----
+   CODE SIZE        =    593    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4       1
+   XDATA SIZE       =      8       1
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      2       8
+   DATA SIZE        =      2       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

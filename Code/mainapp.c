@@ -118,6 +118,15 @@ void main (void)
 				}
 			}
 			
+			if(CheckTimeOut_Claw())//检测前爪停转
+			{
+				if(Check_Claw_EN())
+				{
+					Reset_Claw_EN();	
+					Claw_Trun();//前爪反转
+				}				
+			}
+				
 			Indicator_Light();//指示灯显示
 		}
 	}

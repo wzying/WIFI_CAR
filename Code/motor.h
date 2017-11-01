@@ -61,5 +61,11 @@ void Set_TimeOut_Wifi(void);
 u8 CheckTimeOut_Wifi(void);
 ARM_DIR GetArmStatus(void);
 CLAW_DIR GetClawStatus(void);
+void Set_Claw_EN(void);
+void Reset_Claw_EN(void);
+u8 Check_Claw_EN(void);
+void Claw_Trun(void);
+u8 CheckTimeOut_Claw(void);
+void Set_TimeOut_Claw(void);
 
 #endif

@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   ADC                                                               09/28/2017 10:54:59 PAGE 1   
+C51 COMPILER V9.52.0.0   ADC                                                               09/30/2017 10:36:13 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ADC
@@ -62,7 +62,7 @@ line level    source
   52   1        clr_ADCF;
   53   1        set_ADCS;                 // ADC start trig signal
   54   1      
-C51 COMPILER V9.52.0.0   ADC                                                               09/28/2017 10:54:59 PAGE 2   
+C51 COMPILER V9.52.0.0   ADC                                                               09/30/2017 10:36:13 PAGE 2   
 
   55   1        while(ADCF == 0);
   56   1      
