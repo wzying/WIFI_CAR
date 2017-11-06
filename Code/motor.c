@@ -23,19 +23,25 @@
 ***************************************************/
 void SetMotor_L(u8 pwm , u8 direction)
 {
-	if(pwm!=0)
+	if(pwm == 0)//刹车
+	{
+		SetPWM(1 , 0xff);
+		SetPWM(4 , 0xff);
+	}
+	else
+	{
 		pwm += MOTOR_PWM_DIF;
-	
-  if(direction)//??
-  {
-		SetPWM(1 , 0);
-		SetPWM(4 , pwm);	
-  }
-  else//??
-  {
-		SetPWM(1 , pwm);
-		SetPWM(4 , 0);
-  }
+		if(direction)//??
+		{
+			SetPWM(1 , 0);
+			SetPWM(4 , pwm);	
+		}
+		else//??
+		{
+			SetPWM(1 , pwm);
+			SetPWM(4 , 0);
+		}
+	}
 }
 
 /**************************************************
@@ -49,18 +55,24 @@ void SetMotor_L(u8 pwm , u8 direction)
 ***************************************************/
 void SetMotor_R(u8 pwm , u8 direction)
 {
-	if(pwm!=0)
-		pwm += MOTOR_PWM_DIF;
-	
-	if(direction)//??
+	if(pwm == 0)//刹车
 	{
-		SetPWM(3 , pwm);
-		SetPWM(0 , 0);
+		SetPWM(3 , 0xff);
+		SetPWM(0 , 0xff);		
 	}
-	else//??
+	else
 	{
-		SetPWM(3 , 0);
-		SetPWM(0 , pwm);
+		pwm += MOTOR_PWM_DIF;
+		if(direction)//??
+		{
+			SetPWM(3 , pwm);
+			SetPWM(0 , 0);
+		}
+		else//??
+		{
+			SetPWM(3 , 0);
+			SetPWM(0 , pwm);
+		}
 	}
 }
 
@@ -207,13 +219,15 @@ void Control_Motor(u8 speed,u8 dir)
 		{
 			if( dir > 0x80 )//
 			{
-				carSpeed_L = 0;
+				//carSpeed_L = 0;
 				carSpeed_R = dir - 0x80;
+				carSpeed_L = -carSpeed_R;
 			}
 			if( dir < 0x80 )
 			{
-				carSpeed_R = 0;
+				//carSpeed_R = 0;
 				carSpeed_L = 0x80 - dir;
+				carSpeed_R = -carSpeed_L;
 			}
 			
 //			if( dir > 0x80 )//右转，右电机减速

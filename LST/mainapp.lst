@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/30/2017 10:36:13 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -62,7 +62,7 @@ line level    source
   43          u8 dataPacket0;
   44          u8 dataPacket1;
   45          u8 speed = 0x00;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/30/2017 10:36:13 PAGE 2   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 2   
 
   46          u16 timeOutSonix = 0;//?????????
   47          
@@ -126,7 +126,7 @@ line level    source
  105   3            
  106   3            if(CheckTimeOut_Wifi())//WIFI信号超时
  107   3            {
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/30/2017 10:36:13 PAGE 3   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 3   
 
  108   4              SetMotor_Brake();//刹车
  109   4              SetArm( ARM_STOP );
@@ -190,7 +190,7 @@ line level    source
  167   1        if(uartBuf[3] != 0x00)//0x00空闲信号
  168   1        {
  169   2          Control_ARM (uartBuf[3]);
-C51 COMPILER V9.52.0.0   MAINAPP                                                           09/30/2017 10:36:13 PAGE 4   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 4   
 
  170   2          Control_Claw(uartBuf[4]);
  171   2        }
