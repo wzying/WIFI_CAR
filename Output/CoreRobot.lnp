@@ -1,5 +1,6 @@
 ".\Output\mainapp.obj",
 ".\Output\motor.obj",
+".\Output\voltage.obj",
 ".\Output\Common.obj",
 ".\Output\Delay.obj",
 ".\Output\STARTUP_PORDIS.obj",

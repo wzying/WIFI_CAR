@@ -37,12 +37,14 @@ EUINT16 mTick_1s;
 */
 void BoardInit(void)
 {
+	WDT_Init();
+	
 	GPIO_Init();
 	LED_Init();
 	//Init_ADC();
-	
+
 	Timer3Init(Timer3_IntHandler);//1ms interrupt
-	
+
 	InitialUART0_Timer1(4800);
 	PWM_Init();
 	

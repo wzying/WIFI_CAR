@@ -27,14 +27,23 @@ void Init_ADC(void)
 u16 Get_ADC(void)
 {
 	u16 adc;
-
+	//u32 i=100;
+	
 	//P0.4 AIN5  检测电机电流
 	Enable_ADC_AIN5;	
 	
 	clr_ADCF;
 	set_ADCS;									// ADC start trig signal
 
-	while(ADCF == 0);
+	while( ADCF == 0 );
+//	{
+//		if(i)
+//			i--;
+//		else
+//			return 0x0000;
+//		
+//		delay1ms();
+//	}
 
 	adc = ADCRH*16 + ADCRL;
 	
@@ -45,17 +54,49 @@ u16 Get_ADC(void)
 u16 Get_ADC_BAT(void)
 {
 	u16 adc;	
-	
+	//u32 i=100;
 	//P0.5 AIN4  检测电池电压
 	Enable_ADC_AIN4;		
 
 	clr_ADCF;
 	set_ADCS;									// ADC start trig signal
 
-	while(ADCF == 0);
+	while( ADCF == 0 );
+//	{
+//		if(i)
+//			i--;
+//		else
+//			return 0x0000;
+//		
+//		delay1ms();
+//	}
 
 	adc = ADCRH*16 + ADCRL;
 	
 	return adc;	
+}
+u8 Get_ADC_BAT_8Bit(void)
+{
+	u16 adc;	
+	//u32 i=100;
+	//P0.5 AIN4  检测电池电压
+	Enable_ADC_AIN4;		
+
+	clr_ADCF;
+	set_ADCS;									// ADC start trig signal
+
+	while( ADCF == 0 );
+//	{
+//		if(i)
+//			i--;
+//		else
+//			return 0x0000;
+//		
+//		delay1ms();
+//	}
+
+	adc = ADCRH*16 + ADCRL;
+	
+	return (u8)(adc>>4);	
 }
 

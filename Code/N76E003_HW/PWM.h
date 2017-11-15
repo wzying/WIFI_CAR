@@ -6,5 +6,7 @@ void PWMDisable(UINT8 chn);
 void PWMEnable(UINT8 chn);
 void SetPWM_Stop(void);
 void SetPWM_Start(void);
+void WDT_Init(void);
+void WDT_Reset(void);
 
 #endif

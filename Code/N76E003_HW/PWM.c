@@ -26,6 +26,31 @@ bit BIT_TMP;
 #define set_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS|=SET_BIT0;EA=BIT_TMP
 #define clr_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS&=~SET_BIT0;EA=BIT_TMP
 
+void WDT_Init(void)
+{
+//----------------------------------------------------------------------------------------------
+// WDT Init !!! ENABLE CONFIG WDT FIRST !!!
+// Warning:
+// Always check CONFIG WDT enable first, CONFIG not enable, SFR can't enable WDT reset
+// Please call Enable_WDT_Reset_Config() function to enable CONFIG WDT reset
+//----------------------------------------------------------------------------------------------
+
+//	Enable_WDT_Reset_Config();
+
+	  //TA=0xAA;TA=0x55;WDCON=0x07;						//Setting WDT prescale 
+	  TA=0xAA;TA=0x55;WDCON=0x06;						//Setting WDT prescale 6.4ms
+		set_WDCLR;														//Clear WDT timer
+		while((WDCON|~SET_BIT6)==0xFF);				//confirm WDT clear is ok before into power down mode
+		//EA = 1;
+		set_WDTR;															//WDT run
+			
+}
+void WDT_Reset(void)
+{
+	set_WDCLR;		
+}
+
+
 /*
 	PWM初始化
 	左电机 ： PWM1 + PWM4

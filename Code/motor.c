@@ -12,6 +12,8 @@
 #include "motor.h"
 #include "PWM.h"
 #include "SFR_Macro.h"
+#include "delay.h"
+
 /**************************************************
 *函数名：	SetMotor_L
 *功能  ：	控制“左电机”的转速与方向
@@ -23,10 +25,10 @@
 ***************************************************/
 void SetMotor_L(u8 pwm , u8 direction)
 {
-	if(pwm == 0)//刹车
+	if(pwm == 0)//
 	{
-		SetPWM(1 , 0xff);
-		SetPWM(4 , 0xff);
+		SetPWM(1 , 0);
+		SetPWM(4 , 0);
 	}
 	else
 	{
@@ -55,10 +57,10 @@ void SetMotor_L(u8 pwm , u8 direction)
 ***************************************************/
 void SetMotor_R(u8 pwm , u8 direction)
 {
-	if(pwm == 0)//刹车
+	if(pwm == 0)
 	{
-		SetPWM(3 , 0xff);
-		SetPWM(0 , 0xff);		
+		SetPWM(3 , 0);
+		SetPWM(0 , 0);		
 	}
 	else
 	{
@@ -217,35 +219,47 @@ void Control_Motor(u8 speed,u8 dir)
 
 		if( dir != 0x80 )
 		{
-			if( dir > 0x80 )//
+			if(speed == 0x80)//原地转向
 			{
-				//carSpeed_L = 0;
-				carSpeed_R = dir - 0x80;
-				carSpeed_L = -carSpeed_R;
+				if( dir > 0x80 )//
+				{
+					//carSpeed_L = 0;
+					carSpeed_R = dir - 0x80;
+					carSpeed_L = -carSpeed_R/2;
+				}
+				if( dir < 0x80 )
+				{
+					//carSpeed_R = 0;
+					carSpeed_L = 0x80 - dir;
+					carSpeed_R = -carSpeed_L/2;
+				}
 			}
-			if( dir < 0x80 )
+			else if(speed > 0x80)//前进过程转向
 			{
-				//carSpeed_R = 0;
-				carSpeed_L = 0x80 - dir;
-				carSpeed_R = -carSpeed_L;
+				if( dir > 0x80 )//
+				{
+					carSpeed_L = 0;
+					carSpeed_R = dir - 0x80;
+				}
+				if( dir < 0x80 )
+				{
+					carSpeed_R = 0;
+					carSpeed_L = 0x80 - dir;
+				}				
 			}
-			
-//			if( dir > 0x80 )//右转，右电机减速
-//			{
-//				speed_dif = dir-0x80;
-//				if(carSpeed_R>=0)
-//					carSpeed_R = carSpeed_R-speed_dif;
-//				else
-//					carSpeed_R = carSpeed_R+speed_dif;
-//			}
-//			else//左转，左电机减速
-//			{
-//				speed_dif = 0x80 - dir;
-//				if(carSpeed_L>=0)
-//					carSpeed_L = carSpeed_L-speed_dif;	
-//				else
-//					carSpeed_L = carSpeed_L+speed_dif;
-//			}
+			else if(speed < 0x80)//后退过程转向
+			{
+				if( dir > 0x80 )//
+				{
+					carSpeed_L = 0;
+					carSpeed_R = 0x80 - dir;
+				}
+				if( dir < 0x80 )
+				{
+					carSpeed_R = 0;
+					carSpeed_L = dir - 0x80;
+				}						
+			}
 		}	
 	
 	Control_Motor_L(carSpeed_L);
@@ -256,7 +270,8 @@ void Control_Motor(u8 speed,u8 dir)
 	接收超时检测
 	超时则停车
 */
-#define TIMEOUT_MOTOR 700
+//#define TIMEOUT_MOTOR 700
+#define TIMEOUT_MOTOR 300
 u16 timeOut_Motor=0;
 u8 CheckTimeOut_Motor(void)
 {
@@ -275,7 +290,8 @@ void Set_TimeOut_Motor(void)
 /*
 	WiFi信号接收超时
 */
-#define TIMEOUT_WIFI 1000
+//#define TIMEOUT_WIFI 1000
+#define TIMEOUT_WIFI 600
 u16 timeOut_Wifi=0;
 u8 CheckTimeOut_Wifi(void)
 {
@@ -301,6 +317,8 @@ void Control_ARM(u8 arm)
 	if( arm <= 0x40 )
 	{
 		SetArm( ARM_UP );
+		// Test code
+		//delayms(1000);
 	}
 	else if( arm >= 0xD0 )
 	{
@@ -368,7 +386,8 @@ void Control_Claw(u8 claw)
 /*
 	前爪 信号接收超时
 */
-#define TIMEOUT_CLAW 600
+//#define TIMEOUT_CLAW 600
+#define TIMEOUT_CLAW 300
 u16 timeOut_Claw=0;
 u8 CheckTimeOut_Claw(void)
 {

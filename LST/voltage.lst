@@ -1,0 +1,171 @@
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/14/2017 16:30:37 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE VOLTAGE
+OBJECT MODULE PLACED IN .\Output\voltage.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\voltage.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Co
+                    -de\BSP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\voltage.lst) TABS(2) OBJECT(.\Output\voltag
+                    -e.obj)
+
+line level    source
+
+   1          
+   2          #include "N76E003.h"
+   3          #include "Common.h"
+   4          #include "Delay.h"
+   5          #include "Audio.h"
+   6          #include "Board.h"
+   7          #include "PWM.h"
+   8          #include "motor.h"
+   9          #include "SFR_Macro.h"
+  10          #include "Function_define.h"
+  11          #include "string.h"
+  12          #include "UART.h"
+  13          #include "ADC.h"
+  14          #include "voltage.h"
+  15          
+  16          #define RES_H   20
+  17          #define RES_L   12
+  18          #define RES_RATIO   RES_L/(RES_L+RES_H)
+  19          #define ADC_MAX     0xFF
+  20          #define VOL_REF     355     //参考电压3.55V
+  21          
+  22          VOL_STATUS vol_Status = NORMAL;
+  23          void Set_Vol_Status(VOL_STATUS s)
+  24          {
+  25   1        vol_Status = s;//欠压
+  26   1      }
+  27          VOL_STATUS Get_Vol_Status(void)
+  28          {
+  29   1        return vol_Status;
+  30   1      }
+  31          
+  32          /*
+  33            平均值
+  34          */
+  35          #define AVERAGE_N   5
+  36          u8 Get_Vol_Average(void)
+  37          {
+  38   1        u8 i=0;
+  39   1        u16 sum=0;
+  40   1      //  for(i=0;i<AVERAGE_N;i++)
+  41   1      //  {
+  42   1      //    sum += Get_ADC_BAT_8Bit();
+  43   1      //    delay10ms();
+  44   1      //  }
+  45   1        
+  46   1        sum = Get_ADC_BAT_8Bit();
+  47   1        delay10ms();
+  48   1        sum += Get_ADC_BAT_8Bit();
+  49   1        delay10ms();
+  50   1        sum += Get_ADC_BAT_8Bit();
+  51   1        delay10ms();
+  52   1        sum += Get_ADC_BAT_8Bit();
+  53   1        
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/14/2017 16:30:37 PAGE 2   
+
+  54   1        return sum/4;
+  55   1      }
+  56          
+  57          /*
+  58            根据ADC值计算电压值
+  59            返回： 电池电压*100
+  60          */
+  61          u16 Get_Bat_Voltage(u8 adc)
+  62          {
+  63   1        return (u16)(adc*VOL_REF/(ADC_MAX*RES_RATIO));
+  64   1      }
+  65          
+  66          void Send_Voltage(u16 v)
+  67          {
+  68   1        //v = v>>4;
+  69   1        Send_Data_To_UART0(0x01);
+  70   1        Send_Data_To_UART0(v);
+  71   1      }
+  72          
+  73          /*
+  74            电压监测
+  75          */
+  76          #define   UNDER_VOL_TH    0x80
+  77          #define   HYSTERESIS_TH   5
+  78          u8 vol_level[5] = {0x70,0x80,0x90,0xA0,0xB0};
+  79          u8 Check_Vol_Level(u8 v)
+  80          {
+  81   1        u8 level;
+  82   1        //
+  83   1        if( v < vol_level[0] )
+  84   1          level = 0;
+  85   1        else  if( v < vol_level[1] )
+  86   1          level = 1;
+  87   1        else  if( v < vol_level[2] )
+  88   1          level = 2;
+  89   1        else  if( v < vol_level[3] )
+  90   1          level = 3;
+  91   1        
+  92   1        if( v > (vol_level[level]+HYSTERESIS_TH) )
+  93   1        {
+  94   2          if(level<3)
+  95   2            level++;
+  96   2        }
+  97   1        return level;
+  98   1      }
+  99          
+ 100          static u8 vol_Flag = 0xAF;
+ 101          void Voltage_Monitor(void)
+ 102          { 
+ 103   1        static i=0;
+ 104   1        u16 vol;
+ 105   1        
+ 106   1        if(i>=2000)
+ 107   1        {
+ 108   2          i=0;
+ 109   2          
+ 110   2      //    vol = Get_ADC_BAT();
+ 111   2      //    vol = vol>>4;   
+ 112   2          
+ 113   2          //vol = Get_ADC_BAT_8Bit();
+ 114   2          vol = Get_Vol_Average();
+ 115   2          
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/14/2017 16:30:37 PAGE 3   
+
+ 116   2          //Send_Voltage(vol);
+ 117   2      //    if( vol < 0x7A )//4.4V
+ 118   2      //    {
+ 119   2      //      vol_Flag = 0xA0; //电量过低   
+ 120   2      //    }
+ 121   2      //    else if( vol > (0x7A+15) )
+ 122   2      //      vol_Flag = 0xAF;
+ 123   2          
+ 124   2          if(vol < 0x75)     //10%
+ 125   2            vol_Flag = 0xA1;
+ 126   2          else if(vol < 0x7E)//20%
+ 127   2          {
+ 128   3            if(vol_Flag!=0xA1)
+ 129   3              vol_Flag = 0xA2;
+ 130   3          }
+ 131   2          Send_Voltage(vol_Flag);
+ 132   2        }
+ 133   1        else
+ 134   1        {
+ 135   2          i++;
+ 136   2        } 
+ 137   1        
+ 138   1      //  if(vol < UNDER_VOL_TH)
+ 139   1      //    Set_Vol_Status(UNDER_VOL);
+ 140   1      //  else if(vol > (UNDER_VOL_TH+3)) 
+ 141   1      //    Set_Vol_Status(NORMAL);
+ 142   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    342    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6       6
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

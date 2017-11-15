@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 1   
+C51 COMPILER V9.52.0.0   DELAY                                                             11/14/2017 16:30:38 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE DELAY
@@ -35,114 +35,139 @@ line level    source
   17          #include "Function_define.h"
   18          //bit BIT_TMP;
   19          
-  20          //-------------------------------------------------------------------------
-  21          //void Timer0_Delay100us(UINT32 u32CNT)
-  22          //{
-  23          //    clr_T0M;                                    //T0M=0, Timer0 Clock = Fsys/12
-  24          //    TMOD |= 0x01;                               //Timer0 is 16-bit mode
-  25          //    set_TR0;                                    //Start Timer0
-  26          //    while (u32CNT != 0)
-  27          //    {
-  28          //        TL0 = LOBYTE(TIMER_DIV12_VALUE_100us);  //Find  define in "Function_define.h" "TIMER VALUE"
-  29          //        TH0 = HIBYTE(TIMER_DIV12_VALUE_100us);
-  30          //        while (TF0 != 1);                       //Check Timer0 Time-Out Flag
-  31          //        clr_TF0;
-  32          //        u32CNT --;
-  33          //    }
-  34          //    clr_TR0;                                    //Stop Timer0
-  35          //}
-  36          ////------------------------------------------------------------------------------
-  37          //void Timer0_Delay1ms(UINT32 u32CNT)
-  38          //{
-  39          //    clr_T0M;                                    //T0M=0, Timer0 Clock = Fsys/12
-  40          //    TMOD |= 0x01;                               //Timer0 is 16-bit mode
-  41          //    set_TR0;                                    //Start Timer0
-  42          //    while (u32CNT != 0)
-  43          //    {
-  44          //        TL0 = LOBYTE(TIMER_DIV12_VALUE_1ms);    //Find  define in "Function_define.h" "TIMER VALUE"
-  45          //        TH0 = HIBYTE(TIMER_DIV12_VALUE_1ms);
-  46          //        while (TF0 != 1);                       //Check Timer0 Time-Out Flag
-C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 2   
+  20          void delayms(unsigned int t)   //?? 0us
+  21          {
+  22   1          unsigned char a,b,c,d;
+  23   1          for(d=t;t>0;t--)
+  24   1            for(c=17;c>0;c--)
+  25   1              for(b=134;b>0;b--)
+  26   1                  for(a=2;a>0;a--);
+  27   1      }
+  28          
+  29          void delay1ms(void)   //?? 0us
+  30          {
+  31   1          unsigned char a,b,c;
+  32   1          for(c=17;c>0;c--)
+  33   1              for(b=134;b>0;b--)
+  34   1                  for(a=2;a>0;a--);
+  35   1      }
+  36          
+  37          void delay10ms(void)   //?? 0us
+  38          {
+  39   1          unsigned char a,b,c;
+  40   1          for(c=193;c>0;c--)
+  41   1              for(b=118;b>0;b--)
+  42   1                  for(a=2;a>0;a--);
+  43   1      }
+  44          
+  45          //-------------------------------------------------------------------------
+  46          //void Timer0_Delay100us(UINT32 u32CNT)
+C51 COMPILER V9.52.0.0   DELAY                                                             11/14/2017 16:30:38 PAGE 2   
 
-  47          //        clr_TF0;
-  48          //        u32CNT --;
-  49          //    }
-  50          //    clr_TR0;                                    //Stop Timer0
-  51          //}
-  52          
-  53          ////------------------------------------------------------------------------------
-  54          //void Timer1_Delay10ms(UINT32 u32CNT)
-  55          //{
-  56          //    clr_T1M;                                    //T1M=0, Timer1 Clock = Fsys/12
-  57          //    TMOD |= 0x10;                               //Timer1 is 16-bit mode
-  58          //    set_TR1;                                    //Start Timer1
-  59          //    while (u32CNT != 0)
-  60          //    {
-  61          //        TL1 = LOBYTE(TIMER_DIV12_VALUE_10ms);   //Find  define in "Function_define.h" "TIMER VALUE"
-  62          //        TH1 = HIBYTE(TIMER_DIV12_VALUE_10ms);
-  63          //        while (TF1 != 1);                       //Check Timer1 Time-Out Flag
-  64          //        clr_TF1;
-  65          //        u32CNT --;
-  66          //    }
-  67          //    clr_TR1;                                    //Stop Timer1
-  68          //}
-  69          ////------------------------------------------------------------------------------
-  70          //void Timer2_Delay500us(UINT32 u32CNT)
-  71          //{
-  72          //    clr_T2DIV2;                                 //Timer2 Clock = Fsys/4 
-  73          //    clr_T2DIV1;
-  74          //    set_T2DIV0;
-  75          //    set_TR2;                                    //Start Timer2
-  76          //    while (u32CNT != 0)
-  77          //    {
-  78          //        TL2 = LOBYTE(TIMER_DIV4_VALUE_500us);   //Find  define in "Function_define.h" "TIMER VALUE"
-  79          //        TH2 = HIBYTE(TIMER_DIV4_VALUE_500us);
-  80          //        while (TF2 != 1);                       //Check Timer2 Time-Out Flag
-  81          //        clr_TF2;
-  82          //        u32CNT --;
-  83          //    }
-  84          //    clr_TR2;                                    //Stop Timer2
-  85          //}
-  86          ////------------------------------------------------------------------------------
-  87          //void Timer3_Delay100ms(UINT32 u32CNT)
-  88          //{
-  89          //    T3CON = 0x07;                               //Timer3 Clock = Fsys/128
-  90          //    set_TR3;                                    //Trigger Timer3
-  91          //    while (u32CNT != 0)
-  92          //    {
-  93          //        RL3 = LOBYTE(TIMER_DIV128_VALUE_100ms); //Find  define in "Function_define.h" "TIMER VALUE"
-  94          //        RH3 = HIBYTE(TIMER_DIV128_VALUE_100ms);
-  95          //        while ((T3CON&SET_BIT4) != SET_BIT4);   //Check Timer3 Time-Out Flag
-  96          //        clr_TF3;
-  97          //        u32CNT --;
-  98          //    }
-  99          //    clr_TR3;                                    //Stop Timer3
- 100          //}
- 101          ////------------------------------------------------------------------------------
- 102          //void Timer3_Delay10us(UINT32 u32CNT)
- 103          //{
- 104          //    T3CON = 0x07;                               //Timer3 Clock = Fsys/128
- 105          //    set_TR3;                                    //Trigger Timer3
- 106          //    while (u32CNT != 0)
- 107          //    {
- 108          //        RL3 = LOBYTE(TIMER_DIV4_VALUE_10us); //Find  define in "Function_define.h" "TIMER VALUE"
-C51 COMPILER V9.52.0.0   DELAY                                                             09/19/2017 14:43:50 PAGE 3   
+  47          //{
+  48          //    clr_T0M;                                    //T0M=0, Timer0 Clock = Fsys/12
+  49          //    TMOD |= 0x01;                               //Timer0 is 16-bit mode
+  50          //    set_TR0;                                    //Start Timer0
+  51          //    while (u32CNT != 0)
+  52          //    {
+  53          //        TL0 = LOBYTE(TIMER_DIV12_VALUE_100us);  //Find  define in "Function_define.h" "TIMER VALUE"
+  54          //        TH0 = HIBYTE(TIMER_DIV12_VALUE_100us);
+  55          //        while (TF0 != 1);                       //Check Timer0 Time-Out Flag
+  56          //        clr_TF0;
+  57          //        u32CNT --;
+  58          //    }
+  59          //    clr_TR0;                                    //Stop Timer0
+  60          //}
+  61          ////------------------------------------------------------------------------------
+  62          //void Timer0_Delay1ms(UINT32 u32CNT)
+  63          //{
+  64          //    clr_T0M;                                    //T0M=0, Timer0 Clock = Fsys/12
+  65          //    TMOD |= 0x01;                               //Timer0 is 16-bit mode
+  66          //    set_TR0;                                    //Start Timer0
+  67          //    while (u32CNT != 0)
+  68          //    {
+  69          //        TL0 = LOBYTE(TIMER_DIV12_VALUE_1ms);    //Find  define in "Function_define.h" "TIMER VALUE"
+  70          //        TH0 = HIBYTE(TIMER_DIV12_VALUE_1ms);
+  71          //        while (TF0 != 1);                       //Check Timer0 Time-Out Flag
+  72          //        clr_TF0;
+  73          //        u32CNT --;
+  74          //    }
+  75          //    clr_TR0;                                    //Stop Timer0
+  76          //}
+  77          
+  78          ////------------------------------------------------------------------------------
+  79          //void Timer1_Delay10ms(UINT32 u32CNT)
+  80          //{
+  81          //    clr_T1M;                                    //T1M=0, Timer1 Clock = Fsys/12
+  82          //    TMOD |= 0x10;                               //Timer1 is 16-bit mode
+  83          //    set_TR1;                                    //Start Timer1
+  84          //    while (u32CNT != 0)
+  85          //    {
+  86          //        TL1 = LOBYTE(TIMER_DIV12_VALUE_10ms);   //Find  define in "Function_define.h" "TIMER VALUE"
+  87          //        TH1 = HIBYTE(TIMER_DIV12_VALUE_10ms);
+  88          //        while (TF1 != 1);                       //Check Timer1 Time-Out Flag
+  89          //        clr_TF1;
+  90          //        u32CNT --;
+  91          //    }
+  92          //    clr_TR1;                                    //Stop Timer1
+  93          //}
+  94          ////------------------------------------------------------------------------------
+  95          //void Timer2_Delay500us(UINT32 u32CNT)
+  96          //{
+  97          //    clr_T2DIV2;                                 //Timer2 Clock = Fsys/4 
+  98          //    clr_T2DIV1;
+  99          //    set_T2DIV0;
+ 100          //    set_TR2;                                    //Start Timer2
+ 101          //    while (u32CNT != 0)
+ 102          //    {
+ 103          //        TL2 = LOBYTE(TIMER_DIV4_VALUE_500us);   //Find  define in "Function_define.h" "TIMER VALUE"
+ 104          //        TH2 = HIBYTE(TIMER_DIV4_VALUE_500us);
+ 105          //        while (TF2 != 1);                       //Check Timer2 Time-Out Flag
+ 106          //        clr_TF2;
+ 107          //        u32CNT --;
+ 108          //    }
+C51 COMPILER V9.52.0.0   DELAY                                                             11/14/2017 16:30:38 PAGE 3   
 
- 109          //        RH3 = HIBYTE(TIMER_DIV4_VALUE_10us);
- 110          //        while ((T3CON&SET_BIT4) != SET_BIT4);   //Check Timer3 Time-Out Flag
- 111          //        clr_TF3;
- 112          //        u32CNT --;
- 113          //    }
- 114          //    clr_TR3;                                    //Stop Timer3
- 115          //}
+ 109          //    clr_TR2;                                    //Stop Timer2
+ 110          //}
+ 111          ////------------------------------------------------------------------------------
+ 112          //void Timer3_Delay100ms(UINT32 u32CNT)
+ 113          //{
+ 114          //    T3CON = 0x07;                               //Timer3 Clock = Fsys/128
+ 115          //    set_TR3;                                    //Trigger Timer3
+ 116          //    while (u32CNT != 0)
+ 117          //    {
+ 118          //        RL3 = LOBYTE(TIMER_DIV128_VALUE_100ms); //Find  define in "Function_define.h" "TIMER VALUE"
+ 119          //        RH3 = HIBYTE(TIMER_DIV128_VALUE_100ms);
+ 120          //        while ((T3CON&SET_BIT4) != SET_BIT4);   //Check Timer3 Time-Out Flag
+ 121          //        clr_TF3;
+ 122          //        u32CNT --;
+ 123          //    }
+ 124          //    clr_TR3;                                    //Stop Timer3
+ 125          //}
+ 126          ////------------------------------------------------------------------------------
+ 127          //void Timer3_Delay10us(UINT32 u32CNT)
+ 128          //{
+ 129          //    T3CON = 0x07;                               //Timer3 Clock = Fsys/128
+ 130          //    set_TR3;                                    //Trigger Timer3
+ 131          //    while (u32CNT != 0)
+ 132          //    {
+ 133          //        RL3 = LOBYTE(TIMER_DIV4_VALUE_10us); //Find  define in "Function_define.h" "TIMER VALUE"
+ 134          //        RH3 = HIBYTE(TIMER_DIV4_VALUE_10us);
+ 135          //        while ((T3CON&SET_BIT4) != SET_BIT4);   //Check Timer3 Time-Out Flag
+ 136          //        clr_TF3;
+ 137          //        u32CNT --;
+ 138          //    }
+ 139          //    clr_TR3;                                    //Stop Timer3
+ 140          //}
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   ----    ----
+   CODE SIZE        =    120    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =   ----       1
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -17,6 +17,31 @@
 #include "Function_define.h"
 //bit BIT_TMP;
 
+void delayms(unsigned int t)   //?? 0us
+{
+    unsigned char a,b,c,d;
+	  for(d=t;t>0;t--)
+			for(c=17;c>0;c--)
+        for(b=134;b>0;b--)
+            for(a=2;a>0;a--);
+}
+
+void delay1ms(void)   //?? 0us
+{
+    unsigned char a,b,c;
+    for(c=17;c>0;c--)
+        for(b=134;b>0;b--)
+            for(a=2;a>0;a--);
+}
+
+void delay10ms(void)   //?? 0us
+{
+    unsigned char a,b,c;
+    for(c=193;c>0;c--)
+        for(b=118;b>0;b--)
+            for(a=2;a>0;a--);
+}
+
 //-------------------------------------------------------------------------
 //void Timer0_Delay100us(UINT32 u32CNT)
 //{

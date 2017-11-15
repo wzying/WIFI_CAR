@@ -26,6 +26,8 @@
 #include "UART.h"
 #include "LED.h"
 #include "ADC.h"
+#include "voltage.h"
+#include "SFR_Macro.h"
 
 /***********************Local function Define***********************/
 static void AppInit(void);
@@ -45,8 +47,7 @@ u8 dataPacket1;
 u8 speed = 0x00;
 u16 timeOutSonix = 0;//?????????
 
-/* ???? */
-void delay(void)   //?? 0us
+void delay(void)   //
 {
     unsigned char a,b;
     for(b=20;b>0;b--)
@@ -57,46 +58,35 @@ void delay(void)   //?? 0us
 //UINT16 mtcnt,mprevtcnt;
 void main (void) 
 {
+	u8 il=0;
 //	UINT16 minus;
 	u8 motorOutFlag = 0;
 	u16 i=0;
 //	u16 adc_val;
-	
-	AppInit();
+
+	//AppInit();
 	BoardInit();
 	
-	MyPrintf("Hello WiFI Car \r\n");
+	// Test code
+//	for(il=0;il<12;il++)
+//	{
+//		WDT_Reset();
+//		delayms(10);
+//		Turn_LED();
+//	}
+	
+	//delay();
+	
+	//MyPrintf("Hello WiFI Car \r\n");
 
 	while(1)
 	{
 		if(GetSysClock())//500uS
 		{
 			ResetSysClock();
+			WDT_Reset();
 			
-//			if(i>=1000)
-//			{
-//				i=0;
-//				adc_val = Get_ADC_BAT();
-////				if(adc_val > 200)
-////				{
-////					SetPWM_Stop();
-////					continue;
-////				}
-////				else
-////				{
-////					SetPWM_Start();
-////				}
-//				//MyPrintf("ADC = ");
-//				Send_Data_To_UART0(adc_val/1000 + '0');
-//				Send_Data_To_UART0(adc_val%1000/100 + '0');
-//				Send_Data_To_UART0(adc_val%100/10 + '0');
-//				Send_Data_To_UART0(adc_val%10 + '0');
-//				MyPrintf("\r\n");
-//			}
-//			else
-//			{
-//				i++;
-//			}
+			Voltage_Monitor();
 			
 			if(Check_Recieve_Valid())//接收到有效的数据包
 			{
@@ -157,16 +147,19 @@ void Rx_Package_Handle(uint8_t *uartBuf)
 	Set_TimeOut_Wifi();//WIFI超时复位
 	SetWifiStatus();//设置WIFI为连接状态
 	
-	if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+	//if(Get_Vol_Status() == NORMAL)
 	{
-		Control_Motor(uartBuf[2],uartBuf[1]);
+		if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+		{
+			Control_Motor(uartBuf[2],uartBuf[1]);
+			
+			Set_TimeOut_Motor();//复位超时计数
+		}
 		
-		Set_TimeOut_Motor();//复位超时计数
-	}
-	
-	if(uartBuf[3] != 0x00)//0x00空闲信号
-	{
-		Control_ARM (uartBuf[3]);
-		Control_Claw(uartBuf[4]);
+		if(uartBuf[3] != 0x00)//0x00空闲信号
+		{
+			Control_ARM (uartBuf[3]);
+			Control_Claw(uartBuf[4]);
+		}
 	}
 }

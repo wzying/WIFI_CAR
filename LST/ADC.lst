@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   ADC                                                               09/30/2017 10:36:13 PAGE 1   
+C51 COMPILER V9.52.0.0   ADC                                                               11/14/2017 16:30:38 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ADC
@@ -37,46 +37,87 @@ line level    source
   27          u16 Get_ADC(void)
   28          {
   29   1        u16 adc;
-  30   1      
-  31   1        //P0.4 AIN5  检测电机电流
-  32   1        Enable_ADC_AIN5;  
-  33   1        
-  34   1        clr_ADCF;
-  35   1        set_ADCS;                 // ADC start trig signal
-  36   1      
-  37   1        while(ADCF == 0);
-  38   1      
-  39   1        adc = ADCRH*16 + ADCRL;
-  40   1        
-  41   1        return adc;
-  42   1      }
-  43          
-  44          //获取电池电压
-  45          u16 Get_ADC_BAT(void)
-  46          {
-  47   1        u16 adc;  
-  48   1        
-  49   1        //P0.5 AIN4  检测电池电压
-  50   1        Enable_ADC_AIN4;    
-  51   1      
-  52   1        clr_ADCF;
-  53   1        set_ADCS;                 // ADC start trig signal
-  54   1      
-C51 COMPILER V9.52.0.0   ADC                                                               09/30/2017 10:36:13 PAGE 2   
+  30   1        //u32 i=100;
+  31   1        
+  32   1        //P0.4 AIN5  检测电机电流
+  33   1        Enable_ADC_AIN5;  
+  34   1        
+  35   1        clr_ADCF;
+  36   1        set_ADCS;                 // ADC start trig signal
+  37   1      
+  38   1        while( ADCF == 0 );
+  39   1      //  {
+  40   1      //    if(i)
+  41   1      //      i--;
+  42   1      //    else
+  43   1      //      return 0x0000;
+  44   1      //    
+  45   1      //    delay1ms();
+  46   1      //  }
+  47   1      
+  48   1        adc = ADCRH*16 + ADCRL;
+  49   1        
+  50   1        return adc;
+  51   1      }
+  52          
+  53          //获取电池电压
+  54          u16 Get_ADC_BAT(void)
+C51 COMPILER V9.52.0.0   ADC                                                               11/14/2017 16:30:38 PAGE 2   
 
-  55   1        while(ADCF == 0);
-  56   1      
-  57   1        adc = ADCRH*16 + ADCRL;
-  58   1        
-  59   1        return adc; 
-  60   1      }
-  61          
+  55          {
+  56   1        u16 adc;  
+  57   1        //u32 i=100;
+  58   1        //P0.5 AIN4  检测电池电压
+  59   1        Enable_ADC_AIN4;    
+  60   1      
+  61   1        clr_ADCF;
+  62   1        set_ADCS;                 // ADC start trig signal
+  63   1      
+  64   1        while( ADCF == 0 );
+  65   1      //  {
+  66   1      //    if(i)
+  67   1      //      i--;
+  68   1      //    else
+  69   1      //      return 0x0000;
+  70   1      //    
+  71   1      //    delay1ms();
+  72   1      //  }
+  73   1      
+  74   1        adc = ADCRH*16 + ADCRL;
+  75   1        
+  76   1        return adc; 
+  77   1      }
+  78          u8 Get_ADC_BAT_8Bit(void)
+  79          {
+  80   1        u16 adc;  
+  81   1        //u32 i=100;
+  82   1        //P0.5 AIN4  检测电池电压
+  83   1        Enable_ADC_AIN4;    
+  84   1      
+  85   1        clr_ADCF;
+  86   1        set_ADCS;                 // ADC start trig signal
+  87   1      
+  88   1        while( ADCF == 0 );
+  89   1      //  {
+  90   1      //    if(i)
+  91   1      //      i--;
+  92   1      //    else
+  93   1      //      return 0x0000;
+  94   1      //    
+  95   1      //    delay1ms();
+  96   1      //  }
+  97   1      
+  98   1        adc = ADCRH*16 + ADCRL;
+  99   1        
+ 100   1        return (u8)(adc>>4);  
+ 101   1      }
+ 102          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    121    ----
+   CODE SIZE        =    190    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----       4
+   XDATA SIZE       =   ----       6
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

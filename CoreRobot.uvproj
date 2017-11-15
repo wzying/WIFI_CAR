@@ -371,6 +371,11 @@
               <FileType>5</FileType>
               <FilePath>.\Code\motor.h</FilePath>
             </File>
+            <File>
+              <FileName>voltage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\voltage.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

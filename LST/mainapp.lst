@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/15/2017 13:55:38 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -45,162 +45,155 @@ line level    source
   26          #include "UART.h"
   27          #include "LED.h"
   28          #include "ADC.h"
-  29          
-  30          /***********************Local function Define***********************/
-  31          static void AppInit(void);
-  32          static void AppTask(void);
-  33          static void ClearSensorStatus(void);
-  34          static void WakeupAction(void);
-  35          /***********************Local Variables Define***********************/
-  36          
-  37          EUINT8 midletick;//1s per tick
-  38           
-  39          u8  uartData = 0; //????
-  40          //u8  uartBuf[DATA_LEN];
-  41          u8  num = 0;
-  42          
-  43          u8 dataPacket0;
-  44          u8 dataPacket1;
-  45          u8 speed = 0x00;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 2   
+  29          #include "voltage.h"
+  30          #include "SFR_Macro.h"
+  31          
+  32          /***********************Local function Define***********************/
+  33          static void AppInit(void);
+  34          static void AppTask(void);
+  35          static void ClearSensorStatus(void);
+  36          static void WakeupAction(void);
+  37          /***********************Local Variables Define***********************/
+  38          
+  39          EUINT8 midletick;//1s per tick
+  40           
+  41          u8  uartData = 0; //????
+  42          //u8  uartBuf[DATA_LEN];
+  43          u8  num = 0;
+  44          
+  45          u8 dataPacket0;
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/15/2017 13:55:38 PAGE 2   
 
-  46          u16 timeOutSonix = 0;//?????????
-  47          
-  48          /* ???? */
-  49          void delay(void)   //?? 0us
-  50          {
-  51   1          unsigned char a,b;
-  52   1          for(b=20;b>0;b--)
-  53   1              for(a=1;a>0;a--);
-  54   1      } 
-  55          
-  56          /*******************************************************************/
-  57          //UINT16 mtcnt,mprevtcnt;
-  58          void main (void) 
-  59          {
-  60   1      //  UINT16 minus;
-  61   1        u8 motorOutFlag = 0;
-  62   1        u16 i=0;
-  63   1      //  u16 adc_val;
-  64   1        
-  65   1        AppInit();
-  66   1        BoardInit();
-  67   1        
-  68   1        MyPrintf("Hello WiFI Car \r\n");
-  69   1      
-  70   1        while(1)
-  71   1        {
-  72   2          if(GetSysClock())//500uS
-  73   2          {
-  74   3            ResetSysClock();
-  75   3            
-  76   3      //      if(i>=1000)
-  77   3      //      {
-  78   3      //        i=0;
-  79   3      //        adc_val = Get_ADC_BAT();
-  80   3      ////        if(adc_val > 200)
-  81   3      ////        {
-  82   3      ////          SetPWM_Stop();
-  83   3      ////          continue;
-  84   3      ////        }
-  85   3      ////        else
-  86   3      ////        {
-  87   3      ////          SetPWM_Start();
-  88   3      ////        }
-  89   3      //        //MyPrintf("ADC = ");
-  90   3      //        Send_Data_To_UART0(adc_val/1000 + '0');
-  91   3      //        Send_Data_To_UART0(adc_val%1000/100 + '0');
-  92   3      //        Send_Data_To_UART0(adc_val%100/10 + '0');
-  93   3      //        Send_Data_To_UART0(adc_val%10 + '0');
-  94   3      //        MyPrintf("\r\n");
-  95   3      //      }
-  96   3      //      else
-  97   3      //      {
-  98   3      //        i++;
-  99   3      //      }
- 100   3            
- 101   3            if(Check_Recieve_Valid())//接收到有效的数据包
- 102   3            {
- 103   4              Rx_Package_Handle(RX_Packet);
- 104   4            }
- 105   3            
- 106   3            if(CheckTimeOut_Wifi())//WIFI信号超时
- 107   3            {
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 3   
+  46          u8 dataPacket1;
+  47          u8 speed = 0x00;
+  48          u16 timeOutSonix = 0;//?????????
+  49          
+  50          void delay(void)   //
+  51          {
+  52   1          unsigned char a,b;
+  53   1          for(b=20;b>0;b--)
+  54   1              for(a=1;a>0;a--);
+  55   1      } 
+  56          
+  57          /*******************************************************************/
+  58          //UINT16 mtcnt,mprevtcnt;
+  59          void main (void) 
+  60          {
+  61   1        u8 il=0;
+  62   1      //  UINT16 minus;
+  63   1        u8 motorOutFlag = 0;
+  64   1        u16 i=0;
+  65   1      //  u16 adc_val;
+  66   1      
+  67   1        //AppInit();
+  68   1        BoardInit();
+  69   1        
+  70   1        // Test code
+  71   1      //  for(il=0;il<12;il++)
+  72   1      //  {
+  73   1      //    WDT_Reset();
+  74   1      //    delayms(10);
+  75   1      //    Turn_LED();
+  76   1      //  }
+  77   1        
+  78   1        //delay();
+  79   1        
+  80   1        //MyPrintf("Hello WiFI Car \r\n");
+  81   1      
+  82   1        while(1)
+  83   1        {
+  84   2          if(GetSysClock())//500uS
+  85   2          {
+  86   3            ResetSysClock();
+  87   3            WDT_Reset();
+  88   3            
+  89   3            Voltage_Monitor();
+  90   3            
+  91   3            if(Check_Recieve_Valid())//接收到有效的数据包
+  92   3            {
+  93   4              Rx_Package_Handle(RX_Packet);
+  94   4            }
+  95   3            
+  96   3            if(CheckTimeOut_Wifi())//WIFI信号超时
+  97   3            {
+  98   4              SetMotor_Brake();//刹车
+  99   4              SetArm( ARM_STOP );
+ 100   4              SetClaw( CLAW_STOP );
+ 101   4            } 
+ 102   3            else 
+ 103   3            {
+ 104   4              //前后信号接收超时，刹车
+ 105   4              if(CheckTimeOut_Motor())
+ 106   4              {
+ 107   5                SetMotor_Brake();//刹车
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/15/2017 13:55:38 PAGE 3   
 
- 108   4              SetMotor_Brake();//刹车
- 109   4              SetArm( ARM_STOP );
- 110   4              SetClaw( CLAW_STOP );
- 111   4            } 
- 112   3            else 
- 113   3            {
- 114   4              //前后信号接收超时，刹车
- 115   4              if(CheckTimeOut_Motor())
- 116   4              {
- 117   5                SetMotor_Brake();//刹车
- 118   5              }
- 119   4            }
- 120   3            
- 121   3            if(CheckTimeOut_Claw())//检测前爪停转
- 122   3            {
- 123   4              if(Check_Claw_EN())
- 124   4              {
- 125   5                Reset_Claw_EN();  
- 126   5                Claw_Trun();//前爪反转
- 127   5              }       
- 128   4            }
- 129   3              
- 130   3            Indicator_Light();//指示灯显示
- 131   3          }
- 132   2        }
- 133   1      }
- 134          
- 135          /*
- 136          应用层的一些初始化
- 137          */
- 138          static void AppInit(void)
- 139          {
- 140   1        
- 141   1      }
- 142          
- 143          /*
- 144          应用层任务
- 145          */
- 146          static void AppTask(void)
- 147          {
- 148   1         
- 149   1      }
- 150          
- 151          /*
- 152            接收数据解析
- 153            RX_Handle
- 154          */
- 155          void Rx_Package_Handle(uint8_t *uartBuf)
- 156          {
- 157   1        Set_TimeOut_Wifi();//WIFI超时复位
- 158   1        SetWifiStatus();//设置WIFI为连接状态
- 159   1        
- 160   1        if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
- 161   1        {
- 162   2          Control_Motor(uartBuf[2],uartBuf[1]);
- 163   2          
- 164   2          Set_TimeOut_Motor();//复位超时计数
- 165   2        }
- 166   1        
- 167   1        if(uartBuf[3] != 0x00)//0x00空闲信号
- 168   1        {
- 169   2          Control_ARM (uartBuf[3]);
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/01/2017 15:06:09 PAGE 4   
-
- 170   2          Control_Claw(uartBuf[4]);
- 171   2        }
- 172   1      }
+ 108   5              }
+ 109   4            }
+ 110   3            
+ 111   3            if(CheckTimeOut_Claw())//检测前爪停转
+ 112   3            {
+ 113   4              if(Check_Claw_EN())
+ 114   4              {
+ 115   5                Reset_Claw_EN();  
+ 116   5                Claw_Trun();//前爪反转
+ 117   5              }       
+ 118   4            }
+ 119   3              
+ 120   3            Indicator_Light();//指示灯显示
+ 121   3          }
+ 122   2        }
+ 123   1      }
+ 124          
+ 125          /*
+ 126          应用层的一些初始化
+ 127          */
+ 128          static void AppInit(void)
+ 129          {
+ 130   1        
+ 131   1      }
+ 132          
+ 133          /*
+ 134          应用层任务
+ 135          */
+ 136          static void AppTask(void)
+ 137          {
+ 138   1         
+ 139   1      }
+ 140          
+ 141          /*
+ 142            接收数据解析
+ 143            RX_Handle
+ 144          */
+ 145          void Rx_Package_Handle(uint8_t *uartBuf)
+ 146          {
+ 147   1        Set_TimeOut_Wifi();//WIFI超时复位
+ 148   1        SetWifiStatus();//设置WIFI为连接状态
+ 149   1        
+ 150   1        //if(Get_Vol_Status() == NORMAL)
+ 151   1        {
+ 152   2          if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+ 153   2          {
+ 154   3            Control_Motor(uartBuf[2],uartBuf[1]);
+ 155   3            
+ 156   3            Set_TimeOut_Motor();//复位超时计数
+ 157   3          }
+ 158   2          
+ 159   2          if(uartBuf[3] != 0x00)//0x00空闲信号
+ 160   2          {
+ 161   3            Control_ARM (uartBuf[3]);
+ 162   3            Control_Claw(uartBuf[4]);
+ 163   3          }
+ 164   2        }
+ 165   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    231    ----
-   CONSTANT SIZE    =     18    ----
-   XDATA SIZE       =      8       3
+   CODE SIZE        =    227    ----
+C51 COMPILER V9.52.0.0   MAINAPP                                                           11/15/2017 13:55:38 PAGE 4   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      8       4
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3
    IDATA SIZE       =   ----    ----

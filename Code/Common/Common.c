@@ -15,6 +15,15 @@
 #include "SFR_Macro.h"
 #include "Function_define.h"
 
+void delay_uart(void)   //4ms
+{
+    unsigned char a,b,c;
+    for(c=12;c>0;c--)
+        for(b=130;b>0;b--)
+            for(a=19;a>0;a--);
+    _nop_();  //if Keil,require use intrins.h
+}
+
 //----------------------------------------------------------------------------------
 //  enable the global interrupt switcher 
 //----------------------------------------------------------------------------------
@@ -90,9 +99,18 @@ UINT8 Receive_Data_From_UART0(void)
 
 void Send_Data_To_UART0 (UINT8 c)
 {
+	u16 t=50000;
+	
     TI = 0;
     SBUF = c;
     while(TI==0);
+//	  {
+//			if(t)
+//				t--;
+//			else
+//				break;
+//		}
+		//delay_uart();
 }
 
 void SendDataUart(uint8_t *buf,uint8_t len)
