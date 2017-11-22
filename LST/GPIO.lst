@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 1   
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE GPIO
@@ -62,264 +62,270 @@ line level    source
   43   1          P1.0 + P0.3
   44   1        */
   45   1        P10_PushPull_Mode;
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 2   
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 2   
 
   46   1        P10=0;  
   47   1        P03_PushPull_Mode;
   48   1        P03=0;  
-  49   1      }
-  50          
-  51           
-  52          UINT8 GetPort0Val(UINT8 pin)
-  53          {
-  54   1        UINT8 ret;
-  55   1        
-  56   1        switch(pin)
-  57   1        {
-  58   2          case 0:
-  59   2            ret=P00;
-  60   2          break;
-  61   2          case 1:
-  62   2            ret=P01;
-  63   2          break;
-  64   2          case 2:
-  65   2            ret=P02;
+  49   1        
+  50   1        /*
+  51   1          µç³Ø×é¼ì²â
+  52   1          P1.5
+  53   1        */
+  54   1        P15_Quasi_Mode;
+  55   1      }
+  56          
+  57           
+  58          UINT8 GetPort0Val(UINT8 pin)
+  59          {
+  60   1        UINT8 ret;
+  61   1        
+  62   1        switch(pin)
+  63   1        {
+  64   2          case 0:
+  65   2            ret=P00;
   66   2          break;
-  67   2          case 3:
-  68   2            ret=P03;
+  67   2          case 1:
+  68   2            ret=P01;
   69   2          break;
-  70   2          case 4:
-  71   2            ret=P04;
+  70   2          case 2:
+  71   2            ret=P02;
   72   2          break;
-  73   2          case 5:
-  74   2            ret=P05;
+  73   2          case 3:
+  74   2            ret=P03;
   75   2          break;
-  76   2          case 6:
-  77   2            ret=P06;
+  76   2          case 4:
+  77   2            ret=P04;
   78   2          break;
-  79   2          case 7:
-  80   2            ret=P07;
+  79   2          case 5:
+  80   2            ret=P05;
   81   2          break;
-  82   2        }
-  83   1        
-  84   1        return ret;
-  85   1        
-  86   1      }
-  87          UINT8 GetPort1Val(UINT8 pin)
-  88          {
-  89   1        UINT8 ret;
-  90   1        
-  91   1        switch(pin)
-  92   1        {
-  93   2          case 0:
-  94   2            ret=P10;
-  95   2          break;
-  96   2          case 1:
-  97   2            ret=P11;
-  98   2          break;
-  99   2          case 2:
- 100   2            ret=P12;
+  82   2          case 6:
+  83   2            ret=P06;
+  84   2          break;
+  85   2          case 7:
+  86   2            ret=P07;
+  87   2          break;
+  88   2        }
+  89   1        
+  90   1        return ret;
+  91   1        
+  92   1      }
+  93          UINT8 GetPort1Val(UINT8 pin)
+  94          {
+  95   1        UINT8 ret;
+  96   1        
+  97   1        switch(pin)
+  98   1        {
+  99   2          case 0:
+ 100   2            ret=P10;
  101   2          break;
- 102   2          case 3:
- 103   2            ret=P13;
+ 102   2          case 1:
+ 103   2            ret=P11;
  104   2          break;
- 105   2          case 4:
- 106   2            ret=P14;
+ 105   2          case 2:
+ 106   2            ret=P12;
  107   2          break;
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 3   
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 3   
 
- 108   2          case 5:
- 109   2            ret=P15;
+ 108   2          case 3:
+ 109   2            ret=P13;
  110   2          break;
- 111   2          case 6:
- 112   2            ret=P16;
+ 111   2          case 4:
+ 112   2            ret=P14;
  113   2          break;
- 114   2          case 7:
- 115   2            ret=P17;
+ 114   2          case 5:
+ 115   2            ret=P15;
  116   2          break;
- 117   2        }
- 118   1        
- 119   1        return ret;
- 120   1        
- 121   1      }
- 122          UINT8 GetPort3Val(UINT8 pin)
- 123          {
- 124   1        UINT8 ret;
- 125   1        
- 126   1        ret=0;
- 127   1        
- 128   1        switch(pin)
- 129   1        {
- 130   2          case 0:
- 131   2            ret=P30;
- 132   2          break;
- 133   2           
- 134   2        }
- 135   1        
- 136   1        return ret;
- 137   1        
- 138   1      }
- 139          
- 140          
- 141          void  SetPort2Val(UINT8 pin,UINT8 val)
- 142          {
- 143   1        switch(pin)
- 144   1        {
- 145   2          case 0:
- 146   2            P20=val;
- 147   2          break;
- 148   2           
- 149   2        }
- 150   1        
- 151   1      
- 152   1      }
- 153          
- 154          
- 155          
- 156          void SetGPx0IntHandler(FN_INT_HANDLER fn)
- 157          {
- 158   1        mGPIOIntHandler4=fn;
- 159   1      }
+ 117   2          case 6:
+ 118   2            ret=P16;
+ 119   2          break;
+ 120   2          case 7:
+ 121   2            ret=P17;
+ 122   2          break;
+ 123   2        }
+ 124   1        
+ 125   1        return ret;
+ 126   1        
+ 127   1      }
+ 128          UINT8 GetPort3Val(UINT8 pin)
+ 129          {
+ 130   1        UINT8 ret;
+ 131   1        
+ 132   1        ret=0;
+ 133   1        
+ 134   1        switch(pin)
+ 135   1        {
+ 136   2          case 0:
+ 137   2            ret=P30;
+ 138   2          break;
+ 139   2           
+ 140   2        }
+ 141   1        
+ 142   1        return ret;
+ 143   1        
+ 144   1      }
+ 145          
+ 146          
+ 147          void  SetPort2Val(UINT8 pin,UINT8 val)
+ 148          {
+ 149   1        switch(pin)
+ 150   1        {
+ 151   2          case 0:
+ 152   2            P20=val;
+ 153   2          break;
+ 154   2           
+ 155   2        }
+ 156   1        
+ 157   1      
+ 158   1      }
+ 159          
  160          
- 161          void SetGPx5IntHandler(FN_INT_HANDLER fn)
- 162          {
- 163   1        mGPIOIntHandler5=fn;
- 164   1      }
- 165          
- 166          void SetGPx6IntHandler(FN_INT_HANDLER fn)
- 167          {
- 168   1        mGPIOIntHandler6=fn;
- 169   1      }
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 4   
+ 161          
+ 162          void SetGPx0IntHandler(FN_INT_HANDLER fn)
+ 163          {
+ 164   1        mGPIOIntHandler4=fn;
+ 165   1      }
+ 166          
+ 167          void SetGPx5IntHandler(FN_INT_HANDLER fn)
+ 168          {
+ 169   1        mGPIOIntHandler5=fn;
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 4   
 
- 170          
- 171          void SetEX0IntHandler(FN_INT_HANDLER fn)
- 172          {
- 173   1        mEX0IntHandler=fn;
- 174   1      }
- 175          
- 176          void SetEX1IntHandler(FN_INT_HANDLER fn)
- 177          {
- 178   1        mEX1IntHandler=fn;
- 179   1      }
- 180          /*
- 181          toggle the P07(IR output signal)
- 182          */
- 183          //void ToggleIROut(void)
- 184          //{
- 185          //  P01=~P01;
- 186          //}
- 187          
- 188          //void ToggleIROut_test(void)
- 189          //{
- 190          //  P00=~P00;
- 191          //}
- 192          
- 193          //void SetIR_Pin(UINT8 sta)
- 194          //{
- 195          //  P01=sta;
- 196          //}
- 197          
- 198          //void SetIR_Pin_test(UINT8 sta)
- 199          //{
- 200          //  P00=sta;
- 201          //}
- 202          
- 203          //UINT8 GetTouch_Head(void)
- 204          //{
- 205          //  return P15;
- 206          //}
- 207          
- 208          //UINT8 GetTouch_HeadRight(void)
- 209          //{
- 210          //  return P13;
- 211          //}
- 212          
- 213          //UINT8 GetP05Val(void)
- 214          //{
- 215          //  return P05;
- 216          //}
- 217          
- 218          //UINT8 GetP06Val(void)
- 219          //{
- 220          //  return P06;
- 221          //}
- 222          
- 223          //UINT8 GetP02Val(void)
- 224          //{
- 225          //  return P02;
- 226          //}
- 227          
- 228          //void SetP14(UINT8 sta)
- 229          //{
- 230          //  P14=sta;
- 231          //}
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 5   
+ 170   1      }
+ 171          
+ 172          void SetGPx6IntHandler(FN_INT_HANDLER fn)
+ 173          {
+ 174   1        mGPIOIntHandler6=fn;
+ 175   1      }
+ 176          
+ 177          void SetEX0IntHandler(FN_INT_HANDLER fn)
+ 178          {
+ 179   1        mEX0IntHandler=fn;
+ 180   1      }
+ 181          
+ 182          void SetEX1IntHandler(FN_INT_HANDLER fn)
+ 183          {
+ 184   1        mEX1IntHandler=fn;
+ 185   1      }
+ 186          /*
+ 187          toggle the P07(IR output signal)
+ 188          */
+ 189          //void ToggleIROut(void)
+ 190          //{
+ 191          //  P01=~P01;
+ 192          //}
+ 193          
+ 194          //void ToggleIROut_test(void)
+ 195          //{
+ 196          //  P00=~P00;
+ 197          //}
+ 198          
+ 199          //void SetIR_Pin(UINT8 sta)
+ 200          //{
+ 201          //  P01=sta;
+ 202          //}
+ 203          
+ 204          //void SetIR_Pin_test(UINT8 sta)
+ 205          //{
+ 206          //  P00=sta;
+ 207          //}
+ 208          
+ 209          //UINT8 GetTouch_Head(void)
+ 210          //{
+ 211          //  return P15;
+ 212          //}
+ 213          
+ 214          //UINT8 GetTouch_HeadRight(void)
+ 215          //{
+ 216          //  return P13;
+ 217          //}
+ 218          
+ 219          //UINT8 GetP05Val(void)
+ 220          //{
+ 221          //  return P05;
+ 222          //}
+ 223          
+ 224          //UINT8 GetP06Val(void)
+ 225          //{
+ 226          //  return P06;
+ 227          //}
+ 228          
+ 229          //UINT8 GetP02Val(void)
+ 230          //{
+ 231          //  return P02;
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 5   
 
- 232          // 
- 233          //UINT8 GetP13Val(void)
- 234          //{
- 235          //  return P13;
- 236          //}
- 237          
- 238          //UINT8 GetP15Val(void)
- 239          //{
- 240          //  return P15;
- 241          //}
- 242          /*
- 243          Pin Interrupt handler 
- 244          */
- 245          void PinInterrupt_ISR (void) interrupt 7
- 246          {
- 247   1        UINT8 flg;
- 248   1        
- 249   1        flg=PIF;
- 250   1        if((flg &0x10) == 0x10)
- 251   1        {//P04 interrupt
- 252   2          if(mGPIOIntHandler4)
- 253   2          {
- 254   3            mGPIOIntHandler4();
- 255   3          }
- 256   2        }
- 257   1        else if((flg &0x20) == 0x20)
- 258   1        {//P05 interrupt
- 259   2          if(mGPIOIntHandler5)
- 260   2          {
- 261   3            mGPIOIntHandler5();
- 262   3          }
- 263   2        }
- 264   1        else if((flg &0x40) == 0x40)
- 265   1        {//P06 interrupt
- 266   2          if(mGPIOIntHandler6)
- 267   2          {
- 268   3            mGPIOIntHandler6();
- 269   3          }
- 270   2        }
- 271   1        
- 272   1        PIF = 0;                             //clear interrupt flag
- 273   1         
- 274   1      }
- 275          
- 276          /*
- 277          Extern 0 interrupt handler
- 278          */
- 279          void EXT_INT0(void) interrupt 0
- 280          {
- 281   1        if(mEX0IntHandler)
- 282   1        {
- 283   2          mEX0IntHandler();
- 284   2        }
- 285   1      }
+ 232          //}
+ 233          
+ 234          //void SetP14(UINT8 sta)
+ 235          //{
+ 236          //  P14=sta;
+ 237          //}
+ 238          // 
+ 239          //UINT8 GetP13Val(void)
+ 240          //{
+ 241          //  return P13;
+ 242          //}
+ 243          
+ 244          //UINT8 GetP15Val(void)
+ 245          //{
+ 246          //  return P15;
+ 247          //}
+ 248          /*
+ 249          Pin Interrupt handler 
+ 250          */
+ 251          void PinInterrupt_ISR (void) interrupt 7
+ 252          {
+ 253   1        UINT8 flg;
+ 254   1        
+ 255   1        flg=PIF;
+ 256   1        if((flg &0x10) == 0x10)
+ 257   1        {//P04 interrupt
+ 258   2          if(mGPIOIntHandler4)
+ 259   2          {
+ 260   3            mGPIOIntHandler4();
+ 261   3          }
+ 262   2        }
+ 263   1        else if((flg &0x20) == 0x20)
+ 264   1        {//P05 interrupt
+ 265   2          if(mGPIOIntHandler5)
+ 266   2          {
+ 267   3            mGPIOIntHandler5();
+ 268   3          }
+ 269   2        }
+ 270   1        else if((flg &0x40) == 0x40)
+ 271   1        {//P06 interrupt
+ 272   2          if(mGPIOIntHandler6)
+ 273   2          {
+ 274   3            mGPIOIntHandler6();
+ 275   3          }
+ 276   2        }
+ 277   1        
+ 278   1        PIF = 0;                             //clear interrupt flag
+ 279   1         
+ 280   1      }
+ 281          
+ 282          /*
+ 283          Extern 0 interrupt handler
+ 284          */
+ 285          void EXT_INT0(void) interrupt 0
+ 286          {
+ 287   1        if(mEX0IntHandler)
+ 288   1        {
+ 289   2          mEX0IntHandler();
+ 290   2        }
+ 291   1      }
 
+
+C51 COMPILER V9.52.0.0   GPIO                                                              11/20/2017 10:39:42 PAGE 6   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    475    ----
+   CODE SIZE        =    481    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     15       1
-C51 COMPILER V9.52.0.0   GPIO                                                              11/06/2017 17:48:59 PAGE 6   
-
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

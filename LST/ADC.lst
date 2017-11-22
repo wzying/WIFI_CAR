@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   ADC                                                               11/14/2017 16:30:38 PAGE 1   
+C51 COMPILER V9.52.0.0   ADC                                                               11/20/2017 15:02:55 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ADC
@@ -62,7 +62,7 @@ line level    source
   52          
   53          //获取电池电压
   54          u16 Get_ADC_BAT(void)
-C51 COMPILER V9.52.0.0   ADC                                                               11/14/2017 16:30:38 PAGE 2   
+C51 COMPILER V9.52.0.0   ADC                                                               11/20/2017 15:02:55 PAGE 2   
 
   55          {
   56   1        u16 adc;  
@@ -112,12 +112,29 @@ line level    source
  100   1        return (u8)(adc>>4);  
  101   1      }
  102          
+ 103          
+ 104          u8 Get_ADC_BandGap(void)
+ 105          {
+ 106   1        u16 adc;  
+ 107   1        Enable_ADC_BandGap;
+ 108   1        
+ 109   1        clr_ADCF;
+ 110   1        set_ADCS;                 // ADC start trig signal
+ 111   1      
+ 112   1        while( ADCF == 0 ); 
+ 113   1      
+ 114   1        adc = ADCRH*16 + ADCRL;
+ 115   1        
+ 116   1        return (u8)(adc>>4);  
+C51 COMPILER V9.52.0.0   ADC                                                               11/20/2017 15:02:55 PAGE 3   
+
+ 117   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    190    ----
+   CODE SIZE        =    247    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----       6
+   XDATA SIZE       =   ----       8
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -1,5 +1,9 @@
 #ifndef _GPIO_H
 #define _GPIO_H
+
+#define P_SW_BAT	P15
+#define GET_BAT_STATUS (P_SW_BAT == 1)
+
 void GPIO_Init(void);
 void SetGPx0IntHandler(FN_INT_HANDLER fn);
 void SetGPx5IntHandler(FN_INT_HANDLER fn);

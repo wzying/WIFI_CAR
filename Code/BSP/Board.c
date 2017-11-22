@@ -8,6 +8,7 @@
 #include "Board.h"
 #include "LED.h"
 #include "ADC.h"
+#include "voltage.h"
 /*
 **********************************************************************
 * 硬件抽象层
@@ -311,17 +312,17 @@ static void Timer3_IntHandler(void)
 
 	//修改：让电流阈值随电池电压的降低而降低
 	//if(Get_ADC() > 200)
-	if(Get_ADC() > 180)
+	if(!Get_Vol_Sampling())
 	{
-		SetPWM_Stop();
-		//SetPWM_Start();
+		if(Get_ADC() > 180)
+		{
+			SetPWM_Stop();
+			//SetPWM_Start();
+		}
+		else
+		{
+			SetPWM_Start();
+		}
 	}
-	else
-	{
-		SetPWM_Start();
-	}
-	
 }
 
-
- 

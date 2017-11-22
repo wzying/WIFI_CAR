@@ -97,7 +97,7 @@ UINT8 Receive_Data_From_UART0(void)
     return (c);
 }
 
-void Send_Data_To_UART0 (UINT8 c)
+void Send_Data_To_UART0 (uint8_t c)
 {
 	u16 t=50000;
 	

@@ -8,7 +8,7 @@
 
 //void Timer0_Delay40ms(UINT32 u32CNT);
 //void Timer3_Delay10us(UINT32 u32CNT);
-
+void delay_adc(void);
 void delay1ms(void);
 void delay10ms(void);
 void delayms(unsigned int t);

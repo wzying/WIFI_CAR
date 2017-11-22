@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52                    右电机 ： PWM3 + PWM0
   53          *参数  ：
   54                pwm：0-255  0->停止   255->最大速度
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 2   
 
   55                direction：控制电机的正反转   0->正转   1->反转
   56          *返回  ： 无
@@ -126,7 +126,7 @@ line level    source
  114          static ARM_DIR arm_Dir_Tem;
  115          void SetArm( ARM_DIR dir)
  116          {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 3   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 3   
 
  117   1        arm_Dir_Tem = dir;
  118   1        switch(dir)
@@ -190,7 +190,7 @@ line level    source
  176          */
  177          void Control_Motor_L(s16 speed)
  178          {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 4   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 4   
 
  179   1        if(speed >= 0)
  180   1        {
@@ -254,7 +254,7 @@ line level    source
  238   2            {
  239   3              if( dir > 0x80 )//
  240   3              {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 5   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 5   
 
  241   4                carSpeed_L = 0;
  242   4                carSpeed_R = dir - 0x80;
@@ -288,8 +288,8 @@ line level    source
  270            接收超时检测
  271            超时则停车
  272          */
- 273          //#define TIMEOUT_MOTOR 700
- 274          #define TIMEOUT_MOTOR 300
+ 273          #define TIMEOUT_MOTOR 700
+ 274          //#define TIMEOUT_MOTOR 500
  275          u16 timeOut_Motor=0;
  276          u8 CheckTimeOut_Motor(void)
  277          {
@@ -308,8 +308,8 @@ line level    source
  290          /*
  291            WiFi信号接收超时
  292          */
- 293          //#define TIMEOUT_WIFI 1000
- 294          #define TIMEOUT_WIFI 600
+ 293          #define TIMEOUT_WIFI 1000
+ 294          //#define TIMEOUT_WIFI 800
  295          u16 timeOut_Wifi=0;
  296          u8 CheckTimeOut_Wifi(void)
  297          {
@@ -318,7 +318,7 @@ line level    source
  300   1        else
  301   1          return 1;
  302   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 6   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 6   
 
  303   1        return 0;
  304   1      }
@@ -382,7 +382,7 @@ line level    source
  362   1        if(claw_Turn_Flag)
  363   1          SetClaw( CLAW_HOLD );
  364   1        else
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/15/2017 14:35:28 PAGE 7   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 7   
 
  365   1          SetClaw( CLAW_RELEASE );
  366   1      }
@@ -409,7 +409,7 @@ line level    source
  387            前爪 信号接收超时
  388          */
  389          //#define TIMEOUT_CLAW 600
- 390          #define TIMEOUT_CLAW 300
+ 390          #define TIMEOUT_CLAW 500
  391          u16 timeOut_Claw=0;
  392          u8 CheckTimeOut_Claw(void)
  393          {

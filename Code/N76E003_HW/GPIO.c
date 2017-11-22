@@ -46,6 +46,12 @@ void GPIO_Init(void)
 	P10=0;	
 	P03_PushPull_Mode;
 	P03=0;	
+	
+	/*
+		µç³Ø×é¼ì²â
+	  P1.5
+	*/
+	P15_Quasi_Mode;
 }
 
  

@@ -78,7 +78,8 @@ void main (void)
 	//delay();
 	
 	//MyPrintf("Hello WiFI Car \r\n");
-
+  
+	Set_Bat_TH();//设置电池电量检测阈值
 	while(1)
 	{
 		if(GetSysClock())//500uS

@@ -100,3 +100,18 @@ u8 Get_ADC_BAT_8Bit(void)
 	return (u8)(adc>>4);	
 }
 
+
+u8 Get_ADC_BandGap(void)
+{
+	u16 adc;	
+	Enable_ADC_BandGap;
+	
+	clr_ADCF;
+	set_ADCS;									// ADC start trig signal
+
+	while( ADCF == 0 );	
+
+	adc = ADCRH*16 + ADCRL;
+	
+	return (u8)(adc>>4);	
+}
