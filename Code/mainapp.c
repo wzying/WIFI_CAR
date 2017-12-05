@@ -77,9 +77,9 @@ void main (void)
 	
 	//delay();
 	
-	//MyPrintf("Hello WiFI Car \r\n");
+	//MyPrintf("Hello Wifi \r\n");
   
-	Set_Bat_TH();//设置电池电量检测阈值
+	//Set_Bat_TH();//设置电池电量检测阈值
 	while(1)
 	{
 		if(GetSysClock())//500uS
@@ -88,6 +88,7 @@ void main (void)
 			WDT_Reset();
 			
 			Voltage_Monitor();
+			//Vol_Monitor_Idle();
 			
 			if(Check_Recieve_Valid())//接收到有效的数据包
 			{
@@ -97,7 +98,9 @@ void main (void)
 			if(CheckTimeOut_Wifi())//WIFI信号超时
 			{
 				SetMotor_Brake();//刹车
+				Set_Motor_Status(MOTOR_MAIN,0);//复位电机状态
 				SetArm( ARM_STOP );
+				Set_Motor_Status(MOTOR_ARM,0);//复位电机状态
 				SetClaw( CLAW_STOP );
 			}	
 			else 
@@ -106,6 +109,7 @@ void main (void)
 				if(CheckTimeOut_Motor())
 				{
 					SetMotor_Brake();//刹车
+					Set_Motor_Status(MOTOR_MAIN,0);//复位电机状态
 				}
 			}
 			
@@ -153,6 +157,8 @@ void Rx_Package_Handle(uint8_t *uartBuf)
 		if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
 		{
 			Control_Motor(uartBuf[2],uartBuf[1]);
+			
+			Set_Motor_Status(MOTOR_MAIN,1);//设置电机状态
 			
 			Set_TimeOut_Motor();//复位超时计数
 		}

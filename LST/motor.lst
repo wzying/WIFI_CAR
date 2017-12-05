@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 1   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
   52                    右电机 ： PWM3 + PWM0
   53          *参数  ：
   54                pwm：0-255  0->停止   255->最大速度
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 2   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 2   
 
   55                direction：控制电机的正反转   0->正转   1->反转
   56          *返回  ： 无
@@ -122,314 +122,355 @@ line level    source
  110   1          SetPWM(0 , 0xff);
  111   1      }
  112          
- 113          /* 机械臂 */
- 114          static ARM_DIR arm_Dir_Tem;
- 115          void SetArm( ARM_DIR dir)
- 116          {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 3   
+ 113          /*
+ 114            小车电机状态
+ 115          */
+ 116          static u8 Motor_Status;
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 3   
 
- 117   1        arm_Dir_Tem = dir;
- 118   1        switch(dir)
- 119   1        {
- 120   2        case ARM_UP:
- 121   2          MOTOR_ARM_A = 1;
- 122   2          MOTOR_ARM_B = 0;
- 123   2          break;
- 124   2        case ARM_DOWN:
- 125   2          MOTOR_ARM_A = 0;
- 126   2          MOTOR_ARM_B = 1;
- 127   2          break;
- 128   2        case ARM_STOP:
- 129   2        default:
- 130   2          MOTOR_ARM_A = 0;
- 131   2          MOTOR_ARM_B = 0;
- 132   2          break;
+ 117          void Set_Motor_Status(enum MOTOR_TYPE type , u8 status )
+ 118          {
+ 119   1        switch(type)
+ 120   1        {
+ 121   2          case MOTOR_MAIN:
+ 122   2              if(status)
+ 123   2                Motor_Status |= MOTOR_STATUS_MAIN;
+ 124   2              else
+ 125   2                Motor_Status &= ~MOTOR_STATUS_MAIN;
+ 126   2            break;
+ 127   2          case MOTOR_ARM:
+ 128   2              if(status)
+ 129   2                Motor_Status |= MOTOR_STATUS_ARM;
+ 130   2              else
+ 131   2                Motor_Status &= ~MOTOR_STATUS_ARM;      
+ 132   2            break;
  133   2        }
  134   1      }
- 135          /*
- 136            获取机械臂状态
- 137          */
- 138          ARM_DIR GetArmStatus(void)
- 139          {
- 140   1        return arm_Dir_Tem;
- 141   1      }
- 142          
- 143          
- 144          /* 前爪 */
- 145          static CLAW_DIR claw_Dir_Tem;
- 146          void SetClaw( CLAW_DIR dir )
- 147          {
- 148   1        claw_Dir_Tem = dir;
- 149   1        switch(dir)
- 150   1        {
- 151   2        case CLAW_RELEASE:
- 152   2          MOTOR_CLAW_A = 1;
- 153   2          MOTOR_CLAW_B = 0;
- 154   2          break;
- 155   2        case CLAW_HOLD:
- 156   2          MOTOR_CLAW_A = 0;
- 157   2          MOTOR_CLAW_B = 1;
- 158   2          break;
- 159   2        case CLAW_STOP: 
- 160   2        default:
- 161   2          MOTOR_CLAW_A = 0;
- 162   2          MOTOR_CLAW_B = 0;
- 163   2          break;
- 164   2        } 
- 165   1      }
- 166          CLAW_DIR GetClawStatus(void)
- 167          {
- 168   1        return claw_Dir_Tem;
- 169   1      }
- 170          
- 171          
- 172          /*
- 173            左电机
- 174            speed < 0 反转
- 175            speed > 0 正转
- 176          */
- 177          void Control_Motor_L(s16 speed)
- 178          {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 4   
+ 135          u8 Check_Motor_Status(void)
+ 136          {
+ 137   1        return Motor_Status;
+ 138   1      }
+ 139          
+ 140          /*
+ 141            空闲状态检测（电机停止）
+ 142          */
+ 143          u8 Check_Motor_Idle(void)
+ 144          {
+ 145   1        if(Check_Motor_Status())
+ 146   1          return 0;//存在电机运转，忙状态
+ 147   1        else
+ 148   1          return 1;//电机停止，空闲状态
+ 149   1      }
+ 150          
+ 151          /* 机械臂 */
+ 152          static ARM_DIR arm_Dir_Tem;
+ 153          void SetArm( ARM_DIR dir)
+ 154          {
+ 155   1        arm_Dir_Tem = dir;
+ 156   1        switch(dir)
+ 157   1        {
+ 158   2        case ARM_UP:
+ 159   2          MOTOR_ARM_A = 1;
+ 160   2          MOTOR_ARM_B = 0;
+ 161   2          break;
+ 162   2        case ARM_DOWN:
+ 163   2          MOTOR_ARM_A = 0;
+ 164   2          MOTOR_ARM_B = 1;
+ 165   2          break;
+ 166   2        case ARM_STOP:
+ 167   2        default:
+ 168   2          MOTOR_ARM_A = 0;
+ 169   2          MOTOR_ARM_B = 0;
+ 170   2          break;
+ 171   2        }
+ 172   1      }
+ 173          /*
+ 174            获取机械臂状态
+ 175          */
+ 176          ARM_DIR GetArmStatus(void)
+ 177          {
+ 178   1        return arm_Dir_Tem;
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 4   
 
- 179   1        if(speed >= 0)
- 180   1        {
- 181   2          SetMotor_L(speed,0);
- 182   2        }
- 183   1        else
- 184   1        {
- 185   2          SetMotor_L(-speed,1);
- 186   2        }
- 187   1      }
- 188          /*
- 189            右电机
- 190            speed < 0 反转
- 191            speed > 0 正转
- 192          */
- 193          void Control_Motor_R(s16 speed)
- 194          {
- 195   1        if(speed >= 0)
- 196   1        {
- 197   2          SetMotor_R(speed,0);
- 198   2        }
- 199   1        else
- 200   1        {
- 201   2          SetMotor_R(-speed,1);
- 202   2        }
+ 179   1      }
+ 180          
+ 181          
+ 182          /* 前爪 */
+ 183          static CLAW_DIR claw_Dir_Tem;
+ 184          void SetClaw( CLAW_DIR dir )
+ 185          {
+ 186   1        claw_Dir_Tem = dir;
+ 187   1        switch(dir)
+ 188   1        {
+ 189   2        case CLAW_RELEASE:
+ 190   2          MOTOR_CLAW_A = 1;
+ 191   2          MOTOR_CLAW_B = 0;
+ 192   2          break;
+ 193   2        case CLAW_HOLD:
+ 194   2          MOTOR_CLAW_A = 0;
+ 195   2          MOTOR_CLAW_B = 1;
+ 196   2          break;
+ 197   2        case CLAW_STOP: 
+ 198   2        default:
+ 199   2          MOTOR_CLAW_A = 0;
+ 200   2          MOTOR_CLAW_B = 0;
+ 201   2          break;
+ 202   2        } 
  203   1      }
- 204          
- 205          
- 206          /*
- 207            小车前后左右控制
- 208            speed : 前后速度控制量
- 209            dir   : 转向信号控制量
- 210          */
- 211          void Control_Motor(u8 speed,u8 dir)
- 212          {
- 213   1        s16 carSpeed_L=0,carSpeed_R=0;
- 214   1        //u8 speed_dif;
- 215   1        u8 flag=0;
- 216   1        
- 217   1          carSpeed_L = speed - 0x80;
- 218   1          carSpeed_R = speed - 0x80;
- 219   1      
- 220   1          if( dir != 0x80 )
- 221   1          {
- 222   2            if(speed == 0x80)//原地转向
- 223   2            {
- 224   3              if( dir > 0x80 )//
- 225   3              {
- 226   4                //carSpeed_L = 0;
- 227   4                carSpeed_R = dir - 0x80;
- 228   4                carSpeed_L = -carSpeed_R/2;
- 229   4              }
- 230   3              if( dir < 0x80 )
- 231   3              {
- 232   4                //carSpeed_R = 0;
- 233   4                carSpeed_L = 0x80 - dir;
- 234   4                carSpeed_R = -carSpeed_L/2;
- 235   4              }
- 236   3            }
- 237   2            else if(speed > 0x80)//前进过程转向
- 238   2            {
- 239   3              if( dir > 0x80 )//
- 240   3              {
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 5   
+ 204          CLAW_DIR GetClawStatus(void)
+ 205          {
+ 206   1        return claw_Dir_Tem;
+ 207   1      }
+ 208          
+ 209          
+ 210          /*
+ 211            左电机
+ 212            speed < 0 反转
+ 213            speed > 0 正转
+ 214          */
+ 215          void Control_Motor_L(s16 speed)
+ 216          {
+ 217   1        if(speed >= 0)
+ 218   1        {
+ 219   2          SetMotor_L(speed,0);
+ 220   2        }
+ 221   1        else
+ 222   1        {
+ 223   2          SetMotor_L(-speed,1);
+ 224   2        }
+ 225   1      }
+ 226          /*
+ 227            右电机
+ 228            speed < 0 反转
+ 229            speed > 0 正转
+ 230          */
+ 231          void Control_Motor_R(s16 speed)
+ 232          {
+ 233   1        if(speed >= 0)
+ 234   1        {
+ 235   2          SetMotor_R(speed,0);
+ 236   2        }
+ 237   1        else
+ 238   1        {
+ 239   2          SetMotor_R(-speed,1);
+ 240   2        }
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 5   
 
- 241   4                carSpeed_L = 0;
- 242   4                carSpeed_R = dir - 0x80;
- 243   4              }
- 244   3              if( dir < 0x80 )
- 245   3              {
- 246   4                carSpeed_R = 0;
- 247   4                carSpeed_L = 0x80 - dir;
- 248   4              }       
- 249   3            }
- 250   2            else if(speed < 0x80)//后退过程转向
- 251   2            {
- 252   3              if( dir > 0x80 )//
- 253   3              {
- 254   4                carSpeed_L = 0;
- 255   4                carSpeed_R = 0x80 - dir;
- 256   4              }
- 257   3              if( dir < 0x80 )
- 258   3              {
- 259   4                carSpeed_R = 0;
- 260   4                carSpeed_L = dir - 0x80;
- 261   4              }           
- 262   3            }
- 263   2          } 
- 264   1        
- 265   1        Control_Motor_L(carSpeed_L);
- 266   1        Control_Motor_R(carSpeed_R);
- 267   1      }
- 268          
- 269          /*
- 270            接收超时检测
- 271            超时则停车
- 272          */
- 273          #define TIMEOUT_MOTOR 700
- 274          //#define TIMEOUT_MOTOR 500
- 275          u16 timeOut_Motor=0;
- 276          u8 CheckTimeOut_Motor(void)
- 277          {
- 278   1        if(timeOut_Motor)
- 279   1          timeOut_Motor--;
- 280   1        else
- 281   1          return 1;
- 282   1        
- 283   1        return 0;
- 284   1      }
- 285          void Set_TimeOut_Motor(void)
- 286          {
- 287   1        timeOut_Motor = TIMEOUT_MOTOR;
- 288   1      }
- 289          
- 290          /*
- 291            WiFi信号接收超时
- 292          */
- 293          #define TIMEOUT_WIFI 1000
- 294          //#define TIMEOUT_WIFI 800
- 295          u16 timeOut_Wifi=0;
- 296          u8 CheckTimeOut_Wifi(void)
- 297          {
- 298   1        if(timeOut_Wifi)
- 299   1          timeOut_Wifi--;
- 300   1        else
- 301   1          return 1;
+ 241   1      }
+ 242          
+ 243          
+ 244          /*
+ 245            小车前后左右控制
+ 246            speed : 前后速度控制量
+ 247            dir   : 转向信号控制量
+ 248          */
+ 249          void Control_Motor(u8 speed,u8 dir)
+ 250          {
+ 251   1        s16 carSpeed_L=0,carSpeed_R=0;
+ 252   1        //u8 speed_dif;
+ 253   1        u8 flag=0;
+ 254   1        
+ 255   1          carSpeed_L = speed - 0x80;
+ 256   1          carSpeed_R = speed - 0x80;
+ 257   1      
+ 258   1          if( dir != 0x80 )
+ 259   1          {
+ 260   2            if(speed == 0x80)//原地转向
+ 261   2            {
+ 262   3              if( dir > 0x80 )//
+ 263   3              {
+ 264   4                //carSpeed_L = 0;
+ 265   4                carSpeed_R = dir - 0x80;
+ 266   4                carSpeed_L = -carSpeed_R/2;
+ 267   4              }
+ 268   3              if( dir < 0x80 )
+ 269   3              {
+ 270   4                //carSpeed_R = 0;
+ 271   4                carSpeed_L = 0x80 - dir;
+ 272   4                carSpeed_R = -carSpeed_L/2;
+ 273   4              }
+ 274   3            }
+ 275   2            else if(speed > 0x80)//前进过程转向
+ 276   2            {
+ 277   3              if( dir > 0x80 )//
+ 278   3              {
+ 279   4                carSpeed_L = 0;
+ 280   4                carSpeed_R = dir - 0x80;
+ 281   4              }
+ 282   3              if( dir < 0x80 )
+ 283   3              {
+ 284   4                carSpeed_R = 0;
+ 285   4                carSpeed_L = 0x80 - dir;
+ 286   4              }       
+ 287   3            }
+ 288   2            else if(speed < 0x80)//后退过程转向
+ 289   2            {
+ 290   3              if( dir > 0x80 )//
+ 291   3              {
+ 292   4                carSpeed_L = 0;
+ 293   4                carSpeed_R = 0x80 - dir;
+ 294   4              }
+ 295   3              if( dir < 0x80 )
+ 296   3              {
+ 297   4                carSpeed_R = 0;
+ 298   4                carSpeed_L = dir - 0x80;
+ 299   4              }           
+ 300   3            }
+ 301   2          } 
  302   1        
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 6   
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 6   
 
- 303   1        return 0;
- 304   1      }
- 305          void Set_TimeOut_Wifi(void)
- 306          {
- 307   1        timeOut_Wifi = TIMEOUT_WIFI;
- 308   1      }
- 309          
- 310          
- 311          /*
- 312            机械臂控制
- 313            参数： arm -> WiFi控制信号
- 314          */
- 315          void Control_ARM(u8 arm)
- 316          {
- 317   1        if( arm <= 0x40 )
- 318   1        {
- 319   2          SetArm( ARM_UP );
- 320   2          // Test code
- 321   2          //delayms(1000);
- 322   2        }
- 323   1        else if( arm >= 0xD0 )
- 324   1        {
- 325   2          SetArm( ARM_DOWN );
- 326   2        }
- 327   1        else
- 328   1        {
- 329   2          SetArm( ARM_STOP );
- 330   2        }
- 331   1      
- 332   1      }
- 333          /*
- 334            前爪控制
- 335            
- 336          */
- 337          static u8 claw_Turn_Flag = 0;
- 338          static u8 claw_EN = 0;
- 339          void Set_Claw_EN(void)
- 340          {
- 341   1        claw_EN = 1;
+ 303   1        Control_Motor_L(carSpeed_L);
+ 304   1        Control_Motor_R(carSpeed_R);
+ 305   1      }
+ 306          
+ 307          /*
+ 308            接收超时检测
+ 309            超时则停车
+ 310          */
+ 311          #define TIMEOUT_MOTOR 700
+ 312          //#define TIMEOUT_MOTOR 500
+ 313          u16 timeOut_Motor=0;
+ 314          u8 CheckTimeOut_Motor(void)
+ 315          {
+ 316   1        if(timeOut_Motor)
+ 317   1          timeOut_Motor--;
+ 318   1        else
+ 319   1          return 1;
+ 320   1        
+ 321   1        return 0;
+ 322   1      }
+ 323          void Set_TimeOut_Motor(void)
+ 324          {
+ 325   1        timeOut_Motor = TIMEOUT_MOTOR;
+ 326   1      }
+ 327          
+ 328          /*
+ 329            WiFi信号接收超时
+ 330          */
+ 331          #define TIMEOUT_WIFI 1000
+ 332          //#define TIMEOUT_WIFI 800
+ 333          u16 timeOut_Wifi=0;
+ 334          u8 CheckTimeOut_Wifi(void)
+ 335          {
+ 336   1        if(timeOut_Wifi)
+ 337   1          timeOut_Wifi--;
+ 338   1        else
+ 339   1          return 1;
+ 340   1        
+ 341   1        return 0;
  342   1      }
- 343          void Reset_Claw_EN(void)
+ 343          void Set_TimeOut_Wifi(void)
  344          {
- 345   1        claw_EN = 0;
+ 345   1        timeOut_Wifi = TIMEOUT_WIFI;
  346   1      }
- 347          u8 Check_Claw_EN(void)
- 348          {
- 349   1        return claw_EN;
- 350   1      }
- 351          void Claw_Trun(void)
- 352          {
- 353   1        if(claw_Turn_Flag)
- 354   1          claw_Turn_Flag = 0;
- 355   1        else
- 356   1          claw_Turn_Flag = 1;
- 357   1      }
- 358          void Claw_Dir(void)
- 359          {
- 360   1        Set_Claw_EN();
- 361   1        Set_TimeOut_Claw();
- 362   1        if(claw_Turn_Flag)
- 363   1          SetClaw( CLAW_HOLD );
- 364   1        else
-C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 13:58:12 PAGE 7   
+ 347          
+ 348          
+ 349          /*
+ 350            机械臂控制
+ 351            参数： arm -> WiFi控制信号
+ 352          */
+ 353          void Control_ARM(u8 arm)
+ 354          {
+ 355   1        if( arm <= 0x40 )
+ 356   1        {
+ 357   2          SetArm( ARM_UP );
+ 358   2          Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
+ 359   2        }
+ 360   1        else if( arm >= 0xD0 )
+ 361   1        {
+ 362   2          SetArm( ARM_DOWN );
+ 363   2          Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
+ 364   2        }
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 7   
 
- 365   1          SetClaw( CLAW_RELEASE );
- 366   1      }
- 367          
- 368          void Control_Claw(u8 claw)
- 369          {
- 370   1        
- 371   1        if( claw <= 0x40 )
- 372   1        {
- 373   2          //SetClaw( CLAW_HOLD );
- 374   2          Claw_Dir();
- 375   2        }
- 376   1        else if( claw >= 0xC0 )
- 377   1        {
- 378   2          //SetClaw( CLAW_RELEASE );
- 379   2          Claw_Dir();
- 380   2        }
- 381   1        else
- 382   1        {
- 383   2          SetClaw( CLAW_STOP );   
- 384   2        }
+ 365   1        else
+ 366   1        {
+ 367   2          SetArm( ARM_STOP );
+ 368   2          Set_Motor_Status(MOTOR_ARM,0);//复位电机状态
+ 369   2        }
+ 370   1      
+ 371   1      }
+ 372          /*
+ 373            前爪控制
+ 374            
+ 375          */
+ 376          static u8 claw_Turn_Flag = 0;
+ 377          static u8 claw_EN = 0;
+ 378          void Set_Claw_EN(void)
+ 379          {
+ 380   1        claw_EN = 1;
+ 381   1      }
+ 382          void Reset_Claw_EN(void)
+ 383          {
+ 384   1        claw_EN = 0;
  385   1      }
- 386          /*
- 387            前爪 信号接收超时
- 388          */
- 389          //#define TIMEOUT_CLAW 600
- 390          #define TIMEOUT_CLAW 500
- 391          u16 timeOut_Claw=0;
- 392          u8 CheckTimeOut_Claw(void)
- 393          {
- 394   1        if(timeOut_Claw)
- 395   1          timeOut_Claw--;
- 396   1        else
- 397   1          return 1;
- 398   1        
- 399   1        return 0;
- 400   1      }
- 401          void Set_TimeOut_Claw(void)
- 402          {
- 403   1        timeOut_Claw = TIMEOUT_CLAW;
- 404   1      }
+ 386          u8 Check_Claw_EN(void)
+ 387          {
+ 388   1        return claw_EN;
+ 389   1      }
+ 390          void Claw_Trun(void)
+ 391          {
+ 392   1        if(claw_Turn_Flag)
+ 393   1          claw_Turn_Flag = 0;
+ 394   1        else
+ 395   1          claw_Turn_Flag = 1;
+ 396   1      }
+ 397          void Claw_Dir(void)
+ 398          {
+ 399   1        Set_Claw_EN();
+ 400   1        Set_TimeOut_Claw();
+ 401   1        if(claw_Turn_Flag)
+ 402   1          SetClaw( CLAW_HOLD );
+ 403   1        else
+ 404   1          SetClaw( CLAW_RELEASE );
+ 405   1      }
+ 406          
+ 407          void Control_Claw(u8 claw)
+ 408          {
+ 409   1        
+ 410   1        if( claw <= 0x40 )
+ 411   1        {
+ 412   2          //SetClaw( CLAW_HOLD );
+ 413   2          Claw_Dir();
+ 414   2        }
+ 415   1        else if( claw >= 0xC0 )
+ 416   1        {
+ 417   2          //SetClaw( CLAW_RELEASE );
+ 418   2          Claw_Dir();
+ 419   2        }
+ 420   1        else
+ 421   1        {
+ 422   2          SetClaw( CLAW_STOP );   
+ 423   2        }
+ 424   1      }
+ 425          /*
+ 426            前爪 信号接收超时
+C51 COMPILER V9.52.0.0   MOTOR                                                             11/22/2017 16:05:32 PAGE 8   
+
+ 427          */
+ 428          //#define TIMEOUT_CLAW 600
+ 429          #define TIMEOUT_CLAW 500
+ 430          u16 timeOut_Claw=0;
+ 431          u8 CheckTimeOut_Claw(void)
+ 432          {
+ 433   1        if(timeOut_Claw)
+ 434   1          timeOut_Claw--;
+ 435   1        else
+ 436   1          return 1;
+ 437   1        
+ 438   1        return 0;
+ 439   1      }
+ 440          void Set_TimeOut_Claw(void)
+ 441          {
+ 442   1        timeOut_Claw = TIMEOUT_CLAW;
+ 443   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    791    ----
+   CODE SIZE        =    871    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      8       1
+   XDATA SIZE       =      9       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2      13
    IDATA SIZE       =   ----    ----

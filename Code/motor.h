@@ -11,6 +11,14 @@
 #ifndef _MOTOR_H_
 #define	_MOTOR_H_
 
+#define MOTOR_STATUS_MAIN	0x01
+#define MOTOR_STATUS_ARM 	0x02
+enum MOTOR_TYPE{
+	MOTOR_MAIN,
+	MOTOR_ARM,
+	MOTOR_CLAW,
+};
+
 #define MOTOR_PWM_DIF  60 
 
 /* 	×óµç»ú 	IO£ºPWM1 + PC7	*/
@@ -67,5 +75,8 @@ u8 Check_Claw_EN(void);
 void Claw_Trun(void);
 u8 CheckTimeOut_Claw(void);
 void Set_TimeOut_Claw(void);
+void Set_Motor_Status(enum MOTOR_TYPE type , u8 status );
+u8 Check_Motor_Status(void);
+u8 Check_Motor_Idle(void);
 
 #endif

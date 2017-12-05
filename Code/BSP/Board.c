@@ -314,7 +314,8 @@ static void Timer3_IntHandler(void)
 	//if(Get_ADC() > 200)
 	if(!Get_Vol_Sampling())
 	{
-		if(Get_ADC() > 180)
+		g_I_motor = Get_ADC();
+		if( g_I_motor > LM_I_MOTOR )
 		{
 			SetPWM_Stop();
 			//SetPWM_Start();

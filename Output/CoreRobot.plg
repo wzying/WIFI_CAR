@@ -8,28 +8,47 @@ Project File Date:  11/06/2017
 
 <h2>Output:</h2>
 Build target 'CoreRobot'
-compiling motor.c...
 linking...
-Program Size: data=72.1 xdata=102 code=4663
+Program Size: data=72.1 xdata=105 code=5000
 creating hex file from ".\Output\CoreRobot"...
 ".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\WiFiCar_MCU_V1_0_GIT\\Output\\CoreRobot" 
+Load "D:\\work\\wifi_car\\WiFiCar_MCU_V1_0_GIT\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 5000 bytes programmed.
+Flash Verify Done: 5000 bytes verified.
 Build target 'CoreRobot'
 linking...
-Program Size: data=72.1 xdata=102 code=4663
+Program Size: data=72.1 xdata=105 code=5000
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\WiFiCar_MCU_V1_0_GIT\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 5000 bytes programmed.
+Flash Verify Done: 5000 bytes verified.
+Build target 'CoreRobot'
+compiling voltage.c...
+linking...
+Program Size: data=72.1 xdata=105 code=5008
+creating hex file from ".\Output\CoreRobot"...
+".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
+Load "D:\\work\\wifi_car\\WiFiCar_MCU_V1_0_GIT\\Output\\CoreRobot" 
+Flash Erase Done.
+Flash Write Done: 5008 bytes programmed.
+Flash Verify Done: 5008 bytes verified.
+Build target 'CoreRobot'
+compiling voltage.c...
+linking...
+Program Size: data=72.1 xdata=105 code=5008
 creating hex file from ".\Output\CoreRobot"...
 ".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
 Build target 'CoreRobot'
 compiling voltage.c...
 linking...
-Program Size: data=72.1 xdata=102 code=4663
-creating hex file from ".\Output\CoreRobot"...
-".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
-Build target 'CoreRobot'
-linking...
-Program Size: data=72.1 xdata=102 code=4663
+Program Size: data=72.1 xdata=105 code=5000
 creating hex file from ".\Output\CoreRobot"...
 ".\Output\CoreRobot" - 0 Error(s), 0 Warning(s).
 Load "D:\\work\\wifi_car\\WiFiCar_MCU_V1_0_GIT\\Output\\CoreRobot" 
 Flash Erase Done.
-Flash Write Done: 4663 bytes programmed.
-Flash Verify Done: 4663 bytes verified.
+Flash Write Done: 5000 bytes programmed.
+Flash Verify Done: 5000 bytes verified.

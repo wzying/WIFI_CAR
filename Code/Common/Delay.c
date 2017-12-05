@@ -21,7 +21,7 @@ void delay_adc(void)   // 5us
 {
     unsigned char a,b;
     for(b=1;b>0;b--)
-        for(a=17;a>0;a--);
+        for(a=10;a>0;a--);
 }
 
 

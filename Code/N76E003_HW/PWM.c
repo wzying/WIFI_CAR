@@ -38,7 +38,7 @@ void WDT_Init(void)
 //	Enable_WDT_Reset_Config();
 
 	  //TA=0xAA;TA=0x55;WDCON=0x07;						//Setting WDT prescale 
-	  TA=0xAA;TA=0x55;WDCON=0x06;						//Setting WDT prescale 6.4ms
+	  TA=0xAA;TA=0x55;WDCON=0x07;						//Setting WDT prescale
 		set_WDCLR;														//Clear WDT timer
 		while((WDCON|~SET_BIT6)==0xFF);				//confirm WDT clear is ok before into power down mode
 		//EA = 1;

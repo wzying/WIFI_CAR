@@ -110,6 +110,44 @@ void SetMotor_Brake(void)
 		SetPWM(0 , 0xff);
 }
 
+/*
+	小车电机状态
+*/
+static u8 Motor_Status;
+void Set_Motor_Status(enum MOTOR_TYPE type , u8 status )
+{
+	switch(type)
+	{
+		case MOTOR_MAIN:
+				if(status)
+					Motor_Status |= MOTOR_STATUS_MAIN;
+				else
+					Motor_Status &= ~MOTOR_STATUS_MAIN;
+			break;
+		case MOTOR_ARM:
+				if(status)
+					Motor_Status |= MOTOR_STATUS_ARM;
+				else
+					Motor_Status &= ~MOTOR_STATUS_ARM;			
+			break;
+	}
+}
+u8 Check_Motor_Status(void)
+{
+	return Motor_Status;
+}
+
+/*
+	空闲状态检测（电机停止）
+*/
+u8 Check_Motor_Idle(void)
+{
+	if(Check_Motor_Status())
+		return 0;//存在电机运转，忙状态
+	else
+		return 1;//电机停止，空闲状态
+}
+
 /* 机械臂 */
 static ARM_DIR arm_Dir_Tem;
 void SetArm( ARM_DIR dir)
@@ -317,16 +355,17 @@ void Control_ARM(u8 arm)
 	if( arm <= 0x40 )
 	{
 		SetArm( ARM_UP );
-		// Test code
-		//delayms(1000);
+		Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
 	}
 	else if( arm >= 0xD0 )
 	{
 		SetArm( ARM_DOWN );
+		Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
 	}
 	else
 	{
 		SetArm( ARM_STOP );
+		Set_Motor_Status(MOTOR_ARM,0);//复位电机状态
 	}
 
 }
