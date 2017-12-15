@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   UART                                                              11/06/2017 17:49:00 PAGE 1   
+C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
@@ -62,7 +62,7 @@ line level    source
   43   1          TMOD |= 0x20;     //Timer1 Mode1
   44   1          
   45   1          set_SMOD;         //UART0 Double Rate Enable
-C51 COMPILER V9.52.0.0   UART                                                              11/06/2017 17:49:00 PAGE 2   
+C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 2   
 
   46   1          set_T1M;
   47   1          clr_BRCK;         //Serial port 0 baud rate clock source = Timer1
@@ -126,7 +126,7 @@ line level    source
  105   2          {
  106   3            if(RX_Packet[0] == 0x66)//包头0x66
  107   3            {
-C51 COMPILER V9.52.0.0   UART                                                              11/06/2017 17:49:00 PAGE 3   
+C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 3   
 
  108   4              Set_Recieve_valid();//接收到有效的数据包
  109   4              //SendDataUart(RX_Packet,DATA_LEN);

@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 1   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE BOARD
@@ -62,7 +62,7 @@ line level    source
   51   1        
   52   1        GlobalInterruptEnable();//使能中断全局GIE。
   53   1        StartTimer3();
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 2   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 2   
 
   54   1      }
   55           
@@ -126,7 +126,7 @@ line level    source
  113   1        {
  114   2          mTick_1ms=1;
  115   2          mTick_1s++;
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 3   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 3   
 
  116   2       
  117   2        }
@@ -190,7 +190,7 @@ line level    source
  175          Called: unkown
  176           
  177          **********************************************************************/
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 4   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 4   
 
  178          UINT16 GetTickCount(void)
  179          {
@@ -254,7 +254,7 @@ line level    source
  237   1        return ret;
  238   1      }
  239           
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 5   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 5   
 
  240          /*********************************************************************
  241          Brief: SetAttackPin IR   IR 攻击输出 ,有问题,需要改
@@ -318,7 +318,7 @@ line level    source
  299   1        {
  300   2          i = 0;
  301   2          
-C51 COMPILER V9.52.0.0   BOARD                                                             11/24/2017 11:41:40 PAGE 6   
+C51 COMPILER V9.52.0.0   BOARD                                                             12/15/2017 11:09:36 PAGE 6   
 
  302   2          SetSysClock();
  303   2          

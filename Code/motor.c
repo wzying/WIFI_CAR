@@ -13,7 +13,7 @@
 #include "PWM.h"
 #include "SFR_Macro.h"
 #include "delay.h"
-
+#include "Function_define.h"
 /**************************************************
 *函数名：	SetMotor_L
 *功能  ：	控制“左电机”的转速与方向
@@ -73,7 +73,7 @@ void SetMotor_R(u8 pwm , u8 direction)
 		else//??
 		{
 			SetPWM(3 , 0);
-			SetPWM(0 , pwm);
+			SetPWM(0 , pwm);	
 		}
 	}
 }
@@ -300,6 +300,18 @@ void Control_Motor(u8 speed,u8 dir)
 			}
 		}	
 	
+//		//Test 全速跑
+//		if(carSpeed_L < 0)
+//			carSpeed_L = -0x80;
+//		else if(carSpeed_L > 0)
+//			carSpeed_L = 0x80;
+//		
+//		if(carSpeed_R < 0)
+//			carSpeed_R = -0x80;
+//		else if(carSpeed_R > 0)
+//			carSpeed_R = 0x80;
+//		// End Test
+		
 	Control_Motor_L(carSpeed_L);
 	Control_Motor_R(carSpeed_R);
 }

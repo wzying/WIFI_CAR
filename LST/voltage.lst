@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/27/2017 16:30:44 PAGE 1   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE VOLTAGE
@@ -62,7 +62,7 @@ line level    source
   51          /*
   52            平均值
   53          */
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/27/2017 16:30:44 PAGE 2   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 2   
 
   54          #define AVERAGE_N   2
   55          u8 Get_Vol_Average(void)
@@ -126,7 +126,7 @@ line level    source
  113   2          r = (u8)((g_I_motor*10)/LM_I_MOTOR);
  114   2        }
  115   1        return r;
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/27/2017 16:30:44 PAGE 3   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 3   
 
  116   1      }
  117          
@@ -190,7 +190,7 @@ line level    source
  175   2          i=0;
  176   2          
  177   2          Set_Vol_Sampling();//正在采样中
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/27/2017 16:30:44 PAGE 4   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 4   
 
  178   2          v_Gap = Get_ADC_BandGap();
  179   2          vol_avr = Get_Vol_Average();
@@ -254,7 +254,7 @@ line level    source
  237   3            //Send_Data_To_UART0(v_R);
  238   3            //Send_Data_To_UART0(vol_avr);
  239   3            //Send_Data_To_UART0( (u8)(g_I_motor>>8) );
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           11/27/2017 16:30:44 PAGE 5   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 5   
 
  240   3            //Send_Data_To_UART0( (u8)g_I_motor );
  241   3            

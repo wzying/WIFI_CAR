@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/24/2017 14:05:32 PAGE 1   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           12/12/2017 15:22:30 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAINAPP
@@ -62,7 +62,7 @@ line level    source
   43          u8  num = 0;
   44          
   45          u8 dataPacket0;
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/24/2017 14:05:32 PAGE 2   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           12/12/2017 15:22:30 PAGE 2   
 
   46          u8 dataPacket1;
   47          u8 speed = 0x00;
@@ -126,7 +126,7 @@ line level    source
  105   4            } 
  106   3            else 
  107   3            {
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/24/2017 14:05:32 PAGE 3   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           12/12/2017 15:22:30 PAGE 3   
 
  108   4              //前后信号接收超时，刹车
  109   4              if(CheckTimeOut_Motor())
@@ -190,7 +190,7 @@ line level    source
  167   2          {
  168   3            Control_ARM (uartBuf[3]);
  169   3            Control_Claw(uartBuf[4]);
-C51 COMPILER V9.52.0.0   MAINAPP                                                           11/24/2017 14:05:32 PAGE 4   
+C51 COMPILER V9.52.0.0   MAINAPP                                                           12/12/2017 15:22:30 PAGE 4   
 
  170   3          }
  171   2        }

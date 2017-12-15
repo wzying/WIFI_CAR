@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   DELAY                                                             11/24/2017 10:32:12 PAGE 1   
+C51 COMPILER V9.52.0.0   DELAY                                                             12/12/2017 15:22:30 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE DELAY
@@ -62,7 +62,7 @@ line level    source
   44          
   45          void delay10ms(void)   //?? 0us
   46          {
-C51 COMPILER V9.52.0.0   DELAY                                                             11/24/2017 10:32:12 PAGE 2   
+C51 COMPILER V9.52.0.0   DELAY                                                             12/12/2017 15:22:30 PAGE 2   
 
   47   1          unsigned char a,b,c;
   48   1          for(c=193;c>0;c--)
@@ -126,7 +126,7 @@ line level    source
  106          //    clr_T2DIV1;
  107          //    set_T2DIV0;
  108          //    set_TR2;                                    //Start Timer2
-C51 COMPILER V9.52.0.0   DELAY                                                             11/24/2017 10:32:12 PAGE 3   
+C51 COMPILER V9.52.0.0   DELAY                                                             12/12/2017 15:22:30 PAGE 3   
 
  109          //    while (u32CNT != 0)
  110          //    {
