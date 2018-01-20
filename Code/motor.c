@@ -320,8 +320,8 @@ void Control_Motor(u8 speed,u8 dir)
 	接收超时检测
 	超时则停车
 */
-#define TIMEOUT_MOTOR 700
-//#define TIMEOUT_MOTOR 500
+//#define TIMEOUT_MOTOR 700
+#define TIMEOUT_MOTOR 500
 u16 timeOut_Motor=0;
 u8 CheckTimeOut_Motor(void)
 {
@@ -340,8 +340,8 @@ void Set_TimeOut_Motor(void)
 /*
 	WiFi信号接收超时
 */
-#define TIMEOUT_WIFI 1000
-//#define TIMEOUT_WIFI 800
+//#define TIMEOUT_WIFI 1000
+#define TIMEOUT_WIFI 800
 u16 timeOut_Wifi=0;
 u8 CheckTimeOut_Wifi(void)
 {
@@ -438,7 +438,7 @@ void Control_Claw(u8 claw)
 	前爪 信号接收超时
 */
 //#define TIMEOUT_CLAW 600
-#define TIMEOUT_CLAW 500
+#define TIMEOUT_CLAW 400
 u16 timeOut_Claw=0;
 u8 CheckTimeOut_Claw(void)
 {

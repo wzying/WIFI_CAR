@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        12/15/2017  15:49:30  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        01/11/2018  15:24:49  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Output\CoreRobot (MAINAPP)
 
             * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
             XDATA   0000H     002CH     UNIT         ?XD?UART
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 2
 
 
             XDATA   002CH     0010H     UNIT         ?XD?BOARD
@@ -119,7 +119,7 @@ LINK MAP OF MODULE:  .\Output\CoreRobot (MAINAPP)
             CODE    0E96H     0027H     UNIT         ?PR?LED_FLASH?LED
             CODE    0EBDH     0025H     UNIT         ?PR?SET_BAT_TH?VOLTAGE
             CODE    0EE2H     0024H     UNIT         ?PR?_RECIEVEPACKET?UART
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 3
 
 
             CODE    0F06H     0023H     UNIT         ?PR?DELAY_UART?COMMON
@@ -179,7 +179,7 @@ LINK MAP OF MODULE:  .\Output\CoreRobot (MAINAPP)
             CODE    130FH     0007H     UNIT         ?PR?_SETGPX6INTHANDLER?GPIO
             CODE    1316H     0007H     UNIT         ?PR?_SETEX0INTHANDLER?GPIO
             CODE    131DH     0007H     UNIT         ?PR?_SETEX1INTHANDLER?GPIO
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 4
 
 
             CODE    1324H     0007H     UNIT         ?PR?SET_RECIEVE_VALID?UART
@@ -239,7 +239,7 @@ SEGMENT                                      DATA_GROUP          XDATA_GROUP
   +--> ?PR?CLAW_TRUN?MOTOR
   +--> ?PR?INDICATOR_LIGHT?LED
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 5
 
 
 ?PR?BOARDINIT?BOARD                        -----    -----      -----    -----
@@ -299,7 +299,7 @@ SEGMENT                                      DATA_GROUP          XDATA_GROUP
 
 ?PR?_RX_PACKAGE_HANDLE?MAINAPP             0030H    0003H      -----    -----
   +--> ?PR?SET_TIMEOUT_WIFI?MOTOR
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 6
 
 
   +--> ?PR?SETWIFISTATUS?LED
@@ -359,7 +359,7 @@ SEGMENT                                      DATA_GROUP          XDATA_GROUP
 
 *** NEW ROOT ***************************************************
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 7
 
 
 ?PR?SERIALPORT0_ISR?UART                   -----    -----      -----    -----
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   X:005CH         SYMBOL        il
   X:005DH         SYMBOL        motorOutFlag
   X:005EH         SYMBOL        i
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 8
 
 
   -------         ENDDO         
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       APPTASK
   -------         PROC          _RX_PACKAGE_HANDLE
   D:0030H         SYMBOL        uartBuf
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 9
 
 
   C:0840H         LINE#         150
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:1337H         PUBLIC        Check_Claw_EN
   C:1296H         PUBLIC        Set_TimeOut_Claw
   D:00F8H         PUBLIC        SCON_1
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 10
 
 
   D:0045H         SYMBOL        arm_Dir_Tem
@@ -599,7 +599,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0B50H         LINE#         67
   C:0B56H         LINE#         68
   C:0B5AH         LINE#         69
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 11
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 11
 
 
   C:0B5AH         LINE#         70
@@ -659,7 +659,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         PROC          CHECK_MOTOR_IDLE
   C:1274H         LINE#         143
   C:1274H         LINE#         144
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 12
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 12
 
 
   C:1274H         LINE#         145
@@ -719,7 +719,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:1105H         LINE#         202
   C:1105H         LINE#         203
   -------         ENDPROC       _SETCLAW
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 13
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 13
 
 
   -------         PROC          GETCLAWSTATUS
@@ -779,7 +779,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0389H         LINE#         267
   C:0389H         LINE#         268
   C:0392H         LINE#         269
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 14
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 14
 
 
   C:0392H         LINE#         271
@@ -839,7 +839,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0F97H         LINE#         349
   C:0FA7H         LINE#         351
   C:0FAAH         LINE#         353
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 15
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 15
 
 
   C:0FACH         LINE#         354
@@ -899,7 +899,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         PROC          CLAW_DIR
   C:1106H         LINE#         409
   C:1106H         LINE#         410
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 16
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 16
 
 
   C:1106H         LINE#         411
@@ -959,7 +959,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   X:0042H         SYMBOL        v_R
   C:1379H         PUBLIC        _Set_Vol_Status
   X:0043H         SYMBOL        vol_Flag
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 17
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 17
 
 
   D:0098H         PUBLIC        SCON
@@ -1019,7 +1019,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       GET_VOL_STATUS
   -------         PROC          GET_VOL_AVERAGE
   -------         DO            
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 18
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 18
 
 
   X:0060H         SYMBOL        adc
@@ -1079,7 +1079,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       SET_BAT_TH
   -------         PROC          _SET_BAT_TH_R
   D:0007H         SYMBOL        r
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 19
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 19
 
 
   -------         DO            
@@ -1139,7 +1139,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:04F2H         LINE#         227
   C:04F5H         LINE#         228
   C:0500H         LINE#         229
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 20
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 20
 
 
   C:0508H         LINE#         230
@@ -1199,7 +1199,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:00C8H         PUBLIC        T2CON
   D:00C4H         PUBLIC        T3CON
   C:12D4H         PUBLIC        Receive_Data_From_UART0
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 21
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 21
 
 
   D:008EH         PUBLIC        CKCON
@@ -1259,7 +1259,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:12D9H         LINE#         96
   C:12DBH         LINE#         97
   C:12DBH         LINE#         98
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 22
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 22
 
 
   -------         ENDPROC       RECEIVE_DATA_FROM_UART0
@@ -1319,7 +1319,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:00E8H         PUBLIC        ADCCON0
   D:00C0H         PUBLIC        I2CON
   D:00C8H         PUBLIC        T2CON
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 23
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 23
 
 
   C:0CD0H         PUBLIC        _delayms
@@ -1379,7 +1379,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       DELAY10MS
   -------         ENDMOD        DELAY
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 24
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 24
 
 
   -------         MODULE        ?C_STARTUP
@@ -1439,7 +1439,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0E48H         PUBLIC        BoardInit
   C:09FCH         SYMBOL        Timer3_IntHandler
   C:135FH         PUBLIC        _printstr
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 25
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 25
 
 
   X:0031H         PUBLIC        mTimerCnt
@@ -1499,7 +1499,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0DDCH         LINE#         115
   C:0DEAH         LINE#         117
   C:0DEAH         LINE#         119
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 26
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 26
 
 
   C:0DF0H         LINE#         120
@@ -1559,7 +1559,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       _GETTIMER
   -------         PROC          _GETIOLEVEL
   D:0007H         SYMBOL        i
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 27
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 27
 
 
   -------         DO            
@@ -1619,7 +1619,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:12FAH         LINE#         275
   C:12FAH         LINE#         276
   C:1300H         LINE#         277
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 28
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 28
 
 
   -------         ENDPROC       SETSYSCLOCK
@@ -1679,7 +1679,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:00A0H         PUBLIC        P2
   D:00B0H         PUBLIC        P3
   D:00D8H         PUBLIC        PWMCON0
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 29
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 29
 
 
   D:00A8H         PUBLIC        IE
@@ -1739,7 +1739,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0E87H         LINE#         47
   C:0E8DH         LINE#         48
   C:0E8FH         LINE#         54
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 30
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 30
 
 
   C:0E95H         LINE#         55
@@ -1799,7 +1799,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0940H         LINE#         105
   C:0940H         LINE#         106
   C:0945H         LINE#         107
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 31
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 31
 
 
   C:0947H         LINE#         108
@@ -1859,7 +1859,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:1307H         LINE#         165
   -------         ENDPROC       _SETGPX0INTHANDLER
   -------         PROC          _SETGPX5INTHANDLER
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 32
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 32
 
 
   D:0001H         SYMBOL        fn
@@ -1919,7 +1919,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:07ADH         LINE#         278
   C:07B0H         LINE#         280
   -------         ENDPROC       PININTERRUPT_ISR
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 33
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 33
 
 
   -------         PROC          EXT_INT0
@@ -1979,7 +1979,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:122EH         LINE#         29
   C:122EH         LINE#         31
   C:1230H         LINE#         32
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 34
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 34
 
 
   C:1233H         LINE#         33
@@ -2039,7 +2039,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   X:0000H         PUBLIC        mdlen
   D:0008H         PUBLIC        timeOut_Rx
   B:00A8H.4       PUBLIC        ES
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 35
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 35
 
 
   D:00B8H         PUBLIC        IP
@@ -2099,7 +2099,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:0005H         SYMBOL        dlen
   C:0D68H         LINE#         59
   C:0D68H         LINE#         60
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 36
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 36
 
 
   C:0D68H         LINE#         61
@@ -2159,7 +2159,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         PROC          CHECKTIMEOUT
   C:1179H         LINE#         124
   C:1179H         LINE#         125
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 37
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 37
 
 
   C:1179H         LINE#         126
@@ -2219,7 +2219,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:0088H         PUBLIC        TCON
   D:0091H         PUBLIC        SFRS
   C:123DH         PUBLIC        _PWMEnable
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 38
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 38
 
 
   D:00F8H         PUBLIC        SCON_1
@@ -2279,7 +2279,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0A76H         LINE#         97
   C:0A79H         LINE#         98
   C:0A7CH         LINE#         101
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 39
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 39
 
 
   C:0A7FH         LINE#         103
@@ -2339,7 +2339,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0663H         LINE#         177
   C:0665H         LINE#         178
   C:0667H         LINE#         179
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 40
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 40
 
 
   C:0668H         LINE#         180
@@ -2399,7 +2399,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:00B4H         PUBLIC        P1M2
   D:0090H         PUBLIC        P1
   D:00ACH         PUBLIC        P3M1
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 41
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 41
 
 
   D:00A0H         PUBLIC        P2
@@ -2459,7 +2459,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   -------         ENDPROC       TURN_LED
   -------         PROC          CHECKWIFISTATUS
   C:0FCDH         LINE#         45
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 42
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 42
 
 
   C:0FCDH         LINE#         46
@@ -2519,7 +2519,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   D:0088H         PUBLIC        TCON
   C:0C2AH         PUBLIC        Get_ADC_BandGap
   C:003EH         PUBLIC        Get_ADC_BAT_8Bit
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 43
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 43
 
 
   C:1387H         PUBLIC        Init_ADC
@@ -2579,7 +2579,7 @@ SYMBOL TABLE OF MODULE:  .\Output\CoreRobot (MAINAPP)
   C:0071H         LINE#         100
   C:0082H         LINE#         101
   -------         ENDPROC       GET_ADC_BAT_8BIT
-BL51 BANKED LINKER/LOCATER V6.22                                                      12/15/2017  15:49:30  PAGE 44
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/11/2018  15:24:49  PAGE 44
 
 
   -------         PROC          GET_ADC_BANDGAP
