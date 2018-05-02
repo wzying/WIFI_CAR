@@ -33,12 +33,12 @@ void SetMotor_L(u8 pwm , u8 direction)
 	else
 	{
 		pwm += MOTOR_PWM_DIF;
-		if(direction)//??
+		if(direction)//
 		{
 			SetPWM(1 , 0);
 			SetPWM(4 , pwm);	
 		}
-		else//??
+		else//
 		{
 			SetPWM(1 , pwm);
 			SetPWM(4 , 0);
@@ -65,12 +65,12 @@ void SetMotor_R(u8 pwm , u8 direction)
 	else
 	{
 		pwm += MOTOR_PWM_DIF;
-		if(direction)//??
+		if(direction)
 		{
 			SetPWM(3 , pwm);
 			SetPWM(0 , 0);
 		}
-		else//??
+		else
 		{
 			SetPWM(3 , 0);
 			SetPWM(0 , pwm);	
@@ -86,8 +86,6 @@ void SetMotor_R(u8 pwm , u8 direction)
 ***************************************************/
 void SetMotor_STOP(void)
 {
-//	clr_PWMRUN;
-
 //	P12=0;P11=0; P00=0;P01=0;
 	
 	SetPWM(1 , 0);
@@ -108,44 +106,6 @@ void SetMotor_Brake(void)
 		SetPWM(4 , 0xff);
 		SetPWM(3 , 0xff);
 		SetPWM(0 , 0xff);
-}
-
-/*
-	小车电机状态
-*/
-static u8 Motor_Status;
-void Set_Motor_Status(enum MOTOR_TYPE type , u8 status )
-{
-	switch(type)
-	{
-		case MOTOR_MAIN:
-				if(status)
-					Motor_Status |= MOTOR_STATUS_MAIN;
-				else
-					Motor_Status &= ~MOTOR_STATUS_MAIN;
-			break;
-		case MOTOR_ARM:
-				if(status)
-					Motor_Status |= MOTOR_STATUS_ARM;
-				else
-					Motor_Status &= ~MOTOR_STATUS_ARM;			
-			break;
-	}
-}
-u8 Check_Motor_Status(void)
-{
-	return Motor_Status;
-}
-
-/*
-	空闲状态检测（电机停止）
-*/
-u8 Check_Motor_Idle(void)
-{
-	if(Check_Motor_Status())
-		return 0;//存在电机运转，忙状态
-	else
-		return 1;//电机停止，空闲状态
 }
 
 /* 机械臂 */
@@ -240,7 +200,6 @@ void Control_Motor_R(s16 speed)
 	}
 }
 
-
 /*
 	小车前后左右控制
 	speed : 前后速度控制量
@@ -249,7 +208,6 @@ void Control_Motor_R(s16 speed)
 void Control_Motor(u8 speed,u8 dir)
 {
 	s16 carSpeed_L=0,carSpeed_R=0;
-	//u8 speed_dif;
 	u8 flag=0;
 	
 		carSpeed_L = speed - 0x80;
@@ -261,13 +219,11 @@ void Control_Motor(u8 speed,u8 dir)
 			{
 				if( dir > 0x80 )//
 				{
-					//carSpeed_L = 0;
 					carSpeed_R = dir - 0x80;
 					carSpeed_L = -carSpeed_R/2;
 				}
 				if( dir < 0x80 )
 				{
-					//carSpeed_R = 0;
 					carSpeed_L = 0x80 - dir;
 					carSpeed_R = -carSpeed_L/2;
 				}
@@ -299,22 +255,37 @@ void Control_Motor(u8 speed,u8 dir)
 				}						
 			}
 		}	
-	
-//		//Test 全速跑
-//		if(carSpeed_L < 0)
-//			carSpeed_L = -0x80;
-//		else if(carSpeed_L > 0)
-//			carSpeed_L = 0x80;
-//		
-//		if(carSpeed_R < 0)
-//			carSpeed_R = -0x80;
-//		else if(carSpeed_R > 0)
-//			carSpeed_R = 0x80;
-//		// End Test
 		
 	Control_Motor_L(carSpeed_L);
 	Control_Motor_R(carSpeed_R);
 }
+
+
+/*
+	小车前后左右控制 -- 左右独立按键版本
+	speed : 前后速度控制量
+  dir   : 转向信号控制量
+*/
+void Control_Motor_Key(u8 speed,u8 dir_l,u8 dir_r)
+{
+		s16 carSpeed_L=0,carSpeed_R=0;
+		u8 flag=0;
+	
+		if(speed != 0x80)	//前进
+		{
+			carSpeed_L = speed - 0x80;
+			carSpeed_R = speed - 0x80;
+		}
+		else	//转向
+		{
+			carSpeed_L = -(dir_l - 0x80);
+			carSpeed_R = -(dir_r - 0x80);
+		}
+		
+		Control_Motor_L(carSpeed_L);
+		Control_Motor_R(carSpeed_R);
+}
+
 
 /*
 	接收超时检测
@@ -367,17 +338,14 @@ void Control_ARM(u8 arm)
 	if( arm <= 0x40 )
 	{
 		SetArm( ARM_UP );
-		Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
 	}
 	else if( arm >= 0xD0 )
 	{
 		SetArm( ARM_DOWN );
-		Set_Motor_Status(MOTOR_ARM,1);//设置电机状态
 	}
 	else
 	{
 		SetArm( ARM_STOP );
-		Set_Motor_Status(MOTOR_ARM,0);//复位电机状态
 	}
 
 }
@@ -421,12 +389,10 @@ void Control_Claw(u8 claw)
 	
 	if( claw <= 0x40 )
 	{
-		//SetClaw( CLAW_HOLD );
 		Claw_Dir();
 	}
 	else if( claw >= 0xC0 )
 	{
-		//SetClaw( CLAW_RELEASE );
 		Claw_Dir();
 	}
 	else

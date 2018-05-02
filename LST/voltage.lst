@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 1   
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           04/03/2018 16:24:31 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE VOLTAGE
@@ -25,268 +25,184 @@ line level    source
   14          #include "voltage.h"
   15          #include "GPIO.h"
   16          
-  17          #define RES_H   20
-  18          #define RES_L   12
-  19          #define RES_RATIO   RES_L/(RES_L+RES_H)
-  20          #define ADC_MAX     0xFF
-  21          #define VOL_REF     355     //参考电压3.55V
-  22          
-  23          u16 g_I_motor;  //电机电流
-  24          
-  25          //电压采样标志
-  26          u8 vol_sample=0;
-  27          void Set_Vol_Sampling(void)
-  28          {
-  29   1        vol_sample = 1;//正在电压采样
-  30   1      }
-  31          void Reset_Vol_Sampling(void)
-  32          {
-  33   1        vol_sample = 0;
-  34   1      }
-  35          u8 Get_Vol_Sampling(void)
-  36          {
-  37   1        return vol_sample;
-  38   1      }
-  39          
-  40          
-  41          VOL_STATUS vol_Status = NORMAL;
-  42          void Set_Vol_Status(VOL_STATUS s)
-  43          {
-  44   1        vol_Status = s;//欠压
-  45   1      }
-  46          VOL_STATUS Get_Vol_Status(void)
-  47          {
-  48   1        return vol_Status;
-  49   1      }
-  50          
-  51          /*
-  52            平均值
-  53          */
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 2   
+  17          u16 g_I_motor;  //电机电流
+  18          u8 bat_full = 0;
+  19          u8 bat_10   = 0;
+  20          u8 bat_20   = 0;
+  21          
+  22          //电压采样标志
+  23          u8 vol_sample=0;
+  24          void Set_Vol_Sampling(void)
+  25          {
+  26   1        vol_sample = 1;//正在电压采样
+  27   1      }
+  28          void Reset_Vol_Sampling(void)
+  29          {
+  30   1        vol_sample = 0;
+  31   1      }
+  32          u8 Get_Vol_Sampling(void)
+  33          {
+  34   1        return vol_sample;
+  35   1      }
+  36          
+  37          /*
+  38            平均值
+  39          */
+  40          #define AVERAGE_N   2
+  41          u8 Get_Vol_Average(void)
+  42          {
+  43   1        u8 adc;
+  44   1      //  u8 i=0;
+  45   1      //  u16 sum=0;
+  46   1      //  
+  47   1      //  delay_adc();
+  48   1      //  for(i=0;i<AVERAGE_N;i++)
+  49   1      //  {
+  50   1      //    sum += Get_ADC_BAT_8Bit();
+  51   1      //    delay_adc();
+  52   1      //  }
+  53   1      //  
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           04/03/2018 16:24:31 PAGE 2   
 
-  54          #define AVERAGE_N   2
-  55          u8 Get_Vol_Average(void)
-  56          {
-  57   1        u8 adc;
-  58   1      //  u8 i=0;
-  59   1      //  u16 sum=0;
-  60   1      //  
-  61   1      //  delay_adc();
-  62   1      //  for(i=0;i<AVERAGE_N;i++)
-  63   1      //  {
-  64   1      //    sum += Get_ADC_BAT_8Bit();
-  65   1      //    delay_adc();
-  66   1      //  }
-  67   1      //  
-  68   1      //  return sum/AVERAGE_N;
-  69   1        
-  70   1        adc = Get_ADC_BAT_8Bit();
-  71   1        return adc;
-  72   1      }
-  73          
-  74          /*
-  75            根据ADC值计算电压值
-  76            返回： 电池电压*100
-  77          */
-  78          u16 Get_Bat_Voltage(u8 adc)
-  79          {
-  80   1        return (u16)(adc*VOL_REF/(ADC_MAX*RES_RATIO));
-  81   1      }
-  82          
-  83          void Send_Voltage(u8 v)
-  84          {
-  85   1        Send_Data_To_UART0(0x01);
-  86   1        Send_Data_To_UART0(v);
-  87   1      }
-  88          
-  89          /*
-  90            电压监测
-  91          */
-  92          #define   UNDER_VOL_TH    0x80
-  93          #define   HYSTERESIS_TH   5
-  94          //默认是充电版4.8V 。AA版*5/4
-  95          u8 bat_full = 0x6D;
-  96          u8 bat_10   = 0x5E;
-  97          u8 bat_20   = 0x64;
-  98          
-  99          /*
- 100            获取电机电流的比例系数
- 101                0 - LM_I_MOTOR
- 102            》》  0 - 10
- 103          */
- 104          u8 Get_I_Motor_R(void)
- 105          {
- 106   1        u8 r;
- 107   1        if(g_I_motor > LM_I_MOTOR)
- 108   1        {
- 109   2          r = 10;
- 110   2        }
- 111   1        else
- 112   1        {
- 113   2          r = (u8)((g_I_motor*10)/LM_I_MOTOR);
- 114   2        }
- 115   1        return r;
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 3   
+  54   1      //  return sum/AVERAGE_N;
+  55   1        
+  56   1        adc = Get_ADC_BAT_8Bit();
+  57   1        return adc;
+  58   1      }
+  59          
+  60          /*
+  61            发送电池电量到APP
+  62            格式：
+  63            66 D1 D2 D3 D4 D5 CHECKSUM 99
+  64            CHECKSUM= (D1^D2^D3^D4^D5)&0XFF
+  65          
+  66          */
+  67          u8 voltage_data[8] = {0x66,0x00,0x00,0x00,0x00,0x00,0x00,0x99};
+  68          void Send_Voltage(u8 v)
+  69          {
+  70   1      //  Send_Data_To_UART0(0x01);
+  71   1      //  Send_Data_To_UART0(v);
+  72   1        voltage_data[1] = v;
+  73   1        voltage_data[6] = v;
+  74   1        SendDataUart(voltage_data,8);
+  75   1      }
+  76          
+  77          /*
+  78            获取电机电流的比例系数
+  79                  0 - LM_I_MOTOR
+  80            返回：0 - 10
+  81          */
+  82          u8 Get_I_Motor_R(void)
+  83          {
+  84   1        u8 r;
+  85   1        if(g_I_motor > LM_I_MOTOR)
+  86   1        {
+  87   2          r = 10;
+  88   2        }
+  89   1        else
+  90   1        {
+  91   2          r = (u8)((g_I_motor*10)/LM_I_MOTOR);
+  92   2        }
+  93   1        return r;
+  94   1      }
+  95          
+  96          /*
+  97            根据电机电流设置阈值
+  98            电池：5节充电电池-6V  or  5节干电池-7.5V
+  99            电流越大，阈值越小
+ 100          */
+ 101          void Set_Bat_TH_R(u8 r)
+ 102          {
+ 103   1        u8 d;
+ 104   1        d = r*5;
+ 105   1        
+ 106   1        bat_full = 0x96-d;//6.2V
+ 107   1        bat_20   = 0x87-d;//5.6V
+ 108   1        bat_10   = 0x7A-d;//5.2V    
+ 109   1      }
+ 110          
+ 111          /*
+ 112            电压监测
+ 113          */
+ 114          static u8 vol_Flag = 0xAF;
+ 115          static u8 vol_avr;
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           04/03/2018 16:24:31 PAGE 3   
 
- 116   1      }
- 117          
- 118          /*
- 119            设置阈值
- 120          */
- 121          #define BAT_AA_R 5/4
- 122          void Set_Bat_TH(void)
- 123          {
- 124   1      //  if(GET_BAT_STATUS)//充电版4.8V
- 125   1      //  {
- 126   1      //    bat_full = 0x6D;//5.1V
- 127   1      //    bat_10   = 0x5E;//3.7V
- 128   1      //    bat_20   = 0x57;//4.0V  
- 129   1      //  }
- 130   1      //  else//AA版6V
- 131   1      //  {
- 132   1      //    bat_full = 0x83;//6.1V
- 133   1      //    bat_10   = 0x70;//5.1V
- 134   1      //    bat_20   = 0x7A;//5.6V  
- 135   1      //  }
- 136   1        if(GET_BAT_STATUS)//充电版4.8V
- 137   1        {
- 138   2          bat_full = 0x79;//5.1V
- 139   2          bat_10   = 0x5A;//3.9V
- 140   2          bat_20   = 0x60;//4.1V    
- 141   2        }
- 142   1        else//AA版6V
- 143   1        {
- 144   2          bat_full = 0x93;//6.1V
- 145   2          bat_10   = 0x67;//4.4V
- 146   2          bat_20   = 0x72;//4.8V    
- 147   2        } 
- 148   1      }
- 149          /*
- 150            根据电机电流设置阈值
- 151            电池：5节充电电池 6V
- 152              or  5节干电池   7.5V
- 153          */
- 154          void Set_Bat_TH_R(u8 r)
- 155          {
- 156   1        u8 d;
- 157   1        d = r*5;
- 158   1        
- 159   1        bat_full = 0x96-d;//6.2V
- 160   1        bat_20   = 0x87-d;//5.6V
- 161   1        bat_10   = 0x7A-d;//5.2V    
- 162   1      }
- 163          
- 164          
- 165          static u8 vol_Flag = 0xAF;
- 166          static u8 vol_avr;
- 167          static  u16 v_Gap;
- 168          static  u8  v_R=0xFF;
- 169          void Voltage_Monitor(void)
- 170          { 
- 171   1        static u16 i=0;
- 172   1        
- 173   1        if(i>=2500)
- 174   1        {
- 175   2          i=0;
- 176   2          
- 177   2          Set_Vol_Sampling();//正在采样中
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 4   
+ 116          static  u16 v_Gap;
+ 117          static  u8  v_R=0xFF;
+ 118          void Voltage_Monitor(void)
+ 119          { 
+ 120   1        static u16 i=0;
+ 121   1        
+ 122   1        if(i>=2500)
+ 123   1        {
+ 124   2          i=0;
+ 125   2          
+ 126   2          Set_Vol_Sampling();//正在采样中
+ 127   2          v_Gap = Get_ADC_BandGap();    //单片机内部标准电压，1.22V
+ 128   2          vol_avr = Get_Vol_Average();  //采样电压。
+ 129   2          //计算vol_avr 与 v_Gap 的比值，就能知道实际电压
+ 130   2          Reset_Vol_Sampling();//电压采样结束
+ 131   2          
+ 132   2          /* v_R=1 对应实际电压 0.041V */
+ 133   2          if(vol_avr < 0xC5)//输入过高限制，以免溢出 . v_Gap 恒定= 0x5A
+ 134   2            v_R = (vol_avr*100)/v_Gap;
+ 135   2          else
+ 136   2            v_R = 0xFF;
+ 137   2          
+ 138   2          Set_Bat_TH_R(Get_I_Motor_R());//设置电量阈值
+ 139   2          
+ 140   2          if(v_R < bat_10)     //10% 
+ 141   2            vol_Flag = 0xA1;
+ 142   2          else if(v_R < bat_20)//20%   
+ 143   2          {
+ 144   3            if(vol_Flag!=0xA1)
+ 145   3              vol_Flag = 0xA2;
+ 146   3          }
+ 147   2          else if(v_R > bat_full)//电量充足  
+ 148   2            vol_Flag = 0xAF;
+ 149   2          
+ 150   2          //发送电量状态到APP
+ 151   2          Send_Voltage(vol_Flag);
+ 152   2        }
+ 153   1        else
+ 154   1        {
+ 155   2          i++;
+ 156   2        } 
+ 157   1      }
+ 158          
+ 159          /*
+ 160            马达电流 限流
+ 161            过流、堵转 保护
+ 162          */
+ 163          void I_Limit(void)
+ 164          {
+ 165   1        //if(Get_ADC() > 200)
+ 166   1        if(!Get_Vol_Sampling())//如果没有在进行电压采样，才能进行电流采样
+ 167   1        {
+ 168   2          g_I_motor = Get_ADC();
+ 169   2          if( g_I_motor > LM_I_MOTOR )
+ 170   2          {
+ 171   3            SetPWM_Stop();
+ 172   3            //SetPWM_Start();
+ 173   3          }
+ 174   2          else
+ 175   2          {
+ 176   3            SetPWM_Start();
+ 177   3          }
+C51 COMPILER V9.52.0.0   VOLTAGE                                                           04/03/2018 16:24:31 PAGE 4   
 
- 178   2          v_Gap = Get_ADC_BandGap();
- 179   2          vol_avr = Get_Vol_Average();
- 180   2          Reset_Vol_Sampling();
- 181   2          
- 182   2          /* v_R=1 对应实际电压 0.041V */
- 183   2          if(vol_avr < 0xC5)//输入过高限制，以免溢出 . v_Gap 恒定= 0x5A
- 184   2            v_R = (vol_avr*100)/v_Gap;
- 185   2          else
- 186   2            v_R = 0xFF;
- 187   2          
- 188   2          //Send_Data_To_UART0(v_R);
- 189   2          //Send_Data_To_UART0(vol_avr);
- 190   2          //Send_Data_To_UART0( (u8)(g_I_motor>>8) );
- 191   2          //Send_Data_To_UART0( (u8)g_I_motor );
- 192   2          //Send_Data_To_UART0(Get_I_Motor_R());
- 193   2          
- 194   2          Set_Bat_TH_R(Get_I_Motor_R());//设置电量阈值
- 195   2          
- 196   2          if(v_R < bat_10)     //10% 
- 197   2            vol_Flag = 0xA1;
- 198   2          else if(v_R < bat_20)//20%   
- 199   2          {
- 200   3            if(vol_Flag!=0xA1)
- 201   3              vol_Flag = 0xA2;
- 202   3          }
- 203   2          else if(v_R > bat_full)//电量充足  
- 204   2            vol_Flag = 0xAF;
- 205   2          
- 206   2          Send_Voltage(vol_Flag);
- 207   2        }
- 208   1        else
- 209   1        {
- 210   2          i++;
- 211   2        } 
- 212   1      }
- 213          
- 214          /*
- 215            电量检测 -- 检测停止状态的电压
- 216          */
- 217          void Vol_Monitor_Idle(void)
- 218          {
- 219   1        static u16 i=0;
- 220   1        
- 221   1        if(i>=2500)
- 222   1        {
- 223   2          i=0;
- 224   2          
- 225   2          //if(Check_Motor_Idle())//空闲状态才开启电量检测
- 226   2          {
- 227   3            Set_Vol_Sampling();//正在采样中
- 228   3            v_Gap = Get_ADC_BandGap();
- 229   3            vol_avr = Get_Vol_Average();
- 230   3            Reset_Vol_Sampling();
- 231   3            
- 232   3            if(vol_avr < 0xC5)//输入过高限制，以免溢出 . v_Gap 恒定= 0x5A
- 233   3              v_R = (vol_avr*100)/v_Gap;
- 234   3            else
- 235   3              v_R = 0xFF;
- 236   3            
- 237   3            //Send_Data_To_UART0(v_R);
- 238   3            //Send_Data_To_UART0(vol_avr);
- 239   3            //Send_Data_To_UART0( (u8)(g_I_motor>>8) );
-C51 COMPILER V9.52.0.0   VOLTAGE                                                           12/12/2017 15:22:30 PAGE 5   
-
- 240   3            //Send_Data_To_UART0( (u8)g_I_motor );
- 241   3            
- 242   3            
- 243   3            if(v_R < bat_10)     //10% 
- 244   3              vol_Flag = 0xA1;
- 245   3            else if(v_R < bat_20)//20%   
- 246   3            {
- 247   4              if(vol_Flag!=0xA1)
- 248   4                vol_Flag = 0xA2;
- 249   4            }
- 250   3            else if(v_R > bat_full)//电量充足  
- 251   3              vol_Flag = 0xAF;
- 252   3            
- 253   3            Send_Voltage(vol_Flag);     
- 254   3          }
- 255   2        }
- 256   1        else
- 257   1        {
- 258   2          i++;
- 259   2        }   
- 260   1      }
- 261          
- 262          
+ 178   2        } 
+ 179   1      }
+ 180          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    550    ----
+   CODE SIZE        =    364    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     15       3
+   XDATA SIZE       =     21       3
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1       1
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

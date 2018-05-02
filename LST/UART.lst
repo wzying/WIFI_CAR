@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 1   
+C51 COMPILER V9.52.0.0   UART                                                              03/19/2018 16:44:36 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
@@ -38,144 +38,59 @@ line level    source
   19          #include "Common.h"
   20          #include "string.h"
   21          #include "UART.h"
-  22          
-  23          EUINT8 mdlen;
-  24          EUINT8 mTxIdx;
-  25          EUINT8 mRxLen;
-  26          EUINT8 mRxBuf[20];
-  27          EUINT8 mTxBuf[20];
-  28          /*
-  29          init uart0 with the pin mapped in p06,p07
-  30          and the baudrate is drived by timer1
-  31          */
-  32          void TestUartInit(void)
-  33          {
-  34   1          UINT32 u32Baudrate;
-  35   1        
-  36   1          mRxLen=0;
-  37   1          u32Baudrate=9600;
-  38   1        
-  39   1          P06_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
-  40   1          P07_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
-  41   1        
-  42   1          SCON = 0x50;      //UART0 Mode1,REN=1,TI=1
-  43   1          TMOD |= 0x20;     //Timer1 Mode1
-  44   1          
-  45   1          set_SMOD;         //UART0 Double Rate Enable
-C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 2   
+  22          #include "protocol.h"
+  23          
+  24          EUINT8 mdlen;
+  25          EUINT8 mTxIdx;
+  26          EUINT8 mRxLen;
+  27          EUINT8 mRxBuf[20];
+  28          EUINT8 mTxBuf[20];
+  29          
+  30          /*
+  31            UART发送
+  32          */
+  33          void UART0SendData(UINT8* pdin,UINT8 dlen)
+  34          {
+  35   1        if(dlen<=20)
+  36   1        {
+  37   2          mdlen=dlen;
+  38   2        }
+  39   1        else
+  40   1        {
+  41   2          mdlen=20;
+  42   2        }
+  43   1        memcpy(mTxBuf,pdin,mdlen);
+  44   1        
+  45   1        SBUF = *mTxBuf;
+C51 COMPILER V9.52.0.0   UART                                                              03/19/2018 16:44:36 PAGE 2   
 
-  46   1          set_T1M;
-  47   1          clr_BRCK;         //Serial port 0 baud rate clock source = Timer1
-  48   1       
-  49   1          TH1 = 256 - (1000000/u32Baudrate+1);               /*16 MHz */
-  50   1       
-  51   1          set_TR1;
-  52   1          set_TI;           //For printf function must setting TI = 1
-  53   1        
-  54   1          set_ES;         //For interrupt enable
-  55   1      }
-  56          
-  57          
-  58          
-  59          void UART0SendData(UINT8* pdin,UINT8 dlen)
-  60          {
-  61   1        if(dlen<=20)
-  62   1        {
-  63   2          mdlen=dlen;
-  64   2        }
-  65   1        else
-  66   1        {
-  67   2          mdlen=20;
-  68   2        }
-  69   1        memcpy(mTxBuf,pdin,mdlen);
-  70   1        
-  71   1        SBUF = *mTxBuf;
-  72   1        mTxIdx=0;
-  73   1        
-  74   1      }
-  75          
-  76          /*
-  77            接收到有效的数据包
-  78          */
-  79          u8 valid_R = 0;
-  80          u8 Check_Recieve_Valid(void)
-  81          {
-  82   1        u8 res;
-  83   1        res = valid_R;
-  84   1        valid_R = 0;//复位
-  85   1        return res;
-  86   1      }
-  87          void Set_Recieve_valid(void)
-  88          {
-  89   1        valid_R = 1;
-  90   1      }
-  91          
-  92          //接收到的数据包
-  93          uint8_t RX_Packet[LEN_PACKET_MAX];
-  94          static uint8_t index_Rx = 0;
-  95          #define TIME_OUT_RX_MAX 10
-  96          uint16_t timeOut_Rx = 0;//接收超时
-  97          void RecievePacket(uint8_t d)
-  98          {
-  99   1        timeOut_Rx = TIME_OUT_RX_MAX;//接收超时计数值
- 100   1        if(index_Rx < LEN_PACKET_MAX)
- 101   1        {
- 102   2          RX_Packet[index_Rx] = d;
- 103   2      
- 104   2          if(index_Rx == (DATA_LEN-1))
- 105   2          {
- 106   3            if(RX_Packet[0] == 0x66)//包头0x66
- 107   3            {
-C51 COMPILER V9.52.0.0   UART                                                              12/12/2017 15:22:31 PAGE 3   
-
- 108   4              Set_Recieve_valid();//接收到有效的数据包
- 109   4              //SendDataUart(RX_Packet,DATA_LEN);
- 110   4              //Rx_Package_Handle(RX_Packet);
- 111   4              
- 112   4              //ResetIndexRx();//成功接收完一个包，复位下次接收
- 113   4            }
- 114   3          }
- 115   2          index_Rx++;
- 116   2        }
- 117   1      }  
- 118          //
- 119          void ResetIndexRx(void)
- 120          {
- 121   1        index_Rx = 0;
- 122   1      }
- 123          //检测超时
- 124          uint8_t CheckTimeOut(void)
- 125          {
- 126   1        if(timeOut_Rx)
- 127   1          timeOut_Rx--;
- 128   1        else
- 129   1          return 1; //timeOut_Rx==0,返回1
- 130   1        
- 131   1        return 0; 
- 132   1      }
- 133          
- 134          
- 135          void SerialPort0_ISR(void) interrupt 4
- 136          {
- 137   1          if (RI==1) 
- 138   1          {                                       /* if reception occur */
- 139   2            clr_RI;                             /* clear reception flag for next reception */
- 140   2            //Send_Data_To_UART0(SBUF);
- 141   2            RecievePacket(SBUF);
- 142   2          }
- 143   1          if(TI==1)
- 144   1          {
- 145   2            clr_TI;                             /* if emission occur */
- 146   2          }
- 147   1      }
+  46   1        mTxIdx=0;
+  47   1        
+  48   1      }
+  49          
+  50          /*
+  51            UART中断
+  52          */
+  53          void SerialPort0_ISR(void) interrupt 4
+  54          {
+  55   1          if (RI==1) 
+  56   1          {                                       /* if reception occur */
+  57   2            clr_RI;                             /* clear reception flag for next reception */
+  58   2            RecievePacket(SBUF);
+  59   2          }
+  60   1          if(TI==1)
+  61   1          {
+  62   2            clr_TI;                             /* if emission occur */
+  63   2          }
+  64   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    239    ----
+   CODE SIZE        =    118    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     44       1
+   XDATA SIZE       =     43    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     23    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -1,0 +1,171 @@
+C51 COMPILER V9.52.0.0   PROTOCOL                                                          03/19/2018 17:48:54 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE PROTOCOL
+OBJECT MODULE PLACED IN .\Output\protocol.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE protocol.c OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Code\B
+                    -SP;.\Code\N76E003_HW) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\protocol.lst) TABS(2) OBJECT(.\Output\protocol.
+                    -obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Buta Technology Corp. All rights reserved.                                         */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.ptahtoy.com
+   9          //  E-Mail : wzy@ptahtoy.com
+  10          //  Date   : Jun/24/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          /*
+  14            protocol.c
+  15            串口协议
+  16            串口波特率： 4800
+  17            UART一个数据包发送 11 Byte 。这里只使用了 0 - 4 共5个字节，后6个字节无需关心
+  18            Byte[0] ： 0x66 ，数据头
+  19            Byte[1] ： 转向信号，空闲信号中间值0x80 ，范围0x00 - 0xFF
+  20            Byte[2] ： 前进速度，空闲信号中间值0x80，大于0x80往前，小于0x80退后
+  21            Byte[3] ： 机械臂  ，空闲信号中间值0x80 
+  22            Byte[4] ： 爪子    ，空闲信号中间值0x80 
+  23          */
+  24          
+  25          
+  26          #include "N76E003.h"
+  27          #include "Common.h"
+  28          #include "Delay.h"
+  29          #include "Audio.h"
+  30          #include "Board.h"
+  31          #include "PWM.h"
+  32          #include "motor.h"
+  33          #include "SFR_Macro.h"
+  34          #include "Function_define.h"
+  35          #include "string.h"
+  36          #include "UART.h"
+  37          #include "LED.h"
+  38          #include "ADC.h"
+  39          #include "voltage.h"
+  40          #include "SFR_Macro.h"
+  41          #include "protocol.h"
+  42          
+  43          /*
+  44            接收到有效的数据包
+  45          */
+  46          u8 valid_R = 0;
+  47          u8 Check_Recieve_Valid(void)
+C51 COMPILER V9.52.0.0   PROTOCOL                                                          03/19/2018 17:48:54 PAGE 2   
+
+  48          {
+  49   1        u8 res;
+  50   1        res = valid_R;
+  51   1        valid_R = 0;//复位
+  52   1        return res;
+  53   1      }
+  54          void Set_Recieve_valid(void)
+  55          {
+  56   1        valid_R = 1;
+  57   1      }
+  58          
+  59          //接收到的数据包
+  60          uint8_t RX_Packet[LEN_PACKET_MAX];
+  61          static uint8_t index_Rx = 0;
+  62          #define TIME_OUT_RX_MAX 10
+  63          uint16_t timeOut_Rx = 0;//接收超时
+  64          void RecievePacket(uint8_t d)
+  65          {
+  66   1        timeOut_Rx = TIME_OUT_RX_MAX;//接收超时计数值
+  67   1        if(index_Rx < LEN_PACKET_MAX)
+  68   1        {
+  69   2          RX_Packet[index_Rx] = d;
+  70   2      
+  71   2          if(index_Rx == (DATA_LEN-1))
+  72   2          {
+  73   3            if(RX_Packet[0] == 0x66)//包头0x66
+  74   3            {
+  75   4              Set_Recieve_valid();//接收到有效的数据包
+  76   4            }
+  77   3          }
+  78   2          index_Rx++;
+  79   2        }
+  80   1      }  
+  81          
+  82          /*
+  83            接收数据解析
+  84            RX_Handle
+  85          */
+  86          void Rx_Package_Handle(uint8_t *uartBuf)
+  87          {
+  88   1        Set_TimeOut_Wifi();//WIFI超时复位
+  89   1        SetWifiStatus();//设置WIFI为连接状态
+  90   1        
+  91   1        if(uartBuf[7] == 0x01)//按键遥控
+  92   1        {
+  93   2          if( (uartBuf[1]!=0x80) || (uartBuf[2]!=0x80) || (uartBuf[3]!=0x80) )
+  94   2          {
+  95   3            Control_Motor_Key(uartBuf[1],uartBuf[2],uartBuf[3]);
+  96   3            
+  97   3            Set_TimeOut_Motor();//复位超时计数
+  98   3          }
+  99   2          
+ 100   2          {
+ 101   3            Control_ARM (uartBuf[4]);
+ 102   3            Control_Claw(uartBuf[5]);
+ 103   3          }
+ 104   2        }
+ 105   1        //if(uartBuf[7] == 0x02)
+ 106   1        else //陀螺仪控制
+ 107   1        {
+ 108   2          if( (uartBuf[2]!=0x80) || (uartBuf[1]!=0x80) )
+ 109   2          {
+C51 COMPILER V9.52.0.0   PROTOCOL                                                          03/19/2018 17:48:54 PAGE 3   
+
+ 110   3            Control_Motor(uartBuf[2],uartBuf[1]);
+ 111   3            
+ 112   3            Set_TimeOut_Motor();//复位超时计数
+ 113   3          }
+ 114   2          
+ 115   2          if(uartBuf[3] != 0x00)//0x00空闲信号
+ 116   2          {
+ 117   3            Control_ARM (uartBuf[3]);
+ 118   3            Control_Claw(uartBuf[4]);
+ 119   3          }
+ 120   2        } 
+ 121   1      }
+ 122          
+ 123          void ResetIndexRx(void)
+ 124          {
+ 125   1        index_Rx = 0;
+ 126   1      }
+ 127          //检测超时
+ 128          uint8_t CheckTimeOut(void)
+ 129          {
+ 130   1        if(timeOut_Rx)
+ 131   1          timeOut_Rx--;
+ 132   1        else
+ 133   1          return 1; //timeOut_Rx==0,返回1
+ 134   1        
+ 135   1        return 0; 
+ 136   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    302    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     18       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -26,6 +26,7 @@ bit BIT_TMP;
 #define set_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS|=SET_BIT0;EA=BIT_TMP
 #define clr_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS&=~SET_BIT0;EA=BIT_TMP
 
+//看门狗
 void WDT_Init(void)
 {
 //----------------------------------------------------------------------------------------------
@@ -45,6 +46,7 @@ void WDT_Init(void)
 		set_WDTR;															//WDT run
 			
 }
+//复位看门狗计数器
 void WDT_Reset(void)
 {
 	set_WDCLR;		
@@ -61,23 +63,10 @@ void PWM_Init(void)
  
 	P12_PushPull_Mode;//PWM0
 	P11_PushPull_Mode;//PWM1
-	
-	//P10_PushPull_Mode;//PWM2
 	P00_PushPull_Mode;//PWM3
-	
 	P01_PushPull_Mode;//PWM4
-	//P03_PushPull_Mode;//PWM5
 	
 	P12=0;P11=0;/*P10=0;*/P00=0;P01=0;/*P03=0;*/
-	
-//	PWM0_P12_OUTPUT_DISABLE;
-//	PWM1_P11_OUTPUT_DISABLE;
-//	
-//	PWM2_P10_OUTPUT_DISABLE;
-//	PWM3_P00_OUTPUT_DISABLE;
-//	
-//	PWM4_P01_OUTPUT_DISABLE;
-//	PWM5_P03_OUTPUT_DISABLE;
 
 	PWM_IMDEPENDENT_MODE;
 	PWM_CLOCK_FSYS;// selecte sysclk=16MHz as the input clock
@@ -130,12 +119,8 @@ void SetPWM_Stop(void)
 
 	PWM0_P12_OUTPUT_DISABLE;
 	PWM1_P11_OUTPUT_DISABLE;
-	
-	//PWM2_P10_OUTPUT_DISABLE;
 	PWM3_P00_OUTPUT_DISABLE;
-	
 	PWM4_P01_OUTPUT_DISABLE;
-	//PWM5_P03_OUTPUT_DISABLE;
 
 	P12=0;P11=0; P00=0;P01=0;	
 	
@@ -147,10 +132,6 @@ void SetPWM_Stop(void)
 	MOTOR_CLAW_A = 0;
 	MOTOR_CLAW_B = 0;	
 	
-//	SetPWM(1 , 0); //占空比需要保留，不能清除。等电流降低后重新恢复输出
-//	SetPWM(4 , 0);
-//	SetPWM(3 , 0);
-//	SetPWM(0 , 0);
 }
 
 void SetPWM(UINT8 chn,UINT8 val)

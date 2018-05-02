@@ -19,5 +19,6 @@ void Set_Bat_TH(void);
 void Set_Motor_Idle(void);
 void Set_Motor_Busy(void);
 void Vol_Monitor_Idle(void);
+void I_Limit(void);
 
 #endif

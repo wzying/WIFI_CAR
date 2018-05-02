@@ -357,24 +357,19 @@
               <FilePath>.\Code\mainapp.c</FilePath>
             </File>
             <File>
-              <FileName>IRComm.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\IRComm.h</FilePath>
-            </File>
-            <File>
               <FileName>motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\motor.c</FilePath>
             </File>
             <File>
-              <FileName>motor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\motor.h</FilePath>
-            </File>
-            <File>
               <FileName>voltage.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\voltage.c</FilePath>
+            </File>
+            <File>
+              <FileName>protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\protocol.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -391,31 +386,6 @@
               <FileType>1</FileType>
               <FilePath>.\Code\Common\Delay.c</FilePath>
             </File>
-            <File>
-              <FileName>Common.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Common\Common.h</FilePath>
-            </File>
-            <File>
-              <FileName>Delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Common\Delay.h</FilePath>
-            </File>
-            <File>
-              <FileName>Function_Define.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Common\Function_Define.h</FilePath>
-            </File>
-            <File>
-              <FileName>N76E003.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Common\N76E003.h</FilePath>
-            </File>
-            <File>
-              <FileName>SFR_Macro.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\Common\SFR_Macro.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -431,11 +401,6 @@
         <Group>
           <GroupName>BSP</GroupName>
           <Files>
-            <File>
-              <FileName>Board.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\BSP\Board.h</FilePath>
-            </File>
             <File>
               <FileName>Board.c</FileName>
               <FileType>1</FileType>
@@ -457,29 +422,9 @@
               <FilePath>.\Code\N76E003_HW\Timer.c</FilePath>
             </File>
             <File>
-              <FileName>GPIO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\N76E003_HW\GPIO.h</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\N76E003_HW\Timer.h</FilePath>
-            </File>
-            <File>
               <FileName>UART.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\N76E003_HW\UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\N76E003_HW\UART.h</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Code\N76E003_HW\PWM.h</FilePath>
             </File>
             <File>
               <FileName>PWM.c</FileName>

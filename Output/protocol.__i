@@ -1,0 +1,1 @@
+"protocol.c" OPTIMIZE (4,SPEED) BROWSE INCDIR(.\Code\Common;.\Code;.\Code\BSP;.\Code\N76E003_HW) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\protocol.lst) TABS (2) OBJECT(.\Output\protocol.obj)

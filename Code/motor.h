@@ -61,6 +61,7 @@ void SetClaw( CLAW_DIR dir );
 /* »úÐµ±Û */
 void SetArm( ARM_DIR dir);
 void Control_Motor(u8 speed,u8 dir);
+void Control_Motor_Key(u8 speed,u8 dir_l,u8 dir_r);
 void Set_TimeOut_Motor(void);
 u8 CheckTimeOut_Motor(void);
 void Control_Claw(u8 claw);
@@ -75,7 +76,6 @@ u8 Check_Claw_EN(void);
 void Claw_Trun(void);
 u8 CheckTimeOut_Claw(void);
 void Set_TimeOut_Claw(void);
-void Set_Motor_Status(enum MOTOR_TYPE type , u8 status );
 u8 Check_Motor_Status(void);
 u8 Check_Motor_Idle(void);
 

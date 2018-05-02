@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   PWM                                                               12/12/2017 15:22:31 PAGE 1   
+C51 COMPILER V9.52.0.0   PWM                                                               03/19/2018 17:13:38 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE PWM
@@ -45,205 +45,186 @@ line level    source
   26          #define set_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS|=SET_BIT0;EA=BIT_TMP
   27          #define clr_SFRPAGE  BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;SFRS&=~SET_BIT0;EA=BIT_TMP
   28          
-  29          void WDT_Init(void)
-  30          {
-  31   1      //----------------------------------------------------------------------------------------------
-  32   1      // WDT Init !!! ENABLE CONFIG WDT FIRST !!!
-  33   1      // Warning:
-  34   1      // Always check CONFIG WDT enable first, CONFIG not enable, SFR can't enable WDT reset
-  35   1      // Please call Enable_WDT_Reset_Config() function to enable CONFIG WDT reset
-  36   1      //----------------------------------------------------------------------------------------------
-  37   1      
-  38   1      //  Enable_WDT_Reset_Config();
-  39   1      
-  40   1          //TA=0xAA;TA=0x55;WDCON=0x07;           //Setting WDT prescale 
-  41   1          TA=0xAA;TA=0x55;WDCON=0x07;           //Setting WDT prescale
-  42   1          set_WDCLR;                            //Clear WDT timer
-  43   1          while((WDCON|~SET_BIT6)==0xFF);       //confirm WDT clear is ok before into power down mode
-  44   1          //EA = 1;
-  45   1          set_WDTR;                             //WDT run
-C51 COMPILER V9.52.0.0   PWM                                                               12/12/2017 15:22:31 PAGE 2   
+  29          //看门狗
+  30          void WDT_Init(void)
+  31          {
+  32   1      //----------------------------------------------------------------------------------------------
+  33   1      // WDT Init !!! ENABLE CONFIG WDT FIRST !!!
+  34   1      // Warning:
+  35   1      // Always check CONFIG WDT enable first, CONFIG not enable, SFR can't enable WDT reset
+  36   1      // Please call Enable_WDT_Reset_Config() function to enable CONFIG WDT reset
+  37   1      //----------------------------------------------------------------------------------------------
+  38   1      
+  39   1      //  Enable_WDT_Reset_Config();
+  40   1      
+  41   1          //TA=0xAA;TA=0x55;WDCON=0x07;           //Setting WDT prescale 
+  42   1          TA=0xAA;TA=0x55;WDCON=0x07;           //Setting WDT prescale
+  43   1          set_WDCLR;                            //Clear WDT timer
+  44   1          while((WDCON|~SET_BIT6)==0xFF);       //confirm WDT clear is ok before into power down mode
+  45   1          //EA = 1;
+C51 COMPILER V9.52.0.0   PWM                                                               03/19/2018 17:13:38 PAGE 2   
 
-  46   1            
-  47   1      }
-  48          void WDT_Reset(void)
-  49          {
-  50   1        set_WDCLR;    
-  51   1      }
-  52          
-  53          
-  54          /*
-  55            PWM初始化
-  56            左电机 ： PWM1 + PWM4
-  57            右电机 ： PWM3 + PWM0
-  58          */
-  59          void PWM_Init(void)
-  60          {
-  61   1       
-  62   1        P12_PushPull_Mode;//PWM0
-  63   1        P11_PushPull_Mode;//PWM1
-  64   1        
-  65   1        //P10_PushPull_Mode;//PWM2
+  46   1          set_WDTR;                             //WDT run
+  47   1            
+  48   1      }
+  49          //复位看门狗计数器
+  50          void WDT_Reset(void)
+  51          {
+  52   1        set_WDCLR;    
+  53   1      }
+  54          
+  55          
+  56          /*
+  57            PWM初始化
+  58            左电机 ： PWM1 + PWM4
+  59            右电机 ： PWM3 + PWM0
+  60          */
+  61          void PWM_Init(void)
+  62          {
+  63   1       
+  64   1        P12_PushPull_Mode;//PWM0
+  65   1        P11_PushPull_Mode;//PWM1
   66   1        P00_PushPull_Mode;//PWM3
-  67   1        
-  68   1        P01_PushPull_Mode;//PWM4
-  69   1        //P03_PushPull_Mode;//PWM5
-  70   1        
-  71   1        P12=0;P11=0;/*P10=0;*/P00=0;P01=0;/*P03=0;*/
-  72   1        
-  73   1      //  PWM0_P12_OUTPUT_DISABLE;
-  74   1      //  PWM1_P11_OUTPUT_DISABLE;
-  75   1      //  
-  76   1      //  PWM2_P10_OUTPUT_DISABLE;
-  77   1      //  PWM3_P00_OUTPUT_DISABLE;
-  78   1      //  
-  79   1      //  PWM4_P01_OUTPUT_DISABLE;
-  80   1      //  PWM5_P03_OUTPUT_DISABLE;
+  67   1        P01_PushPull_Mode;//PWM4
+  68   1        
+  69   1        P12=0;P11=0;/*P10=0;*/P00=0;P01=0;/*P03=0;*/
+  70   1      
+  71   1        PWM_IMDEPENDENT_MODE;
+  72   1        PWM_CLOCK_FSYS;// selecte sysclk=16MHz as the input clock
+  73   1        PWM_CLOCK_DIV_4;// pwm clock=16/16=1MHz
+  74   1        PWMPH = 0x00;
+  75   1        PWMPL = (0x7E + MOTOR_PWM_DIF);//
+  76   1        /**********************************************************************
+  77   1        PWM frequency = Fpwm/((PWMPH,PWMPL) + 1) <Fpwm = Fsys/PWM_CLOCK_DIV> 
+  78   1                  = (16MHz/8)/(0x063 + 1)
+  79   1                  = 20KHz  
+  80   1        ***********************************************************************/
   81   1      
-  82   1        PWM_IMDEPENDENT_MODE;
-  83   1        PWM_CLOCK_FSYS;// selecte sysclk=16MHz as the input clock
-  84   1        PWM_CLOCK_DIV_4;// pwm clock=16/16=1MHz
-  85   1        PWMPH = 0x00;
-  86   1        PWMPL = (0x7E + MOTOR_PWM_DIF);//
-  87   1        /**********************************************************************
-  88   1        PWM frequency = Fpwm/((PWMPH,PWMPL) + 1) <Fpwm = Fsys/PWM_CLOCK_DIV> 
-  89   1                  = (16MHz/8)/(0x063 + 1)
-  90   1                  = 20KHz  
-  91   1        ***********************************************************************/
-  92   1      
-  93   1        //-------- PWM start run--------------
-  94   1        set_LOAD;
-  95   1        set_PWMRUN;
-  96   1        
-  97   1        PWM0_P12_OUTPUT_ENABLE;
-  98   1        PWM1_P11_OUTPUT_ENABLE;
-  99   1        
- 100   1        //PWM2_P10_OUTPUT_ENABLE;
- 101   1        PWM3_P00_OUTPUT_ENABLE;
- 102   1        
- 103   1        PWM4_P01_OUTPUT_ENABLE;
- 104   1        //PWM5_P03_OUTPUT_ENABLE;
- 105   1      }
- 106          
- 107          void SetPWM_Start(void)
-C51 COMPILER V9.52.0.0   PWM                                                               12/12/2017 15:22:31 PAGE 3   
+  82   1        //-------- PWM start run--------------
+  83   1        set_LOAD;
+  84   1        set_PWMRUN;
+  85   1        
+  86   1        PWM0_P12_OUTPUT_ENABLE;
+  87   1        PWM1_P11_OUTPUT_ENABLE;
+  88   1        
+  89   1        //PWM2_P10_OUTPUT_ENABLE;
+  90   1        PWM3_P00_OUTPUT_ENABLE;
+  91   1        
+  92   1        PWM4_P01_OUTPUT_ENABLE;
+  93   1        //PWM5_P03_OUTPUT_ENABLE;
+  94   1      }
+  95          
+  96          void SetPWM_Start(void)
+  97          {
+  98   1        //恢复PWM输出
+  99   1        PWM0_P12_OUTPUT_ENABLE;
+ 100   1        PWM1_P11_OUTPUT_ENABLE;
+ 101   1        
+ 102   1        //PWM2_P10_OUTPUT_ENABLE;
+ 103   1        PWM3_P00_OUTPUT_ENABLE;
+ 104   1        
+ 105   1        PWM4_P01_OUTPUT_ENABLE;
+ 106   1        //PWM5_P03_OUTPUT_ENABLE;
+ 107   1        
+C51 COMPILER V9.52.0.0   PWM                                                               03/19/2018 17:13:38 PAGE 3   
 
- 108          {
- 109   1        //恢复PWM输出
- 110   1        PWM0_P12_OUTPUT_ENABLE;
- 111   1        PWM1_P11_OUTPUT_ENABLE;
- 112   1        
- 113   1        //PWM2_P10_OUTPUT_ENABLE;
- 114   1        PWM3_P00_OUTPUT_ENABLE;
- 115   1        
- 116   1        PWM4_P01_OUTPUT_ENABLE;
- 117   1        //PWM5_P03_OUTPUT_ENABLE;
- 118   1        
- 119   1        set_PWMRUN;
- 120   1        
- 121   1        //恢复机械臂
- 122   1        SetArm(GetArmStatus());
- 123   1        //恢复前爪
- 124   1        SetClaw(GetClawStatus());
- 125   1      }
- 126          
- 127          void SetPWM_Stop(void)
- 128          {
- 129   1        clr_PWMRUN;
- 130   1      
- 131   1        PWM0_P12_OUTPUT_DISABLE;
- 132   1        PWM1_P11_OUTPUT_DISABLE;
- 133   1        
- 134   1        //PWM2_P10_OUTPUT_DISABLE;
- 135   1        PWM3_P00_OUTPUT_DISABLE;
- 136   1        
- 137   1        PWM4_P01_OUTPUT_DISABLE;
- 138   1        //PWM5_P03_OUTPUT_DISABLE;
- 139   1      
- 140   1        P12=0;P11=0; P00=0;P01=0; 
- 141   1        
- 142   1        //短时间关闭机械臂
- 143   1        MOTOR_ARM_A = 0;
- 144   1        MOTOR_ARM_B = 0;  
- 145   1        
- 146   1        //短时间关闭前爪
- 147   1        MOTOR_CLAW_A = 0;
- 148   1        MOTOR_CLAW_B = 0; 
- 149   1        
- 150   1      //  SetPWM(1 , 0); //占空比需要保留，不能清除。等电流降低后重新恢复输出
- 151   1      //  SetPWM(4 , 0);
- 152   1      //  SetPWM(3 , 0);
- 153   1      //  SetPWM(0 , 0);
- 154   1      }
- 155          
- 156          void SetPWM(UINT8 chn,UINT8 val)
- 157          {
- 158   1        switch(chn)
- 159   1        {
- 160   2          case 0:
- 161   2            PWM0H = 0x00;         
- 162   2            PWM0L = val;
- 163   2            set_LOAD;
- 164   2          break;
- 165   2          case 1:
- 166   2            PWM1H = 0x00;         
- 167   2            PWM1L = val;
- 168   2            set_LOAD;
- 169   2          break;
-C51 COMPILER V9.52.0.0   PWM                                                               12/12/2017 15:22:31 PAGE 4   
+ 108   1        set_PWMRUN;
+ 109   1        
+ 110   1        //恢复机械臂
+ 111   1        SetArm(GetArmStatus());
+ 112   1        //恢复前爪
+ 113   1        SetClaw(GetClawStatus());
+ 114   1      }
+ 115          
+ 116          void SetPWM_Stop(void)
+ 117          {
+ 118   1        clr_PWMRUN;
+ 119   1      
+ 120   1        PWM0_P12_OUTPUT_DISABLE;
+ 121   1        PWM1_P11_OUTPUT_DISABLE;
+ 122   1        PWM3_P00_OUTPUT_DISABLE;
+ 123   1        PWM4_P01_OUTPUT_DISABLE;
+ 124   1      
+ 125   1        P12=0;P11=0; P00=0;P01=0; 
+ 126   1        
+ 127   1        //短时间关闭机械臂
+ 128   1        MOTOR_ARM_A = 0;
+ 129   1        MOTOR_ARM_B = 0;  
+ 130   1        
+ 131   1        //短时间关闭前爪
+ 132   1        MOTOR_CLAW_A = 0;
+ 133   1        MOTOR_CLAW_B = 0; 
+ 134   1        
+ 135   1      }
+ 136          
+ 137          void SetPWM(UINT8 chn,UINT8 val)
+ 138          {
+ 139   1        switch(chn)
+ 140   1        {
+ 141   2          case 0:
+ 142   2            PWM0H = 0x00;         
+ 143   2            PWM0L = val;
+ 144   2            set_LOAD;
+ 145   2          break;
+ 146   2          case 1:
+ 147   2            PWM1H = 0x00;         
+ 148   2            PWM1L = val;
+ 149   2            set_LOAD;
+ 150   2          break;
+ 151   2          case 2:
+ 152   2            PWM2H = 0x00;         
+ 153   2            PWM2L = val;
+ 154   2            set_LOAD;
+ 155   2          break;
+ 156   2          case 3:
+ 157   2            PWM3H = 0x00;         
+ 158   2            PWM3L = val;
+ 159   2            set_LOAD;
+ 160   2          break;
+ 161   2          case 4:
+ 162   2            set_SFRPAGE;
+ 163   2            PWM4H = 0x00;         
+ 164   2            PWM4L = val;
+ 165   2            clr_SFRPAGE;
+ 166   2            set_LOAD;
+ 167   2          break;
+ 168   2          case 5:
+ 169   2            set_SFRPAGE;
+C51 COMPILER V9.52.0.0   PWM                                                               03/19/2018 17:13:38 PAGE 4   
 
- 170   2          case 2:
- 171   2            PWM2H = 0x00;         
- 172   2            PWM2L = val;
+ 170   2            PWM5H = 0x00;         
+ 171   2            PWM5L = val;
+ 172   2            clr_SFRPAGE;
  173   2            set_LOAD;
  174   2          break;
- 175   2          case 3:
- 176   2            PWM3H = 0x00;         
- 177   2            PWM3L = val;
- 178   2            set_LOAD;
- 179   2          break;
- 180   2          case 4:
- 181   2            set_SFRPAGE;
- 182   2            PWM4H = 0x00;         
- 183   2            PWM4L = val;
- 184   2            clr_SFRPAGE;
- 185   2            set_LOAD;
- 186   2          break;
- 187   2          case 5:
- 188   2            set_SFRPAGE;
- 189   2            PWM5H = 0x00;         
- 190   2            PWM5L = val;
- 191   2            clr_SFRPAGE;
- 192   2            set_LOAD;
- 193   2          break;
- 194   2        }
- 195   1      }
- 196           
- 197          void PWMEnable(UINT8 chn)
- 198          {
- 199   1        if(chn==0)
- 200   1        {
- 201   2          PWM0_P12_OUTPUT_ENABLE;
- 202   2        }
- 203   1        else if(chn==1)
- 204   1        {
- 205   2          PWM1_P11_OUTPUT_ENABLE;
- 206   2        }
- 207   1      }
- 208          
- 209          void PWMDisable(UINT8 chn)
- 210          {
- 211   1        if(chn==0)
- 212   1        {
- 213   2          PWM0_P12_OUTPUT_DISABLE;
- 214   2          P12=1;
- 215   2        }
- 216   1        else if(chn==1)
- 217   1        {
- 218   2          PWM1_P11_OUTPUT_DISABLE;
- 219   2          P11=1;
- 220   2        }
- 221   1      }
+ 175   2        }
+ 176   1      }
+ 177           
+ 178          void PWMEnable(UINT8 chn)
+ 179          {
+ 180   1        if(chn==0)
+ 181   1        {
+ 182   2          PWM0_P12_OUTPUT_ENABLE;
+ 183   2        }
+ 184   1        else if(chn==1)
+ 185   1        {
+ 186   2          PWM1_P11_OUTPUT_ENABLE;
+ 187   2        }
+ 188   1      }
+ 189          
+ 190          void PWMDisable(UINT8 chn)
+ 191          {
+ 192   1        if(chn==0)
+ 193   1        {
+ 194   2          PWM0_P12_OUTPUT_DISABLE;
+ 195   2          P12=1;
+ 196   2        }
+ 197   1        else if(chn==1)
+ 198   1        {
+ 199   2          PWM1_P11_OUTPUT_DISABLE;
+ 200   2          P11=1;
+ 201   2        }
+ 202   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -254,8 +235,6 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
-C51 COMPILER V9.52.0.0   PWM                                                               12/12/2017 15:22:31 PAGE 5   
-
 END OF MODULE INFORMATION.
 
 
